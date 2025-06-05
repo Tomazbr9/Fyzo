@@ -4,17 +4,17 @@ public enum TransactionType {
     EXPENSE(1),
     REVENUE(2);
     
-    private Integer code;
+    private int code;
 	
 	private TransactionType(Integer code) {
 		this.code = code;
 	}
 	
-	public Integer getCode() {
+	public int getCode() {
 		return this.code;
 	}
 	
-	public static TransactionType valueOf(Integer code) {
+	public static TransactionType valueOf(int code) {
 		for(TransactionType value : TransactionType.values()) {
 			if(value.getCode() == code) {
 				return value;

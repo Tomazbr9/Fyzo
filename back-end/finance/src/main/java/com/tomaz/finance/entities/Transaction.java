@@ -1,7 +1,7 @@
 package com.tomaz.finance.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import com.tomaz.finance.enums.TransactionType;
@@ -12,8 +12,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "tb_transaction")
 public class Transaction implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -22,26 +24,38 @@ public class Transaction implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private Double value;
-    private Date date;
+    private Double amount;
+    private LocalDate date;
     private Integer type;
     
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+    
     public Transaction() {
     	
     }
 
-	public Transaction(Long id, String description, Double value, Date date, TransactionType type, User user) {
-		super();
+	public Transaction(Long id, String description, Double amount, LocalDate date, TransactionType type, User user, Category category) {
 		this.id = id;
 		this.description = description;
-		this.value = value;
+		this.amount = amount;
 		this.date = date;
 		setType(type);
 		this.user = user;
+		this.category = category;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public Long getId() {
@@ -61,18 +75,18 @@ public class Transaction implements Serializable {
 	}
 
 	public Double getValue() {
-		return value;
+		return amount;
 	}
 
 	public void setValue(Double value) {
-		this.value = value;
+		this.amount = value;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

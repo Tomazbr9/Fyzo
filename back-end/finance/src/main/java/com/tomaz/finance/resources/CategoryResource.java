@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tomaz.finance.entities.Transaction;
-import com.tomaz.finance.services.TransactionService;
+import com.tomaz.finance.entities.Category;
+import com.tomaz.finance.services.CategoryService;
 
 @RestController
-@RequestMapping("/transactions")
-public class TransactionResource {
+@RequestMapping("/categories")
+public class CategoryResource {
 	
 	@Autowired
-	private TransactionService service;
+	private CategoryService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Transaction>> findAll(){
+	public ResponseEntity<List<Category>> findAll(){
 		
-		List<Transaction> list = service.findAll();
+		List<Category> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 }
