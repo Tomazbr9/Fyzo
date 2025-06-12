@@ -12,10 +12,40 @@ import com.tomaz.finance.repositories.TransactionRepository;
 public class TransactionService {
 	
 	@Autowired
-	private TransactionRepository repository;
+	private TransactionRepository transactionRepository;
+	
+//	@Autowired
+//	private CategoryService categoryService;
+//	
+//	@Autowired
+//	private UserService userService;
 	
 	public List<Transaction> findAll(){
-		return repository.findAll();
+		return transactionRepository.findAll();
 	}
+	
+//	public Transaction create(Transaction dto) {
+//		Transaction transaction = new Transaction();
+//		
+//		
+//		User user = userService.findById(dto.getUser());
+//		
+//		
+//		
+//		
+//		Category category = categoryService.findById(dto.getCategory());
+//		
+//		
+//		transaction.setDescription(dto.getDescription());
+//		transaction.setValue(dto.getValue());
+//		transaction.setType(dto.getType());
+//		transaction.setDate(dto.getDate());
+//		transaction.setCategory(dto.getCategory());
+//		transaction.setUser(dto.getUser());
+//		
+//		return transactionRepository.save(transaction);
+//	}
+//	
+	
 	
 }
