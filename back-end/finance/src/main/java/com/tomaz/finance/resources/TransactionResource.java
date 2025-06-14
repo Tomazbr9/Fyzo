@@ -2,11 +2,12 @@ package com.tomaz.finance.resources;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,9 +28,9 @@ public class TransactionResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
-//	@PostMapping
-//	public ResponseEntity<Transaction> create(@RequestBody Transaction dto){
-//		Transaction transaction = service.create(dto);
-//		return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
-//	}
+	@PostMapping
+	public ResponseEntity<Transaction> create(@RequestBody Transaction dto){
+		Transaction transaction = service.create(dto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
+	}
 }
