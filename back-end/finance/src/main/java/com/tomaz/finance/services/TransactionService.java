@@ -2,6 +2,7 @@ package com.tomaz.finance.services;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import com.tomaz.finance.dto.TransactionDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.enums.TransactionType;
 import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.TransactionRepository;
 import com.tomaz.finance.repositories.UserRepository;
@@ -41,14 +43,12 @@ public class TransactionService {
 		
 		Transaction transaction = new Transaction();
 		
-		
 		transaction.setDescription(dto.getDescription());
 		transaction.setValue(dto.getAmount());
-		transaction.setType(dto.getType());
+		transaction.setType(TransactionType.valueOf(dto.getType()));
 		transaction.setDate(dto.getDate());
 		transaction.setUser(user);
 		transaction.setCategory(category);
-		
 		
 		return transactionRepository.save(transaction);
 	}

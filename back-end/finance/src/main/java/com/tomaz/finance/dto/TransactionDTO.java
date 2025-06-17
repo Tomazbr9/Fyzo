@@ -2,21 +2,22 @@ package com.tomaz.finance.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotNull;
+
 public class TransactionDTO {
-    private Long id;
     private String description;
+    
+    @NotNull(message = "O valor é obrigatório")
     private Double amount;
     private LocalDate date;
     private Integer type;
+    
+    @NotNull(message = "O id do usuário é obrigatório")
     private Long userId;
+    
+    @NotNull(message = "O id da categoria é obrigatório")
     private Long categoryId;
     
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public String getDescription() {
 		return description;
 	}

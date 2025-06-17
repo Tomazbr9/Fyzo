@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tomaz.finance.dto.TransactionDTO;
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.services.TransactionService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/transactions")
@@ -29,7 +32,7 @@ public class TransactionResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Transaction> create(@RequestBody Transaction dto){
+	public ResponseEntity<Transaction> create( @Valid @RequestBody TransactionDTO dto){
 		Transaction transaction = service.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
 	}
