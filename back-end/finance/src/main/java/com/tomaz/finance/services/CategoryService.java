@@ -6,22 +6,45 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tomaz.finance.dto.CategoryCreateDTO;
 import com.tomaz.finance.entities.Category;
+import com.tomaz.finance.entities.User;
+import com.tomaz.finance.enums.TransactionType;
 import com.tomaz.finance.repositories.CategoryRepository;
+import com.tomaz.finance.repositories.UserRepository;
 
 @Service
 public class CategoryService {
+
+	@Autowired
+	private CategoryRepository categoryRepository;
 	
 	@Autowired
-	private CategoryRepository repository;
+	private UserRepository userRepository;
 	
-	public List<Category> findAll(){
-		return repository.findAll();
+	public List<Category> findAll() {
+		return categoryRepository.findAll();
 	}
-	
+
 	public Category findById(Long id) {
-		Optional<Category> obj = repository.findById(id);
-		
+		Optional<Category> obj = categoryRepository.findById(id);
+
 		return obj.get();
+	}
+
+	public Category create(CategoryCreateDTO dto) {
+		
+		Category category = new Category();
+		
+		User user = userRepository.findById(
+				dto.getUserId()).orElseThrow(()-> new RuntimeException("Usuário não encontrado")
+		);
+		
+		category.setName(dto.getName());
+		category.setType(TransactionType.valueOf(dto.getType()));
+		category.setColor(dto.getColor());
+		category.setUser(user);
+		
+		return categoryRepository.save(category);
 	}
 }

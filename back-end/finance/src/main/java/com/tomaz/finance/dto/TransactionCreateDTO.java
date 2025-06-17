@@ -9,6 +9,7 @@ public class TransactionCreateDTO {
     
     @NotNull(message = "O valor é obrigatório")
     private Double amount;
+    
     private LocalDate date;
     private Integer type;
     
