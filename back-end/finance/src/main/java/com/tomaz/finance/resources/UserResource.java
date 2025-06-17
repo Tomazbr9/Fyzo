@@ -8,11 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tomaz.finance.dto.UserCreateDTO;
+import com.tomaz.finance.dto.UserUpdateDTO;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.services.UserService;
 
@@ -42,5 +44,13 @@ public class UserResource {
 	public ResponseEntity<User> create(@Valid @RequestBody UserCreateDTO dto){
 		User obj = service.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto){
+		User obj = service.update(id, dto);
+		return ResponseEntity.ok(obj);
+		
+		
 	}
 }

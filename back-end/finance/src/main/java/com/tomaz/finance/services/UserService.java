@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.UserCreateDTO;
+import com.tomaz.finance.dto.UserUpdateDTO;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.repositories.UserRepository;
 
@@ -32,6 +33,15 @@ public class UserService {
 		user.setUsername(dto.getUsername());
 		user.setEmail(dto.getEmail());
 		user.setPassword(dto.getPassword());
+		
+		return userRepository.save(user);
+	}
+	
+	public User update(Long id, UserUpdateDTO dto) {
+		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		
+		user.setUsername(dto.getUsername());
+		user.setEmail(dto.getEmail());
 		
 		return userRepository.save(user);
 	}
