@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotNull;
 
-public class TransactionDTO {
+public class TransactionCreateDTO {
     private String description;
     
     @NotNull(message = "O valor é obrigatório")

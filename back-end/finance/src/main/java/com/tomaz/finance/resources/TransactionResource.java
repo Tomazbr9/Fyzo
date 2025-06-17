@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tomaz.finance.dto.TransactionDTO;
+import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.services.TransactionService;
 
@@ -32,8 +32,8 @@ public class TransactionResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Transaction> create( @Valid @RequestBody TransactionDTO dto){
-		Transaction transaction = service.create(dto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
+	public ResponseEntity<Transaction> create(@Valid @RequestBody TransactionCreateDTO dto){
+		Transaction obj = service.create(dto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 }

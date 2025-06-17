@@ -1,5 +1,0 @@
-package com.tomaz.finance.dto;
-
-public class UserDTO {
-
-}

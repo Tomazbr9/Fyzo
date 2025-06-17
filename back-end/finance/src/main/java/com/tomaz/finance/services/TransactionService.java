@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tomaz.finance.dto.TransactionDTO;
+import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.entities.User;
@@ -31,7 +31,7 @@ public class TransactionService {
 		return transactionRepository.findAll();
 	}
 	
-	public Transaction create(TransactionDTO dto) {	
+	public Transaction create(TransactionCreateDTO dto) {	
 		
 		User user = userRepository.findById(
 				dto.getUserId()).orElseThrow(()-> new RuntimeException("Usuário não encontrado")
