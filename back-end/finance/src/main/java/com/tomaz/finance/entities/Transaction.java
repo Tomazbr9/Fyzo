@@ -23,7 +23,9 @@ public class Transaction implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String description;
+	private String title;
+
+	private String description;
     private Double amount;
     private LocalDate date;
     private Integer type;
@@ -40,8 +42,9 @@ public class Transaction implements Serializable {
     	
     }
 
-	public Transaction(Long id, String description, Double amount, LocalDate date, TransactionType type, User user, Category category) {
+	public Transaction(Long id, String title, String description, Double amount, LocalDate date, TransactionType type, User user, Category category) {
 		this.id = id;
+		this.title = title;
 		this.description = description;
 		this.amount = amount;
 		this.date = date;
@@ -65,6 +68,14 @@ public class Transaction implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	 public String getTitle() {
+			return title;
+		}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public String getDescription() {
 		return description;
@@ -74,12 +85,12 @@ public class Transaction implements Serializable {
 		this.description = description;
 	}
 
-	public Double getValue() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setValue(Double value) {
-		this.amount = value;
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 
 	public LocalDate getDate() {
@@ -91,6 +102,11 @@ public class Transaction implements Serializable {
 	}
 
 	public TransactionType getType() {
+		
+		if(type == null) {
+			return null;
+		}
+		
 		return TransactionType.valueOf(type);
 	}
 

@@ -2,10 +2,21 @@ package com.tomaz.finance.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class TransactionCreateDTO {
-    private String description;
+	
+	private String title;
+    public String getTitle() {
+		return title;
+	}
+    
+    @NotBlank(message = "Digite um titulo para essa transação")
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	private String description;
     
     @NotNull(message = "O valor é obrigatório")
     private Double amount;

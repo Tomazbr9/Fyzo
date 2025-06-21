@@ -38,8 +38,8 @@ public class TestConfig implements CommandLineRunner {
 		Category c1 = new Category(null, "Aluguel", TransactionType.EXPENSE, "", null);
 		Category c2 = new Category(null, "Renda", TransactionType.REVENUE, "", null);
 		
-		Transaction t1 = new Transaction(null, "salario", 1550.0, LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u1, c1);
-		Transaction t2 = new Transaction(null, "salario", 1800.0, LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u2, c2);
+		Transaction t1 = new Transaction(null, "Salario dia 5", "salario", 1550.0, LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u1, c1);
+		Transaction t2 = new Transaction(null, "Vale","salario", 1800.0, LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u2, c2);
 		
 		categoryRepository.saveAll(Arrays.asList(c1, c2));
 		userRepository.saveAll(Arrays.asList(u1, u2));
