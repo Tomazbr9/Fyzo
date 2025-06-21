@@ -41,7 +41,7 @@ public class TransactionResource {
 	}
 	
 	@PatchMapping("/{id}")
-	public ResponseEntity<Transaction> update(@PathVariable Long id, @Valid @RequestBody TransactionUpdateDTO dto){
+	public ResponseEntity<Transaction> update(@PathVariable Long id, @RequestBody TransactionUpdateDTO dto){
 		Transaction obj = service.update(id, dto);
 		return ResponseEntity.ok(obj);
 	}

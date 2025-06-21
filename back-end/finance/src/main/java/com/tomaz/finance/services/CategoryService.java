@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.CategoryCreateDTO;
+import com.tomaz.finance.dto.CategoryUpdateDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.enums.TransactionType;
@@ -44,6 +45,25 @@ public class CategoryService {
 		category.setType(TransactionType.valueOf(dto.getType()));
 		category.setColor(dto.getColor());
 		category.setUser(user);
+		
+		return categoryRepository.save(category);
+	}
+	
+	public Category update(Long id, CategoryUpdateDTO dto) {
+		
+		Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+		
+		if(dto.getName() != null && !dto.getName().isBlank()) {
+			category.setName(dto.getName());
+		}
+		
+		if(dto.getType() != null) {
+			category.setType(TransactionType.valueOf(dto.getType()));
+		}
+		
+		if(dto.getColor() != null && dto.getColor().isBlank()) {
+			category.setColor(dto.getColor());
+		}
 		
 		return categoryRepository.save(category);
 	}
