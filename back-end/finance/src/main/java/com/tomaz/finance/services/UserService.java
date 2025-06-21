@@ -40,8 +40,13 @@ public class UserService {
 	public User update(Long id, UserUpdateDTO dto) {
 		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 		
-		user.setUsername(dto.getUsername());
-		user.setEmail(dto.getEmail());
+		if(dto.getUsername() != null && !dto.getUsername().isBlank()) {
+			user.setUsername(dto.getUsername());
+		}
+		
+		if(dto.getEmail() != null && !dto.getEmail().isBlank()) {
+			user.setEmail(dto.getEmail());
+		}
 		
 		return userRepository.save(user);
 	}
