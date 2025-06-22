@@ -89,5 +89,13 @@ public class TransactionService {
 		
 		return transactionRepository.save(transaction);
 	}
+	
+	public void delete(Long id) {
+		if(!transactionRepository.existsById(id)) {
+			throw new RuntimeException("Usuário não encontrado");
+		}
+		
+		transactionRepository.deleteById(id);
+	}
 		
 }

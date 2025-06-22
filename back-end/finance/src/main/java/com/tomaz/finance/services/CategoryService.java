@@ -1,6 +1,6 @@
 package com.tomaz.finance.services;
 
-import java.util.List;
+import java.util.List; 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ public class CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	public List<Category> findAll() {
 		return categoryRepository.findAll();
 	}
@@ -34,37 +34,46 @@ public class CategoryService {
 	}
 
 	public Category create(CategoryCreateDTO dto) {
-		
+
 		Category category = new Category();
-		
-		User user = userRepository.findById(
-				dto.getUserId()).orElseThrow(()-> new RuntimeException("Usuário não encontrado")
-		);
-		
+
+		User user = userRepository.findById(dto.getUserId())
+				.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
 		category.setName(dto.getName());
 		category.setType(TransactionType.valueOf(dto.getType()));
 		category.setColor(dto.getColor());
 		category.setUser(user);
-		
+
 		return categoryRepository.save(category);
 	}
-	
+
 	public Category update(Long id, CategoryUpdateDTO dto) {
-		
-		Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-		
-		if(dto.getName() != null && !dto.getName().isBlank()) {
+
+		Category category = categoryRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+
+		if (dto.getName() != null && !dto.getName().isBlank()) {
 			category.setName(dto.getName());
 		}
-		
-		if(dto.getType() != null) {
+
+		if (dto.getType() != null) {
 			category.setType(TransactionType.valueOf(dto.getType()));
 		}
-		
-		if(dto.getColor() != null && dto.getColor().isBlank()) {
+
+		if (dto.getColor() != null && dto.getColor().isBlank()) {
 			category.setColor(dto.getColor());
 		}
-		
+
 		return categoryRepository.save(category);
+    }
+
+	public void delete(Long id) {
+		if (!categoryRepository.existsById(id)) {
+			throw new RuntimeException("Usuário não encontrado");
+		}
+
+		categoryRepository.deleteById(id);
 	}
+
 }
