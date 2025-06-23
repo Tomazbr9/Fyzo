@@ -11,12 +11,15 @@ import com.tomaz.finance.entities.User;
 
 public class UserDetailsImpl implements UserDetails {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private User user;
 	
 	public UserDetailsImpl(User user) {
 		this.user = user;
 	}
 	
+	@Override
 	public Collection<? extends GrantedAuthority>  getAuthorities(){
 		return user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
