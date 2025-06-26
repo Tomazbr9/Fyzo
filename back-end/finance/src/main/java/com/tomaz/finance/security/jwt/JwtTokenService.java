@@ -7,6 +7,7 @@ import java.time.ZonedDateTime;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
 
 public class JwtTokenService {
@@ -26,6 +27,20 @@ public class JwtTokenService {
 	    } 
 		catch (JWTCreationException exception) {
 			throw new JWTCreationException("Erro ao gerar token.", exception);
+		}
+	}
+	
+	public String getSubjectFromToken(String token) {
+		try {
+			Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+			return JWT.require(algorithm)
+					.withIssuer(ISSUER)
+					.build()
+					.verify(token)
+					.getSubject();
+		}
+		catch (JWTVerificationException exception) {
+			throw new JWTCreationException("Token inválido ou expirado.", exception);
 		}
 	}
 	
