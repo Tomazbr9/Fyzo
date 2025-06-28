@@ -1,5 +1,7 @@
 package com.tomaz.finance.dto;
 
+import java.util.List; 
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -14,6 +16,8 @@ public class UserCreateDTO {
 	
 	@NotBlank(message = "A senha é obrigatória")
     private String password;
+	
+	private List<String> roles;
     
 	public String getUsername() {
 		return username;
@@ -33,4 +37,12 @@ public class UserCreateDTO {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public List<String> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+	
+	
 }

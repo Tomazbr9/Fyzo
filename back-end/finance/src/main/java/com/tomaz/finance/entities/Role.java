@@ -27,7 +27,6 @@ public class Role {
 	}
 
 	public Role(Long id, RoleName name) {
-		super();
 		this.id = id;
 		this.name = name;
 	}

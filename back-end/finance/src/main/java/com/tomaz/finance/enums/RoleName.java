@@ -1,6 +1,6 @@
 package com.tomaz.finance.enums;
 
 public enum RoleName {
-	ROLE_USER,
+	ROLE_CUSTOMER,
 	ROLE_ADMIN
 }
