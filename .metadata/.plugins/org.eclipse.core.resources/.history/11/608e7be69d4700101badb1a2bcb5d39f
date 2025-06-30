@@ -1,0 +1,48 @@
+package com.tomaz.finance.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.tomaz.finance.entities.Transaction;
+import com.tomaz.finance.repositories.CategoryRepository;
+import com.tomaz.finance.repositories.TransactionRepository;
+import com.tomaz.finance.repositories.UserRepository;
+
+@Service
+public class TransactionService {
+	
+	@Autowired
+	private TransactionRepository transactionRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	public List<Transaction> findAll(){
+		return transactionRepository.findAll();
+	}
+	
+	public Transaction create(Transaction dto) {
+		Transaction transaction = new Transaction();
+		
+		
+		
+		
+		
+		transaction.setDescription(dto.getDescription());
+		transaction.setValue(dto.getValue());
+		transaction.setType(dto.getType());
+		transaction.setDate(dto.getDate());
+		transaction.setCategory(dto.getCategory());
+		transaction.setUser(dto.getUser());
+		
+		return transactionRepository.save(transaction);
+	}
+	
+	
+	
+}
