@@ -15,6 +15,7 @@ import com.tomaz.finance.dto.UserCreateDTO;
 import com.tomaz.finance.dto.UserUpdateDTO;
 import com.tomaz.finance.entities.Role;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.enums.RoleName;
 import com.tomaz.finance.repositories.RoleRepository;
 import com.tomaz.finance.repositories.UserRepository;
 import com.tomaz.finance.security.SecurityConfig;
@@ -62,14 +63,18 @@ public class UserService {
 	public User create(UserCreateDTO dto) {
 		User user = new User();
 		
-		List<Role> roles = dto.getRoles().stream()
-				.map(roleName -> roleRepository.findByName(roleName)
-				.orElseThrow(() -> new RuntimeException("Role não encontrada:" + roleName))).toList();
+		System.out.println("TÔ AQUI");
+		
+	    
+		RoleName roleName = RoleName.valueOf(dto.getRole());
+		Role role = roleRepository.findByName(roleName)
+		    .orElseThrow(() -> new RuntimeException("Role não encontrada: " + roleName));
 		
 		user.setUsername(dto.getUsername());
 		user.setEmail(dto.getEmail());
 		user.setPassword(securityConfig.passwordEncoder().encode(dto.getPassword()));
-		user.setRoles(roles);
+		user.setRoles(List.of(role));
+		
 		
 		return userRepository.save(user);
 	}

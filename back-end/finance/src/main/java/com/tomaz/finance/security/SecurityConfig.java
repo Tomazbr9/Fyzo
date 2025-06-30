@@ -1,6 +1,6 @@
 package com.tomaz.finance.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +23,8 @@ public class SecurityConfig {
     private UserAuthenticationFilter userAuthenticationFilter;
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/users/**"
+    		"/users/login",
+    		"/users/register",
     };
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
@@ -35,16 +36,18 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_ADMIN = {
-            
+            "/users"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(csrf -> csrf.disable())
+            
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
@@ -53,7 +56,7 @@ public class SecurityConfig {
 
                 .anyRequest().denyAll()
             )
-            .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+           .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
     

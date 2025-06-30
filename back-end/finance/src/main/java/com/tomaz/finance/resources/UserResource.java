@@ -49,7 +49,7 @@ public class UserResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@PostMapping
+	@PostMapping("/register")
 	public ResponseEntity<User> create(@Valid @RequestBody UserCreateDTO dto){
 		User obj = service.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
