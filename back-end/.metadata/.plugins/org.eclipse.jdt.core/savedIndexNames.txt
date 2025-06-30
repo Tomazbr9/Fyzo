@@ -1,0 +1,2 @@
+INDEX VERSION 1.134+/home/bruno/projects/sistema_de_gestão_financeira_pessoal/back-end/.metadata/.plugins/org.eclipse.jdt.core
+1865797976.index

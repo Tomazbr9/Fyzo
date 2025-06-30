@@ -1,0 +1,186 @@
+[33mcommit b9db610d3dd690ac52c86a8da95b1e840758afee[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 30 11:42:51 2025 -0300
+
+    ...
+
+[33mcommit cd7b901ff33e904e949f13bc6d11456dc0d6ce35[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 30 11:39:31 2025 -0300
+
+    Removida a pasta .metadata
+
+[33mcommit ca143b96d6f4f0a0594819c42dbe00366414bae2[m
+Merge: d5bfe76 29441da
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 30 11:37:13 2025 -0300
+
+    Resolvendo conflitos mantendo versões locais dos arquivos
+
+[33mcommit d5bfe760a9dc4d6f29a397b21dd2f089f61a6a49[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 30 11:30:48 2025 -0300
+
+    Foi ajustado a forma como o back end recebe enum
+
+[33mcommit 29441da0fe80f97f519e28876765aa497eaab524[m
+Author: Bruno Tomaz <tomazcraft@gmail.com>
+Date:   Sun Jun 29 10:06:25 2025 -0300
+
+    Remove .metadata to allow Windows checkout
+
+[33mcommit be4806496fa9daf90f9103669e4f4fb2e4283a4d[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sat Jun 28 11:54:12 2025 -0300
+
+    Algumas configurações foram feitas
+
+[33mcommit c701986d49ade347651b103d302d925e3e2971e1[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Thu Jun 26 11:49:08 2025 -0300
+
+    Foi criada a classe UserauthentactionFilter que tem como objetivo verificar se o usuario é valido e autenticá-lo
+
+[33mcommit 01b85ec9d1be6f955aedea5086e0ac8a4eb475ca[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Thu Jun 26 10:55:16 2025 -0300
+
+    Foi definido por enquanto duas rotas que não tem necessidade de autenticação
+
+[33mcommit c134e42d13aadb4bef9ef03f239d5447fb653d67[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Thu Jun 26 10:43:05 2025 -0300
+
+    Foi criado a classe JwtTokenService que tem como objetivo criar e verificar tokens
+
+[33mcommit fec7d4565b5c1032684ba8e1df262bf3b1a6a67f[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 23 11:04:59 2025 -0300
+
+    foi criado um service que implementa UserDetailsService para retornar um UserDetails para retornar detalhes do usuário
+
+[33mcommit 0f1dd5eec2639c0fecb7359dd37963b7a052c784[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 23 10:48:18 2025 -0300
+
+    Foi criado uma entidade que implementa a interface UserDetails para buscar informações do usuário
+
+[33mcommit 6c639ee334e6e9a7b61581774d45f0d0a37110e1[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 23 10:32:09 2025 -0300
+
+    Foi criado um metodo no repositorio user para buscar no banco de dados informações do usuario
+
+[33mcommit dc6c665b96b999a99f300e39c435cb86e3fd92ff[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Mon Jun 23 10:25:27 2025 -0300
+
+    Foi criadaa a entidade Role e o enum RoleName para identificar papel de usuário
+
+[33mcommit 0fb224e3d6b77c565b9d28a559ca510af2e0ba3f[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sun Jun 22 08:28:26 2025 -0300
+
+    Foi criado um resource para criar autenticação de usuarios e um metodo para fazer registros
+
+[33mcommit 0d506d9674c9c5e1f2e00c70a73fe2414e8614f4[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sun Jun 22 08:04:33 2025 -0300
+
+    Foi criado rotas para deletar categorias e transações
+
+[33mcommit 200c8a65755e849c3ee0616173067181042d1f67[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sat Jun 21 11:41:42 2025 -0300
+
+    Foi criado um recurso para deletar usuarios através do id
+
+[33mcommit b26bc9d80b3b333474db8fafac280fa468f2e5f1[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sat Jun 21 11:20:10 2025 -0300
+
+    Foi criado um dto para atualizar dados da entidade categoria
+
+[33mcommit 8ab3e19d8397d898d9b089cfb7d466583564df64[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sat Jun 21 10:59:52 2025 -0300
+
+    Foi criado o dto para fazer requisições de atualizações para a entidade transaction
+
+[33mcommit 255ef2dbc84212e05985fa2eb8d8e55dbe458a45[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sat Jun 21 09:39:04 2025 -0300
+
+    Rota put para usuarios para é patch
+
+[33mcommit e30a3b4e5efb1629f305dfddf429a96b89f43268[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Tue Jun 17 11:35:48 2025 -0300
+
+    Foi criado um dto para fazer updates nos usuários
+
+[33mcommit 2cd3386c02efc4ddb28a29e14e8739c98049ddfc[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Tue Jun 17 11:13:42 2025 -0300
+
+    Foi criado o dto para criação de categorias
+
+[33mcommit 09a93d728079f8de7a857af9948076e678c4218d[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Tue Jun 17 10:36:45 2025 -0300
+
+    Foi criado dto para entidatde user para ser usada para criação de novos usuários
+
+[33mcommit 623aca218a195a8911327c62db8b109782ab38c2[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Tue Jun 17 10:04:35 2025 -0300
+
+    Foi adicionado validações nos campos do dto Transaction
+
+[33mcommit 0bd94ded9b3faf36aa0161bb015bc0616d1c64ad[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Sat Jun 14 00:05:15 2025 -0300
+
+    Foi criado uma classe dto para transações
+
+[33mcommit 0d0c836c60d6e6c411171107fce0d39e11e4fbeb[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Thu Jun 12 12:01:14 2025 -0300
+
+    Foi criado metodos para buscar por categorias e usuarios por id
+
+[33mcommit b450fbd7144d0f5d79bcc5c9100f47bc7a1a2f24[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Thu Jun 5 10:48:28 2025 -0300
+
+    Foi criado as tabelas Category e Transaction
+
+[33mcommit 2c3a9e08ec691d05c05c3974c6421671d861855d[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Thu Jun 5 08:56:26 2025 -0300
+
+    Foi criado a entidade Transaction e o enum para selecionar o tipo de transação
+
+[33mcommit 86c4ba07754a42f23b3cff3b2bfd1b0036a2abe1[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Wed Jun 4 00:04:21 2025 -0300
+
+    Foi criada a tabela user
+
+[33mcommit 6bed17f33a7d1b7ba128161034bb887a67336a8b[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Tue Jun 3 23:20:19 2025 -0300
+
+    Segundo commit
+
+[33mcommit 0de677e5c57b2906deeae155df100423f2add750[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Tue Jun 3 23:15:41 2025 -0300
+
+    Removida a pasta .metadata do repositorio
+
+[33mcommit 0dbd28ffbc2b13d27475c2609073aa2af7f91f50[m
+Author: Tomaz <tomazcraft@gmail.com>
+Date:   Tue Jun 3 23:07:20 2025 -0300
+
+    Configuraçoes iniciais
