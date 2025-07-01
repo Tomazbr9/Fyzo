@@ -1,10 +1,11 @@
 package com.tomaz.finance.resources;
 
-import java.util.List;  
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +20,7 @@ import com.tomaz.finance.dto.LoginDTO;
 import com.tomaz.finance.dto.UserCreateDTO;
 import com.tomaz.finance.dto.UserUpdateDTO;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.UserService;
 
 import jakarta.validation.Valid;
@@ -43,25 +45,29 @@ public class UserResource {
 		return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<User> findById(@PathVariable Long id) {
-		User obj = service.findById(id);
-		return ResponseEntity.ok().body(obj);
-	}
-	
 	@PostMapping("/register")
 	public ResponseEntity<User> create(@Valid @RequestBody UserCreateDTO dto){
 		User obj = service.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
-	@PatchMapping("/{id}")
-	public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto){
-		User obj = service.update(id, dto);
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<User> findById(@PathVariable Long id) {
+		User obj = service.findById(id);
+		return ResponseEntity.ok().body(obj);
+	}
+	
+	@PatchMapping("/update")
+	public ResponseEntity<User> update(@Valid @RequestBody UserUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		
+		String username = userDetails.getUsername();
+		
+		
+		User obj = service.update(dto, username);
 		return ResponseEntity.ok(obj);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id){
 		service.delete(id);
 		return ResponseEntity.noContent().build();

@@ -33,13 +33,12 @@ public class CategoryService {
 		return obj.get();
 	}
 
-	public Category create(CategoryCreateDTO dto) {
+	public Category create(CategoryCreateDTO dto, String username) {
 
 		Category category = new Category();
 
-		User user = userRepository.findById(dto.getUserId())
-				.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		
 		category.setName(dto.getName());
 		category.setType(TransactionType.valueOf(dto.getType()));
 		category.setColor(dto.getColor());

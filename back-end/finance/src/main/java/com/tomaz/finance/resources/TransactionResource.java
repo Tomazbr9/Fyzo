@@ -1,11 +1,11 @@
 package com.tomaz.finance.resources;
 
-import java.security.Principal; 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
 import com.tomaz.finance.entities.Transaction;
+import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.TransactionService;
 
 import jakarta.validation.Valid;
@@ -37,9 +38,9 @@ public class TransactionResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<Transaction> create(@Valid @RequestBody TransactionCreateDTO dto, Principal principal){
+	public ResponseEntity<Transaction> create(@Valid @RequestBody TransactionCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		
-		String username = principal.getName();
+		String username = userDetails.getUsername();
 		
 		Transaction obj = service.create(dto, username);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tomaz.finance.dto.CategoryCreateDTO;
 import com.tomaz.finance.dto.CategoryUpdateDTO;
 import com.tomaz.finance.entities.Category;
+import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -41,9 +43,11 @@ public class CategoryResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@PostMapping
-	public ResponseEntity<Category> create(@Valid @RequestBody CategoryCreateDTO dto){
-		Category obj = service.create(dto);
+	@PostMapping("/create")
+	public ResponseEntity<Category> create(@Valid @RequestBody CategoryCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		
+		String username = userDetails.getUsername();
+		Category obj = service.create(dto, username);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	

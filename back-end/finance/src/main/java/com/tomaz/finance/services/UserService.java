@@ -76,8 +76,8 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
-	public User update(Long id, UserUpdateDTO dto) {
-		User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+	public User update(UserUpdateDTO dto, String username) {
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 		
 		if(dto.getUsername() != null && !dto.getUsername().isBlank()) {
 			user.setUsername(dto.getUsername());

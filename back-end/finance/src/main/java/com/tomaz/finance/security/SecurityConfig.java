@@ -28,7 +28,9 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/transactions/create"
+    		"/users/update",
+            "/transactions/create",
+    		"/categories/create"
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
@@ -37,7 +39,8 @@ public class SecurityConfig {
 
     public static final String [] ENDPOINTS_ADMIN = {
             "/users",
-    		"/transactions"
+    		"/transactions",
+            "/categories"
     };
 
     @Bean

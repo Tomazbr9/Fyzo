@@ -1,6 +1,6 @@
 package com.tomaz.finance.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank; 
 import jakarta.validation.constraints.NotNull;
 
 public class CategoryCreateDTO {
@@ -13,9 +13,6 @@ public class CategoryCreateDTO {
 	
 	@NotBlank(message = "É obrigatório a escolha de uma cor para a categoria")
     private String color;
-	
-	@NotNull(message = "O id do usuário é obrigatório")
-    private Long userId;
     
 	public String getName() {
 		return name;
@@ -35,10 +32,5 @@ public class CategoryCreateDTO {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+	
 }
