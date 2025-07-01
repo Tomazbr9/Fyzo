@@ -1,6 +1,6 @@
 package com.tomaz.finance.services;
 
-import java.util.List;
+import java.util.List; 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +62,7 @@ public class UserService {
 	
 	public User create(UserCreateDTO dto) {
 		User user = new User();
-		
-		System.out.println("TÔ AQUI");
-		
-	    
+
 		RoleName roleName = RoleName.valueOf(dto.getRole());
 		Role role = roleRepository.findByName(roleName)
 		    .orElseThrow(() -> new RuntimeException("Role não encontrada: " + roleName));

@@ -31,11 +31,10 @@ public class TransactionService {
 		return transactionRepository.findAll();
 	}
 	
-	public Transaction create(TransactionCreateDTO dto) {	
+	public Transaction create(TransactionCreateDTO dto, String username) {
 		
-		User user = userRepository.findById(
-				dto.getUserId()).orElseThrow(()-> new RuntimeException("Usuário não encontrado")
-		);
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 			
 		Category category = categoryRepository.findById(
 				dto.getCategoryId()).orElseThrow(()-> new RuntimeException("Categoria não encontrada")

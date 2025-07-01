@@ -1,21 +1,15 @@
 package com.tomaz.finance.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDate; 
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class TransactionCreateDTO {
 	
+	@NotBlank(message = "Digite um titulo para essa transação")
 	private String title;
-    public String getTitle() {
-		return title;
-	}
-    
-    @NotBlank(message = "Digite um titulo para essa transação")
-	public void setTitle(String title) {
-		this.title = title;
-	}
+   
 	private String description;
     
     @NotNull(message = "O valor é obrigatório")
@@ -24,11 +18,16 @@ public class TransactionCreateDTO {
     private LocalDate date;
     private Integer type;
     
-    @NotNull(message = "O id do usuário é obrigatório")
-    private Long userId;
-    
     @NotNull(message = "O id da categoria é obrigatório")
     private Long categoryId;
+    
+    public String getTitle() {
+		return title;
+	}
+    
+	public void setTitle(String title) {
+		this.title = title;
+	}
     
 	public String getDescription() {
 		return description;
@@ -53,12 +52,6 @@ public class TransactionCreateDTO {
 	}
 	public void setType(Integer type) {
 		this.type = type;
-	}
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
 	}
 	public Long getCategoryId() {
 		return categoryId;

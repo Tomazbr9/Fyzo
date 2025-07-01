@@ -1,5 +1,6 @@
 package com.tomaz.finance.resources;
 
+import java.security.Principal; 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,12 @@ public class TransactionResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@PostMapping
-	public ResponseEntity<Transaction> create(@Valid @RequestBody TransactionCreateDTO dto){
-		Transaction obj = service.create(dto);
+	@PostMapping("/create")
+	public ResponseEntity<Transaction> create(@Valid @RequestBody TransactionCreateDTO dto, Principal principal){
+		
+		String username = principal.getName();
+		
+		Transaction obj = service.create(dto, username);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
