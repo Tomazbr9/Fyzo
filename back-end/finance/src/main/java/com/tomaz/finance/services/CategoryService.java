@@ -1,6 +1,6 @@
 package com.tomaz.finance.services;
 
-import java.util.List; 
+import java.util.List;  
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +47,16 @@ public class CategoryService {
 		return categoryRepository.save(category);
 	}
 
-	public Category update(Long id, CategoryUpdateDTO dto) {
+	public Category update(Long id, CategoryUpdateDTO dto, String username) {
 
 		Category category = categoryRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		
+		if(!category.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Essa categoria não pertence a você.");
+		}
 
 		if (dto.getName() != null && !dto.getName().isBlank()) {
 			category.setName(dto.getName());
@@ -67,9 +73,15 @@ public class CategoryService {
 		return categoryRepository.save(category);
     }
 
-	public void delete(Long id) {
-		if (!categoryRepository.existsById(id)) {
-			throw new RuntimeException("Usuário não encontrado");
+	public void delete(Long id, String username) {
+		
+		Category category = categoryRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		
+		if(!category.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Essa categoria não pertence a você.");
 		}
 
 		categoryRepository.deleteById(id);
