@@ -1,8 +1,9 @@
 package com.tomaz.finance.security;
 
-import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,8 +30,9 @@ public class SecurityConfig {
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
     		"/users/update",
-            "/transactions/create",
-    		"/categories/create"
+            "/transactions/**",
+    		"/categories/**"
+            
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
@@ -54,6 +56,7 @@ public class SecurityConfig {
             
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
+//                .requestMatchers(HttpMethod.PATCH, "/transactions/**").authenticated()
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
                 .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")

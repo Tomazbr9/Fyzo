@@ -46,9 +46,9 @@ public class TransactionResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
-	@PatchMapping("/{id}")
-	public ResponseEntity<Transaction> update(@PathVariable Long id, @RequestBody TransactionUpdateDTO dto){
-		Transaction obj = service.update(id, dto);
+	@PatchMapping("/update/{id}")
+	public ResponseEntity<Transaction> update(@PathVariable Long id, @RequestBody TransactionUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		Transaction obj = service.update(id, dto, userDetails.getUsername());
 		return ResponseEntity.ok(obj);
 	}
 	

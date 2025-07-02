@@ -53,10 +53,15 @@ public class TransactionService {
 		return transactionRepository.save(transaction);
 	}
 	
-	public Transaction update(Long id, TransactionUpdateDTO dto) {
+	public Transaction update(Long id, TransactionUpdateDTO dto, String username) {
+		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("usuário não encontrado"));
 		
 		Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transação não encontrada"));
 		
+		if(!transaction.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Essa transação não pertence a você.");
+		}
 		
 		if(dto.getTitle() != null && !dto.getTitle().isBlank()) {
 			transaction.setTitle(dto.getTitle());
