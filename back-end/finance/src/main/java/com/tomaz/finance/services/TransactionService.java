@@ -55,7 +55,7 @@ public class TransactionService {
 	
 	public Transaction update(Long id, TransactionUpdateDTO dto, String username) {
 		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("usuário não encontrado"));
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 		
 		Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transação não encontrada"));
 		
@@ -94,9 +94,14 @@ public class TransactionService {
 		return transactionRepository.save(transaction);
 	}
 	
-	public void delete(Long id) {
-		if(!transactionRepository.existsById(id)) {
-			throw new RuntimeException("Usuário não encontrado");
+	public void delete(Long id, String username) {
+		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		
+		Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+		
+		if(!transaction.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Essa transação não pertence a você.");
 		}
 		
 		transactionRepository.deleteById(id);

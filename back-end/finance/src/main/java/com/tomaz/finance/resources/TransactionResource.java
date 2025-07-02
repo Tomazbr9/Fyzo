@@ -1,6 +1,6 @@
 package com.tomaz.finance.resources;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,9 +52,9 @@ public class TransactionResource {
 		return ResponseEntity.ok(obj);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
-		service.delete(id);
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		service.delete(id, userDetails.getUsername());
 		return ResponseEntity.noContent().build();
 	}
 }
