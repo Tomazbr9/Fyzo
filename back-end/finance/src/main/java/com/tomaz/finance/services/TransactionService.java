@@ -1,5 +1,6 @@
 package com.tomaz.finance.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,21 @@ public class TransactionService {
 		transaction.setTitle(dto.getTitle());
 		transaction.setDescription(dto.getDescription());
 		transaction.setAmount(dto.getAmount());
-		transaction.setType(TransactionType.valueOf(dto.getType()));
-		transaction.setDate(dto.getDate());
+		
+		try {
+			transaction.setType(TransactionType.valueOf(dto.getType()));
+		}
+		catch (IllegalArgumentException e) {
+	        throw new RuntimeException("Tipo de transação inválido.");
+	    }
+		
+		if(dto.getDate() == null) {
+			transaction.setDate(LocalDate.now());
+		}
+		else {
+			transaction.setDate(dto.getDate());
+		}
+		
 		transaction.setUser(user);
 		transaction.setCategory(category);
 		
@@ -76,7 +90,12 @@ public class TransactionService {
 		}
 		
 		if(dto.getType() != null) {
-			transaction.setType(TransactionType.valueOf(dto.getType()));
+			try {
+				transaction.setType(TransactionType.valueOf(dto.getType()));
+			}
+			catch (IllegalArgumentException e) {
+		        throw new RuntimeException("Tipo de transação inválido.");
+		    }
 		}
 		
 		if(dto.getDate() != null) {

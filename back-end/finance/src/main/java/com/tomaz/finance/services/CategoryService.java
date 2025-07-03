@@ -40,7 +40,14 @@ public class CategoryService {
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 		
 		category.setName(dto.getName());
-		category.setType(TransactionType.valueOf(dto.getType()));
+		
+		try {
+			category.setType(TransactionType.valueOf(dto.getType()));
+		} 
+		catch (IllegalArgumentException e) {
+	        throw new RuntimeException("Tipo de transação inválido.");
+	    }
+		
 		category.setColor(dto.getColor());
 		category.setUser(user);
 
@@ -50,9 +57,9 @@ public class CategoryService {
 	public Category update(Long id, CategoryUpdateDTO dto, String username) {
 
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+				.orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
 		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 		
 		if(!category.getUser().getId().equals(user.getId())) {
 			throw new RuntimeException("Essa categoria não pertence a você.");
@@ -63,7 +70,12 @@ public class CategoryService {
 		}
 
 		if (dto.getType() != null) {
-			category.setType(TransactionType.valueOf(dto.getType()));
+			try {
+				category.setType(TransactionType.valueOf(dto.getType()));
+			}
+			catch (IllegalArgumentException e) {
+		        throw new RuntimeException("Tipo de transação inválido.");
+		    }
 		}
 
 		if (dto.getColor() != null && dto.getColor().isBlank()) {

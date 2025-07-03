@@ -1,7 +1,8 @@
 package com.tomaz.finance.dto;
 
-import jakarta.validation.constraints.NotBlank; 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public class CategoryCreateDTO {
     
@@ -12,6 +13,7 @@ public class CategoryCreateDTO {
     private Integer type;
 	
 	@NotBlank(message = "É obrigatório a escolha de uma cor para a categoria")
+	@Pattern(regexp = "^#[A-Fa-f0-9]{6}$", message = "A cor deve estar no formato hexadecimal (ex: #FF5733)")
     private String color;
     
 	public String getName() {
