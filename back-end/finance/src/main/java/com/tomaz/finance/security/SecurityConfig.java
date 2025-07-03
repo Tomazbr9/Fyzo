@@ -42,7 +42,10 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
-          "/transactions/balance"
+          "/transactions/balance",
+          "/transactions/summary/expense",
+          "/transactions/summary/revenue",
+    		
     };
 
     public static final String [] ENDPOINTS_ADMIN = {

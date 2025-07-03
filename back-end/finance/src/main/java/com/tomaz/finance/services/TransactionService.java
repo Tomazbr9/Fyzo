@@ -3,11 +3,14 @@ package com.tomaz.finance.services;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.BalanceDTO;
+import com.tomaz.finance.dto.CategorySummaryDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
 import com.tomaz.finance.entities.Category;
@@ -146,5 +149,38 @@ public class TransactionService {
 		
 		return new BalanceDTO(totalRevenue, totalExpense);
 	}
+	
+    public List<CategorySummaryDTO> getSummaryByType(String username, Integer type){
+    	
+    	User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+    	
+    	List<Transaction> transactions = transactionRepository.findByUserAndType(user, type);
+    	
+    	Map<Category, BigDecimal> groupedByCategory = transactions
+    			.stream()
+    			.collect(
+    					Collectors.groupingBy(
+    							Transaction::getCategory,
+    							Collectors.mapping(
+    									Transaction::getAmount, 
+    									Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)
+    							)
+    					)
+    			);
+    	
+        
+    	return groupedByCategory
+    			.entrySet().stream()
+    			.map(entry -> new CategorySummaryDTO(
+    					entry.getKey().getId(),
+    					entry.getKey().getName(),
+    					entry.getValue()
+    					
+    			))
+    			.collect(Collectors.toList());
+    					
+    }
+	
+	
 		
 }

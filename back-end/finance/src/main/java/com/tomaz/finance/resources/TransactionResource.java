@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tomaz.finance.dto.BalanceDTO;
+import com.tomaz.finance.dto.CategorySummaryDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
 import com.tomaz.finance.entities.Transaction;
+import com.tomaz.finance.enums.TransactionType;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.TransactionService;
 
@@ -62,6 +64,18 @@ public class TransactionResource {
 	@GetMapping("/balance")
 	public ResponseEntity<BalanceDTO> getBalance(@AuthenticationPrincipal UserDetailsImpl userDetails){
 		BalanceDTO obj = service.getUserBalance(userDetails.getUsername());
+		return ResponseEntity.ok(obj);
+	}
+	
+	@GetMapping("/summary/expense")
+	public ResponseEntity<List<CategorySummaryDTO>> getExpenseByCategory(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<CategorySummaryDTO> obj = service.getSummaryByType(userDetails.getUsername(), TransactionType.EXPENSE.getCode());
+		return ResponseEntity.ok(obj);
+	}
+	
+	@GetMapping("/summary/revenue")
+	public ResponseEntity<List<CategorySummaryDTO>> getRevenueByCategory(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		List<CategorySummaryDTO> obj = service.getSummaryByType(userDetails.getUsername(), TransactionType.REVENUE.getCode());
 		return ResponseEntity.ok(obj);
 	}
 }

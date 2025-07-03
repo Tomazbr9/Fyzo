@@ -49,7 +49,7 @@ public class TestConfig implements CommandLineRunner {
 		u2.setRoles(List.of(customerRole));
 		
 		Category c1 = new Category(null, "Aluguel", TransactionType.EXPENSE, "", null);
-		Category c2 = new Category(null, "Renda", TransactionType.REVENUE, "", null);
+		Category c2 = new Category(null, "Salario", TransactionType.REVENUE, "", null);
 		
 		Transaction t1 = new Transaction(null, "Salario dia 5", "salario", new BigDecimal("1550.0"), LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u1, c1);
 		Transaction t2 = new Transaction(null, "Vale","salario", new BigDecimal("1800.0"), LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u2, c2);

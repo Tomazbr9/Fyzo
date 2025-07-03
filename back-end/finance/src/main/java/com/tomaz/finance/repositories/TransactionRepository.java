@@ -11,4 +11,6 @@ import com.tomaz.finance.entities.User;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 	List<Transaction> findByUser(User user);
+	
+	List<Transaction> findByUserAndType(User user, Integer type);
 }
