@@ -30,9 +30,11 @@ public class SecurityConfig {
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
     		"/users/update",
     		"/users/delete",
+    		
     		"/transactions/create",
             "/transactions/update/**",
             "/transactions/delete/**",
+            
     		"/categories/create",
             "/categories/update/**",
             "/categories/delete/**",
@@ -40,7 +42,7 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
-          
+          "/transactions/balance"
     };
 
     public static final String [] ENDPOINTS_ADMIN = {

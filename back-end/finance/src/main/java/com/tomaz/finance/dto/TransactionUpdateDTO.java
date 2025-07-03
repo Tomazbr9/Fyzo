@@ -1,12 +1,18 @@
 package com.tomaz.finance.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import jakarta.validation.constraints.DecimalMin;
 
 public class TransactionUpdateDTO {
 	
 	private String title;
 	private String description;
-	private Double amount;
+	
+	@DecimalMin(value = "0.01", message = "O valor deve ser maior que zero")
+	private BigDecimal amount;
+	
 	private LocalDate date;
 	private Integer type;
 	private Long categoryId;
@@ -27,10 +33,10 @@ public class TransactionUpdateDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 	public LocalDate getDate() {

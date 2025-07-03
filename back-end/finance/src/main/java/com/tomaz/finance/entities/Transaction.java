@@ -1,6 +1,7 @@
 package com.tomaz.finance.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -26,7 +27,7 @@ public class Transaction implements Serializable {
 	private String title;
 
 	private String description;
-    private Double amount;
+    private BigDecimal amount;
     private LocalDate date;
     private Integer type;
     
@@ -42,7 +43,7 @@ public class Transaction implements Serializable {
     	
     }
 
-	public Transaction(Long id, String title, String description, Double amount, LocalDate date, TransactionType type, User user, Category category) {
+	public Transaction(Long id, String title, String description, BigDecimal amount, LocalDate date, TransactionType type, User user, Category category) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -85,11 +86,11 @@ public class Transaction implements Serializable {
 		this.description = description;
 	}
 
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 

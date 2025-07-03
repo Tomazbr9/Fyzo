@@ -1,11 +1,13 @@
 package com.tomaz.finance.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tomaz.finance.dto.BalanceDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
 import com.tomaz.finance.entities.Category;
@@ -124,6 +126,25 @@ public class TransactionService {
 		}
 		
 		transactionRepository.deleteById(id);
+	}
+	
+	public BalanceDTO getUserBalance(String username) {
+		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrato"));
+		
+		List<Transaction> transactions = transactionRepository.findByUser(user);
+		
+		BigDecimal totalRevenue = transactions.stream()
+				.filter(t -> t.getType() == TransactionType.REVENUE)
+				.map(Transaction::getAmount)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		BigDecimal totalExpense = transactions.stream()
+				.filter(t -> t.getType() == TransactionType.EXPENSE)
+				.map(Transaction::getAmount)
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		
+		return new BalanceDTO(totalRevenue, totalExpense);
 	}
 		
 }

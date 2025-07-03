@@ -1,6 +1,6 @@
 package com.tomaz.finance.resources;
 
-import java.util.List; 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tomaz.finance.dto.BalanceDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
 import com.tomaz.finance.entities.Transaction;
@@ -56,5 +57,11 @@ public class TransactionResource {
 	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		service.delete(id, userDetails.getUsername());
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/balance")
+	public ResponseEntity<BalanceDTO> getBalance(@AuthenticationPrincipal UserDetailsImpl userDetails){
+		BalanceDTO obj = service.getUserBalance(userDetails.getUsername());
+		return ResponseEntity.ok(obj);
 	}
 }

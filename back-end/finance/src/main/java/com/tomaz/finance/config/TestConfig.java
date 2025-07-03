@@ -1,14 +1,14 @@
 package com.tomaz.finance.config;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import java.util.List;
 
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Role;
@@ -51,8 +51,8 @@ public class TestConfig implements CommandLineRunner {
 		Category c1 = new Category(null, "Aluguel", TransactionType.EXPENSE, "", null);
 		Category c2 = new Category(null, "Renda", TransactionType.REVENUE, "", null);
 		
-		Transaction t1 = new Transaction(null, "Salario dia 5", "salario", 1550.0, LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u1, c1);
-		Transaction t2 = new Transaction(null, "Vale","salario", 1800.0, LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u2, c2);
+		Transaction t1 = new Transaction(null, "Salario dia 5", "salario", new BigDecimal("1550.0"), LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u1, c1);
+		Transaction t2 = new Transaction(null, "Vale","salario", new BigDecimal("1800.0"), LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u2, c2);
 		
 		roleRepository.saveAll(List.of(adminRole, customerRole));
 		categoryRepository.saveAll(Arrays.asList(c1, c2));
