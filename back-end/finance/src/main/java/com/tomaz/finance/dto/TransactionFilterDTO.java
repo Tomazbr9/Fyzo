@@ -1,13 +1,32 @@
 package com.tomaz.finance.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TransactionFilterDTO {
-
+	
+	private BigDecimal maxAmount;
+	private BigDecimal minAmount;
 	private Integer categoryId;
 	private Integer type;
 	private LocalDate startDate;
 	private LocalDate endDate;
+
+	public BigDecimal getMaxAmount() {
+		return maxAmount;
+	}
+
+	public void setMaxAmount(BigDecimal maxAmount) {
+		this.maxAmount = maxAmount;
+	}
+
+	public BigDecimal getMinAmount() {
+		return minAmount;
+	}
+
+	public void setMinAmount(BigDecimal minAmount) {
+		this.minAmount = minAmount;
+	}
 
 	public Integer getCategoryId() {
 		return categoryId;
