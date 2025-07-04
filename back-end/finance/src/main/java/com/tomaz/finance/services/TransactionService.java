@@ -7,11 +7,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.BalanceDTO;
 import com.tomaz.finance.dto.CategorySummaryDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
+import com.tomaz.finance.dto.TransactionFilterDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Transaction;
@@ -20,6 +22,7 @@ import com.tomaz.finance.enums.TransactionType;
 import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.TransactionRepository;
 import com.tomaz.finance.repositories.UserRepository;
+import com.tomaz.finance.specification.TransactionSpecification;
 
 @Service
 public class TransactionService {
@@ -179,6 +182,15 @@ public class TransactionService {
     			))
     			.collect(Collectors.toList());
     					
+    }
+    
+    public List<Transaction> filterTransactions(TransactionFilterDTO dto, String username){
+    	
+    	User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+        Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
+        
+        return transactionRepository.findAll(specification);
+    
     }
 	
 	
