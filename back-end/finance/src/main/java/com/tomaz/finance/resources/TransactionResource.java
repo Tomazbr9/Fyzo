@@ -36,10 +36,10 @@ public class TransactionResource {
 	private TransactionService service;
 	
 	@GetMapping
-	public ResponseEntity<List<Transaction>> findAll(){
+	public ResponseEntity<List<Transaction>> findAll(@ModelAttribute TransactionFilterDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		
-		List<Transaction> list = service.findAll();
-		return ResponseEntity.ok().body(list);
+		List<Transaction> result = service.findAll(dto, userDetails.getUsername());
+		return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping("/create")
@@ -81,10 +81,4 @@ public class TransactionResource {
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping("/filter")
-	public ResponseEntity<List<Transaction>> filterTransactions(@ModelAttribute TransactionFilterDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		
-		List<Transaction> result = service.filterTransactions(dto, userDetails.getUsername());
-		return ResponseEntity.ok(result);
-	}
 }

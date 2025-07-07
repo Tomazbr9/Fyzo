@@ -36,8 +36,11 @@ public class TransactionService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public List<Transaction> findAll(){
-		return transactionRepository.findAll();
+	public List<Transaction> findAll(TransactionFilterDTO dto, String username){
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+        Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
+        
+        return transactionRepository.findAll(specification);
 	}
 	
 	public Transaction create(TransactionCreateDTO dto, String username) {
@@ -183,16 +186,5 @@ public class TransactionService {
     			.collect(Collectors.toList());
     					
     }
-    
-    public List<Transaction> filterTransactions(TransactionFilterDTO dto, String username){
-    	
-    	User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-        Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
-        
-        return transactionRepository.findAll(specification);
-    
-    }
-	
-	
 		
 }
