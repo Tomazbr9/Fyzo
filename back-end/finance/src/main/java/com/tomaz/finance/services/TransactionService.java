@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -36,11 +39,13 @@ public class TransactionService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public List<Transaction> findAll(TransactionFilterDTO dto, String username){
+	public Page<Transaction> findAll(TransactionFilterDTO dto, String username){
+		
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
         Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
+        Pageable pageable = PageRequest.of(dto.getPage(), dto.getSize());
         
-        return transactionRepository.findAll(specification);
+        return transactionRepository.findAll(specification, pageable);
 	}
 	
 	public Transaction create(TransactionCreateDTO dto, String username) {

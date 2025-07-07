@@ -42,6 +42,7 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
+    	  "/transactions/me",
           "/transactions/balance",
           "/transactions/summary/expense",
           "/transactions/summary/revenue",
@@ -51,7 +52,6 @@ public class SecurityConfig {
 
     public static final String [] ENDPOINTS_ADMIN = {
             "/users",
-    		"/transactions",
             "/categories"
     };
 
@@ -66,7 +66,6 @@ public class SecurityConfig {
             
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-//                .requestMatchers(HttpMethod.PATCH, "/transactions/**").authenticated()
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
                 .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")

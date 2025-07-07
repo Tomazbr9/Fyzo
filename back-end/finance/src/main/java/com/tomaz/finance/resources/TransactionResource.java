@@ -1,8 +1,9 @@
 package com.tomaz.finance.resources;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,11 +36,9 @@ public class TransactionResource {
 	@Autowired
 	private TransactionService service;
 	
-	@GetMapping
-	public ResponseEntity<List<Transaction>> findAll(@ModelAttribute TransactionFilterDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		
-		List<Transaction> result = service.findAll(dto, userDetails.getUsername());
-		return ResponseEntity.ok(result);
+	@GetMapping("/me")
+	public Page<Transaction> findAll(@ModelAttribute TransactionFilterDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		return service.findAll(dto, userDetails.getUsername());
 	}
 	
 	@PostMapping("/create")
