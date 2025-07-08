@@ -39,11 +39,16 @@ public class Transaction implements Serializable {
     @JoinColumn(name = "category_id")
     private Category category;
     
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+    
+    
     public Transaction() {
     	
     }
 
-	public Transaction(Long id, String title, String description, BigDecimal amount, LocalDate date, TransactionType type, User user, Category category) {
+	public Transaction(Long id, String title, String description, BigDecimal amount, LocalDate date, TransactionType type, User user, Category category, Account account) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -52,6 +57,7 @@ public class Transaction implements Serializable {
 		setType(type);
 		this.user = user;
 		this.category = category;
+		this.account = account;
 	}
 
 	public Category getCategory() {
@@ -123,6 +129,16 @@ public class Transaction implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	@Override

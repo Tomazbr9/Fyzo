@@ -18,10 +18,12 @@ import com.tomaz.finance.dto.CategorySummaryDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionFilterDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
+import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.enums.TransactionType;
+import com.tomaz.finance.repositories.AccountRepository;
 import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.TransactionRepository;
 import com.tomaz.finance.repositories.UserRepository;
@@ -38,6 +40,9 @@ public class TransactionService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	public Page<Transaction> findAll(TransactionFilterDTO dto, String username){
 		
@@ -57,7 +62,24 @@ public class TransactionService {
 				dto.getCategoryId()).orElseThrow(()-> new RuntimeException("Categoria não encontrada")
 		);
 		
+		Account account = accountRepository.findById(dto.getAccounId()).orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+		
+		
 		Transaction transaction = new Transaction();
+		
+		
+		BigDecimal balance = account.getBalance();
+		if(dto.getType() == TransactionType.REVENUE.getCode()) {
+			balance = balance.add(dto.getAmount());
+			account.setBalance(balance);
+			accountRepository.save(account);
+		}
+		
+		if(dto.getType() == TransactionType.EXPENSE.getCode()) {
+			balance = balance.subtract(dto.getAmount());
+			account.setBalance(balance);
+			accountRepository.save(account);
+		}
 		
 		transaction.setTitle(dto.getTitle());
 		transaction.setDescription(dto.getDescription());
@@ -79,6 +101,9 @@ public class TransactionService {
 		
 		transaction.setUser(user);
 		transaction.setCategory(category);
+		transaction.setAccount(account);
+		
+		
 		
 		return transactionRepository.save(transaction);
 	}

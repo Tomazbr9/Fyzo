@@ -46,7 +46,10 @@ public class SecurityConfig {
           "/transactions/balance",
           "/transactions/summary/expense",
           "/transactions/summary/revenue",
-          "/transactions/filter"
+          "/transactions/filter",
+          
+          "/account/me",
+          "/account/create"
     		
     };
 

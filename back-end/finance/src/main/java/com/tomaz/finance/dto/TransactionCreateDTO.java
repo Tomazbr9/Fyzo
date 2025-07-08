@@ -24,6 +24,9 @@ public class TransactionCreateDTO {
     @NotNull(message = "O id da categoria é obrigatório")
     private Long categoryId;
     
+    @NotNull(message = "Obrigatório selecionar uma conta")
+    private Long accountId;
+    
     public String getTitle() {
 		return title;
 	}
@@ -62,4 +65,14 @@ public class TransactionCreateDTO {
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
 	}
+
+	public Long getAccounId() {
+		return accountId;
+	}
+
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
+	
+	
 }
