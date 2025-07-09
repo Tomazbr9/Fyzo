@@ -46,9 +46,7 @@ public class CategoryResource {
 	
 	@PostMapping("/create")
 	public ResponseEntity<Category> create(@Valid @RequestBody CategoryCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		
-		String username = userDetails.getUsername();
-		Category obj = service.create(dto, username);
+		Category obj = service.create(dto, userDetails.getUsername());
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	

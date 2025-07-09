@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.entities.Category;
+import com.tomaz.finance.entities.Goal;
 import com.tomaz.finance.entities.Role;
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.entities.User;
@@ -19,6 +20,7 @@ import com.tomaz.finance.enums.RoleName;
 import com.tomaz.finance.enums.TransactionType;
 import com.tomaz.finance.repositories.AccountRepository;
 import com.tomaz.finance.repositories.CategoryRepository;
+import com.tomaz.finance.repositories.GoalRepository;
 import com.tomaz.finance.repositories.RoleRepository;
 import com.tomaz.finance.repositories.TransactionRepository;
 import com.tomaz.finance.repositories.UserRepository;
@@ -42,6 +44,8 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private AccountRepository accountRepository;
 	
+	@Autowired GoalRepository goalRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -62,10 +66,14 @@ public class TestConfig implements CommandLineRunner {
 		Transaction t1 = new Transaction(null, "Salario dia 5", "salario", new BigDecimal("1550.0"), LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u1, c1, a1);
 		Transaction t2 = new Transaction(null, "Vale","salario", new BigDecimal("1800.0"), LocalDate.of(2025, 6, 6), TransactionType.REVENUE, u2, c2, a2);
 		
+		Goal g1 = new Goal(null, "comprar casa", new BigDecimal("100.000"), LocalDate.of(2030, 02, 01), u1);
+		Goal g2 = new Goal(null, "comprar carro", new BigDecimal("60.000"), LocalDate.of(2030, 02, 01), u2);
+		
 		roleRepository.saveAll(Arrays.asList(adminRole, customerRole));
 		userRepository.saveAll(Arrays.asList(u1, u2));
 		accountRepository.saveAll(Arrays.asList(a1, a2));
 		categoryRepository.saveAll(Arrays.asList(c1, c2));
+		goalRepository.saveAll(Arrays.asList(g1, g2));
 		transactionRepository.saveAll(Arrays.asList(t1, t2));
 		
 		

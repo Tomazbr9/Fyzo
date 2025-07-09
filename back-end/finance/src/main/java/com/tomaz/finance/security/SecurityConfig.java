@@ -49,7 +49,9 @@ public class SecurityConfig {
           "/transactions/filter",
           
           "/account/me",
-          "/account/create"
+          "/account/create",
+          
+          "/goals/create"
     		
     };
 

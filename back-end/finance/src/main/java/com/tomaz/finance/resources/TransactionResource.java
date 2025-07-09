@@ -44,9 +44,7 @@ public class TransactionResource {
 	@PostMapping("/create")
 	public ResponseEntity<Transaction> create(@Valid @RequestBody TransactionCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		
-		String username = userDetails.getUsername();
-		
-		Transaction obj = service.create(dto, username);
+		Transaction obj = service.create(dto, userDetails.getUsername());
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
