@@ -10,5 +10,6 @@ import com.tomaz.finance.entities.User;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-	List<Account> findByUser(User user); 
+	List<Account> findByUser(User user);
+	
 }

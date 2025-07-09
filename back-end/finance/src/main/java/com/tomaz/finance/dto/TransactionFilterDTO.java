@@ -8,6 +8,7 @@ public class TransactionFilterDTO {
 	private BigDecimal maxAmount;
 	private BigDecimal minAmount;
 	private Integer categoryId;
+	private Integer accountId;
 	private Integer type;
 	private LocalDate startDate;
 	private LocalDate endDate;
@@ -77,6 +78,16 @@ public class TransactionFilterDTO {
 	public void setSize(Integer size) {
 		this.size = size;
 	}
+
+	public Integer getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(Integer accountId) {
+		this.accountId = accountId;
+	}
+	
+	
 	
 	
 	

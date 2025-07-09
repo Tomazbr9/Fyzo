@@ -30,7 +30,7 @@ public class AccountService {
 		
 		return accounts.stream()
 				.map(account -> new AccountDTO(account.getName(), account.getBalance()))
-				.collect(Collectors.toList());
+				.toList();
 	}
 	
 	public Account create(AccountCreateDTO dto, String username) {

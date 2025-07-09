@@ -43,6 +43,9 @@ public class TransactionSpecification {
 				predicates.add(builder.lessThanOrEqualTo(root.get("amount"), filter.getMinAmount()));
 			}
 			
+			if(filter.getAccountId() != null) {
+				predicates.add(builder.equal(root.get("account").get("id"), filter.getAccountId()));
+			}
 			
 			return builder.and(predicates.toArray(new Predicate[0]));
 		};

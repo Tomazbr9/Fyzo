@@ -64,6 +64,9 @@ public class TransactionService {
 		
 		Account account = accountRepository.findById(dto.getAccounId()).orElseThrow(() -> new RuntimeException("Conta não encontrada"));
 		
+		if(!account.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Essa conta não pertence a você");
+		}
 		
 		Transaction transaction = new Transaction();
 		
@@ -213,7 +216,7 @@ public class TransactionService {
     					entry.getValue()
     					
     			))
-    			.collect(Collectors.toList());
+    			.toList();
     					
     }
 		
