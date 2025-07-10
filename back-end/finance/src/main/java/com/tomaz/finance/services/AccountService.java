@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.AccountCreateDTO;
-import com.tomaz.finance.dto.AccountDTO;
+import com.tomaz.finance.dto.AccountResponseDTO;
 import com.tomaz.finance.dto.AccountUpdateDTO;
 import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.entities.User;
@@ -23,13 +23,13 @@ public class AccountService {
 	private UserRepository userRepository;
 	
 	
-	public List<AccountDTO> findAll(String username){
+	public List<AccountResponseDTO> findAll(String username){
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 		
 		List<Account> accounts = accountRepository.findByUser(user);
 		
 		return accounts.stream()
-				.map(account -> new AccountDTO(account.getName(), account.getBalance()))
+				.map(account -> new AccountResponseDTO(account.getName(), account.getBalance()))
 				.toList();
 	}
 	

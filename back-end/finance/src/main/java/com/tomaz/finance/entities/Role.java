@@ -12,9 +12,21 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_role")
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
 public class Role implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -26,46 +38,5 @@ public class Role implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private RoleName name;
 	
-	public Role() {
-		
-	}
-
-	public Role(Long id, RoleName name) {
-		this.id = id;
-		this.name = name;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public RoleName getName() {
-		return name;
-	}
-
-	public void setName(RoleName name) {
-		this.name = name;
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Role other = (Role) obj;
-		return Objects.equals(id, other.id);
-	}
 	
 }

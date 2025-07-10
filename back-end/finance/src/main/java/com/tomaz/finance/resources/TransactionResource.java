@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tomaz.finance.dto.BalanceDTO;
+import com.tomaz.finance.dto.BalanceResponseDTO;
 import com.tomaz.finance.dto.CategorySummaryDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionFilterDTO;
@@ -61,8 +61,8 @@ public class TransactionResource {
 	}
 	
 	@GetMapping("/balance")
-	public ResponseEntity<BalanceDTO> getBalance(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		BalanceDTO obj = service.getUserBalance(userDetails.getUsername());
+	public ResponseEntity<BalanceResponseDTO> getBalance(@AuthenticationPrincipal UserDetailsImpl userDetails){
+		BalanceResponseDTO obj = service.getUserBalance(userDetails.getUsername());
 		return ResponseEntity.ok(obj);
 	}
 	

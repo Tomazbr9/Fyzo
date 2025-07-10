@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tomaz.finance.dto.CategoryCreateDTO;
-import com.tomaz.finance.dto.CategoryDTO;
+import com.tomaz.finance.dto.CategoryResponseDTO;
 import com.tomaz.finance.dto.CategoryUpdateDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
@@ -32,9 +32,9 @@ public class CategoryResource {
 	private CategoryService service;
 	
 	@GetMapping
-	public ResponseEntity<List<CategoryDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
+	public ResponseEntity<List<CategoryResponseDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
 		
-		List<CategoryDTO> list = service.findAll(userDetails.getUsername());
+		List<CategoryResponseDTO> list = service.findAll(userDetails.getUsername());
 		return ResponseEntity.ok().body(list);
 	}
 	

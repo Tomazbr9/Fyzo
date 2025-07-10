@@ -1,20 +1,6 @@
 package com.tomaz.finance.dto;
 
-public class AccountUpdateDTO {
-	
-	private String name;
-	
-	public AccountUpdateDTO() {
-		
-	}
+public record AccountUpdateDTO(
+		String name
+) {}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
-}

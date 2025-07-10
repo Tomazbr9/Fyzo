@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tomaz.finance.dto.AccountCreateDTO;
-import com.tomaz.finance.dto.AccountDTO;
+import com.tomaz.finance.dto.AccountResponseDTO;
 import com.tomaz.finance.dto.AccountUpdateDTO;
 import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
@@ -32,7 +32,7 @@ public class AccountResource {
 	private AccountService service;
 	
 	@GetMapping("/me")
-	public List<AccountDTO> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
+	public List<AccountResponseDTO> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
 		return service.findAll(userDetails.getUsername());
 		
 	}

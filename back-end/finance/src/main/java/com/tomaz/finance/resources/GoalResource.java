@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tomaz.finance.dto.GoalCreateDTO;
-import com.tomaz.finance.dto.GoalDTO;
+import com.tomaz.finance.dto.GoalResponseDTO;
 import com.tomaz.finance.dto.GoalUpdateDTO;
 import com.tomaz.finance.entities.Goal;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
@@ -31,8 +31,8 @@ public class GoalResource {
 	private GoalService service;
 	
 	@GetMapping("/me")
-	public ResponseEntity<List<GoalDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		List<GoalDTO> goals = service.findAll(userDetails.getUsername());
+	public ResponseEntity<List<GoalResponseDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
+		List<GoalResponseDTO> goals = service.findAll(userDetails.getUsername());
 		return ResponseEntity.ok().body(goals);
 	}
 	

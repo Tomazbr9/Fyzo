@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.CategoryUpdateDTO;
 import com.tomaz.finance.dto.GoalCreateDTO;
-import com.tomaz.finance.dto.GoalDTO;
+import com.tomaz.finance.dto.GoalResponseDTO;
 import com.tomaz.finance.dto.GoalUpdateDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Goal;
@@ -25,13 +25,13 @@ public class GoalService {
 	@Autowired
 	private GoalRepository goalRepository;
 	
-	public List<GoalDTO> findAll(String username){
+	public List<GoalResponseDTO> findAll(String username){
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 		
 		List<Goal> goals = goalRepository.findByUser(user);
 		
 		return goals.stream()
-				.map(goal -> new GoalDTO(
+				.map(goal -> new GoalResponseDTO(
 					goal.getId(),
 					goal.getName(),
 					goal.getTargetAmount(),

@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.tomaz.finance.dto.BalanceDTO;
+import com.tomaz.finance.dto.BalanceResponseDTO;
 import com.tomaz.finance.dto.CategorySummaryDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionFilterDTO;
@@ -170,7 +170,7 @@ public class TransactionService {
 		transactionRepository.deleteById(id);
 	}
 	
-	public BalanceDTO getUserBalance(String username) {
+	public BalanceResponseDTO getUserBalance(String username) {
 		
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrato"));
 		
@@ -186,7 +186,7 @@ public class TransactionService {
 				.map(Transaction::getAmount)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		
-		return new BalanceDTO(totalRevenue, totalExpense);
+		return new BalanceResponseDTO(totalRevenue, totalExpense);
 	}
 	
     public List<CategorySummaryDTO> getSummaryByType(String username, Integer type){

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.CategoryCreateDTO;
-import com.tomaz.finance.dto.CategoryDTO;
+import com.tomaz.finance.dto.CategoryResponseDTO;
 import com.tomaz.finance.dto.CategoryUpdateDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.User;
@@ -24,14 +24,14 @@ public class CategoryService {
 	@Autowired
 	private UserRepository userRepository;
 
-	public List<CategoryDTO> findAll(String username) {
+	public List<CategoryResponseDTO> findAll(String username) {
 		
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 		
 		List<Category> categories = categoryRepository.findByUser(user);
 		
 		return categories.stream()
-				.map(category -> new CategoryDTO(
+				.map(category -> new CategoryResponseDTO(
 						category.getId(),
 						category.getName(),
 						category.getType().getCode(),

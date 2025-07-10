@@ -3,20 +3,33 @@ package com.tomaz.finance.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import com.tomaz.finance.enums.TransactionType;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_transaction")
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
 public class Transaction implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -29,7 +42,9 @@ public class Transaction implements Serializable {
 	private String description;
     private BigDecimal amount;
     private LocalDate date;
-    private Integer type;
+    
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
     
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -43,121 +58,6 @@ public class Transaction implements Serializable {
     @JoinColumn(name = "account_id")
     private Account account;
     
-    
-    public Transaction() {
-    	
-    }
-
-	public Transaction(Long id, String title, String description, BigDecimal amount, LocalDate date, TransactionType type, User user, Category category, Account account) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.amount = amount;
-		this.date = date;
-		setType(type);
-		this.user = user;
-		this.category = category;
-		this.account = account;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	 public String getTitle() {
-			return title;
-		}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public TransactionType getType() {
-		
-		if(type == null) {
-			return null;
-		}
-		
-		return TransactionType.valueOf(type);
-	}
-
-	public void setType(TransactionType type) {
-		if(type != null) {
-			this.type = type.getCode();
-		}
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	
-
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Transaction other = (Transaction) obj;
-		return Objects.equals(id, other.id);
-	}
-    
-    
-    
 }
+    
+   

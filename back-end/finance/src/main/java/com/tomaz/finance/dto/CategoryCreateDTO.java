@@ -4,35 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public class CategoryCreateDTO {
-    
-	@NotBlank(message = "O nome da categoria é obrigatório")
-	private String name;
-	
-	@NotNull(message = "Por favor, escolha o tipo da categoria")
-    private Integer type;
-	
-	@NotBlank(message = "É obrigatório a escolha de uma cor para a categoria")
-	@Pattern(regexp = "^#[A-Fa-f0-9]{6}$", message = "A cor deve estar no formato hexadecimal (ex: #FF5733)")
-    private String color;
-    
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Integer getType() {
-		return type;
-	}
-	public void setType(Integer type) {
-		this.type = type;
-	}
-	public String getColor() {
-		return color;
-	}
-	public void setColor(String color) {
-		this.color = color;
-	}
-	
-}
+public record CategoryCreateDTO(
+    @NotBlank(message = "O nome da categoria é obrigatório")
+    String name,
+
+    @NotNull(message = "Por favor, escolha o tipo da categoria")
+    Integer type,
+
+    @NotBlank(message = "É obrigatório a escolha de uma cor para a categoria")
+    @Pattern(regexp = "^#[A-Fa-f0-9]{6}$", message = "A cor deve estar no formato hexadecimal (ex: #FF5733)")
+    String color
+) {}
