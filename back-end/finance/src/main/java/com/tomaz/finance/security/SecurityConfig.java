@@ -51,7 +51,10 @@ public class SecurityConfig {
           "/account/me",
           "/account/create",
           
-          "/goals/create"
+          "/goals/create",
+          "/goals/all",
+          "/goals/update/**",
+          "/goals/delete/**"
     		
     };
 

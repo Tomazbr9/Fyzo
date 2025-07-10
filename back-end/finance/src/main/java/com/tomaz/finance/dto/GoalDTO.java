@@ -1,46 +1,29 @@
-package com.tomaz.finance.entities;
+package com.tomaz.finance.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "tb_goal")
-public class Goal implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class GoalDTO {
 	private Long id;
 	private String name;
 	private BigDecimal targetAmount;
-	private BigDecimal savedAmount = BigDecimal.ZERO;
+	private BigDecimal savedAmount;
 	private LocalDate targetDate;
-	private boolean completed = false;
+	private boolean completed;
 	
-	@ManyToOne
-	private User user;
-	
-	public Goal() {
+	public GoalDTO() {
 		
 	}
 
-	public Goal(Long id, String name, BigDecimal targetAmount, LocalDate targetDate, User user) {
+	public GoalDTO(Long id, String name, BigDecimal targetAmount, BigDecimal savedAmount, LocalDate targetDate,
+			boolean completed) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.targetAmount = targetAmount;
-		this.savedAmount = BigDecimal.ZERO;
+		this.savedAmount = savedAmount;
 		this.targetDate = targetDate;
-		this.completed = false;
-		this.user = user;
+		this.completed = completed;
 	}
 
 	public Long getId() {
@@ -89,14 +72,6 @@ public class Goal implements Serializable {
 
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 	
 	
