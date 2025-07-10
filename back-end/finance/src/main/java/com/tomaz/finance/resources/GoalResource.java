@@ -30,7 +30,7 @@ public class GoalResource {
 	@Autowired
 	private GoalService service;
 	
-	@GetMapping("/all")
+	@GetMapping("/me")
 	public ResponseEntity<List<GoalDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
 		List<GoalDTO> goals = service.findAll(userDetails.getUsername());
 		return ResponseEntity.ok().body(goals);

@@ -1,13 +1,13 @@
 package com.tomaz.finance.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.dto.AccountCreateDTO;
 import com.tomaz.finance.dto.AccountDTO;
+import com.tomaz.finance.dto.AccountUpdateDTO;
 import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.repositories.AccountRepository;
@@ -42,5 +42,38 @@ public class AccountService {
 		account.setUser(user);
 		
 		return accountRepository.save(account);
+	}
+	
+	public Account update(Long id, AccountUpdateDTO dto, String username) {
+
+		Account account = accountRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Conta não encontrada."));
+		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+		
+		if(!account.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Essa conta não pertence a você.");
+		}
+
+		if (dto.getName() != null && !dto.getName().isBlank()) {
+			account.setName(dto.getName());
+		}
+		
+		return accountRepository.save(account);
+		
+    }
+	
+	public void delete(Long id, String username) {
+		
+		Account account = accountRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		
+		if(!account.getUser().getId().equals(user.getId())) {
+			throw new RuntimeException("Essa categoria não pertence a você.");
+		}
+
+		accountRepository.deleteById(id);
 	}
 }

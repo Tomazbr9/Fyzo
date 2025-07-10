@@ -28,7 +28,6 @@ public class Account {
 	}
 
 	public Account(Long id, String name, User user) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.balance = balance.ZERO;
