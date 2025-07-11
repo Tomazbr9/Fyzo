@@ -1,8 +1,10 @@
 package com.tomaz.finance.dto;
 
+import com.tomaz.finance.enums.TransactionType;
+
 public record CategoryResponseDTO(
     Long id,
     String name,
-    Integer type,
+    TransactionType type,
     String color
 ) {}

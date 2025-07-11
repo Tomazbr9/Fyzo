@@ -1,5 +1,7 @@
 package com.tomaz.finance.dto;
 
+import com.tomaz.finance.enums.TransactionType;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -9,7 +11,7 @@ public record CategoryCreateDTO(
     String name,
 
     @NotNull(message = "Por favor, escolha o tipo da categoria")
-    Integer type,
+    TransactionType type,
 
     @NotBlank(message = "É obrigatório a escolha de uma cor para a categoria")
     @Pattern(regexp = "^#[A-Fa-f0-9]{6}$", message = "A cor deve estar no formato hexadecimal (ex: #FF5733)")

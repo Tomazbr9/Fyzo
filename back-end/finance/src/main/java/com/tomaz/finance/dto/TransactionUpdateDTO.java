@@ -3,6 +3,8 @@ package com.tomaz.finance.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.tomaz.finance.enums.TransactionType;
+
 import jakarta.validation.constraints.DecimalMin;
 
 public record TransactionUpdateDTO(
@@ -14,7 +16,7 @@ public record TransactionUpdateDTO(
     BigDecimal amount,
 
     LocalDate date,
-    Integer type,
+    TransactionType type,
     Long categoryId,
     Long accountId
 

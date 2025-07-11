@@ -10,6 +10,7 @@ import com.tomaz.finance.dto.AccountResponseDTO;
 import com.tomaz.finance.dto.AccountUpdateDTO;
 import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.mapper.AccountMapper;
 import com.tomaz.finance.repositories.AccountRepository;
 import com.tomaz.finance.repositories.UserRepository;
 
@@ -22,6 +23,8 @@ public class AccountService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private AccountMapper accountMapper;
 	
 	public List<AccountResponseDTO> findAll(String username){
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -34,35 +37,33 @@ public class AccountService {
 	}
 	
 	public Account create(AccountCreateDTO dto, String username) {
-		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-		Account account = new Account();
-		
-		account.setName(dto.getName());
-		account.setUser(user);
-		
-		return accountRepository.save(account);
+	    User user = userRepository.findByUsername(username)
+	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+	    Account account = accountMapper.toEntity(dto);
+	    account.setUser(user);
+
+	    return accountRepository.save(account);
 	}
-	
+
 	public Account update(Long id, AccountUpdateDTO dto, String username) {
 
-		Account account = accountRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Conta não encontrada."));
-		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-		
-		if(!account.getUser().getId().equals(user.getId())) {
-			throw new RuntimeException("Essa conta não pertence a você.");
-		}
+	    Account account = accountRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Conta não encontrada."));
+	    
+	    User user = userRepository.findByUsername(username)
+	            .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+	    
+	    if (!account.getUser().getId().equals(user.getId())) {
+	        throw new RuntimeException("Essa conta não pertence a você.");
+	    }
+	    
+	    accountMapper.updateFromDto(dto, account);
 
-		if (dto.getName() != null && !dto.getName().isBlank()) {
-			account.setName(dto.getName());
-		}
-		
-		return accountRepository.save(account);
-		
-    }
-	
+	    
+	    return accountRepository.save(account);
+	}
+
 	public void delete(Long id, String username) {
 		
 		Account account = accountRepository.findById(id)

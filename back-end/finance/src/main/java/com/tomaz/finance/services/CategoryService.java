@@ -12,6 +12,7 @@ import com.tomaz.finance.dto.CategoryUpdateDTO;
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.enums.TransactionType;
+import com.tomaz.finance.mapper.CategoryMapper;
 import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.UserRepository;
 
@@ -23,6 +24,9 @@ public class CategoryService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private CategoryMapper categoryMapper;
 
 	public List<CategoryResponseDTO> findAll(String username) {
 		
@@ -51,55 +55,31 @@ public class CategoryService {
 
 	public Category create(CategoryCreateDTO dto, String username) {
 
-		Category category = new Category();
+	    User user = userRepository.findByUsername(username)
+	            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-		
-		category.setName(dto.getName());
-		
-		try {
-			category.setType(TransactionType.valueOf(dto.getType()));
-		} 
-		catch (IllegalArgumentException e) {
-	        throw new RuntimeException("Tipo de transação inválido.");
-	    }
-		
-		category.setColor(dto.getColor());
-		category.setUser(user);
+	    Category category = categoryMapper.toEntity(dto);
+	    category.setUser(user);
 
-		return categoryRepository.save(category);
+	    return categoryRepository.save(category);
 	}
 
 	public Category update(Long id, CategoryUpdateDTO dto, String username) {
 
-		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
-		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-		
-		if(!category.getUser().getId().equals(user.getId())) {
-			throw new RuntimeException("Essa categoria não pertence a você.");
-		}
+	    Category category = categoryRepository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
 
-		if (dto.getName() != null && !dto.getName().isBlank()) {
-			category.setName(dto.getName());
-		}
+	    User user = userRepository.findByUsername(username)
+	            .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-		if (dto.getType() != null) {
-			try {
-				category.setType(TransactionType.valueOf(dto.getType()));
-			}
-			catch (IllegalArgumentException e) {
-		        throw new RuntimeException("Tipo de transação inválido.");
-		    }
-		}
+	    if (!category.getUser().getId().equals(user.getId())) {
+	        throw new RuntimeException("Essa categoria não pertence a você.");
+	    }
 
-		if (dto.getColor() != null && dto.getColor().isBlank()) {
-			category.setColor(dto.getColor());
-		}
+	    categoryMapper.updateFromDto(dto, category);
 
-		return categoryRepository.save(category);
-    }
+	    return categoryRepository.save(category);
+	}
 
 	public void delete(Long id, String username) {
 		

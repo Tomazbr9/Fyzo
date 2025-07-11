@@ -6,5 +6,9 @@ public record UserUpdateDTO(
     String username,
 
     @Email(message = "Informe um e-mail válido")
-    String email
+    String email,
+    
+    String password
+    
+    
 ) {}

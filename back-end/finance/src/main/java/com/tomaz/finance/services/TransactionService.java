@@ -1,7 +1,6 @@
 package com.tomaz.finance.services;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.enums.TransactionType;
+import com.tomaz.finance.mapper.TransactionMapper;
 import com.tomaz.finance.repositories.AccountRepository;
 import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.TransactionRepository;
@@ -44,6 +44,9 @@ public class TransactionService {
 	@Autowired
 	private AccountRepository accountRepository;
 	
+	@Autowired
+	private TransactionMapper transactionMapper;
+	
 	public Page<Transaction> findAll(TransactionFilterDTO dto, String username){
 		
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
@@ -54,108 +57,76 @@ public class TransactionService {
 	}
 	
 	public Transaction create(TransactionCreateDTO dto, String username) {
-		
-		User user = userRepository.findByUsername(username)
-				.orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-			
-		Category category = categoryRepository.findById(
-				dto.getCategoryId()).orElseThrow(()-> new RuntimeException("Categoria não encontrada")
-		);
-		
-		Account account = accountRepository.findById(dto.getAccounId()).orElseThrow(() -> new RuntimeException("Conta não encontrada"));
-		
-		if(!account.getUser().getId().equals(user.getId())) {
-			throw new RuntimeException("Essa conta não pertence a você");
-		}
-		
-		Transaction transaction = new Transaction();
-		
-		
-		BigDecimal balance = account.getBalance();
-		if(dto.getType() == TransactionType.REVENUE.getCode()) {
-			balance = balance.add(dto.getAmount());
-			account.setBalance(balance);
-			accountRepository.save(account);
-		}
-		
-		if(dto.getType() == TransactionType.EXPENSE.getCode()) {
-			balance = balance.subtract(dto.getAmount());
-			account.setBalance(balance);
-			accountRepository.save(account);
-		}
-		
-		transaction.setTitle(dto.getTitle());
-		transaction.setDescription(dto.getDescription());
-		transaction.setAmount(dto.getAmount());
-		
-		try {
-			transaction.setType(TransactionType.valueOf(dto.getType()));
-		}
-		catch (IllegalArgumentException e) {
-	        throw new RuntimeException("Tipo de transação inválido.");
+	    User user = userRepository.findByUsername(username)
+	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+	    Category category = categoryRepository.findById(dto.categoryId())
+	        .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+
+	    Account account = accountRepository.findById(dto.accountId())
+	        .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+
+	    if (!account.getUser().getId().equals(user.getId())) {
+	        throw new RuntimeException("Essa conta não pertence a você");
 	    }
-		
-		if(dto.getDate() == null) {
-			transaction.setDate(LocalDate.now());
-		}
-		else {
-			transaction.setDate(dto.getDate());
-		}
-		
-		transaction.setUser(user);
-		transaction.setCategory(category);
-		transaction.setAccount(account);
-		
-		
-		
-		return transactionRepository.save(transaction);
+	    
+	    BigDecimal balance = account.getBalance();
+	    if (dto.type() == TransactionType.REVENUE) {
+	        balance = balance.add(dto.amount());
+	        account.setBalance(balance);
+	        accountRepository.save(account);
+	    } else if (dto.type() == TransactionType.EXPENSE) {
+	        balance = balance.subtract(dto.amount());
+	        account.setBalance(balance);
+	        accountRepository.save(account);
+	    } else {
+	        throw new IllegalArgumentException("Tipo de transação inválido.");
+	    }
+	    
+	    Transaction transaction = transactionMapper.toEntity(dto);
+
+	    transaction.setType(dto.type());
+	    transaction.setUser(user);
+	    transaction.setCategory(category);
+	    transaction.setAccount(account);
+
+	    return transactionRepository.save(transaction);
 	}
-	
+
 	public Transaction update(Long id, TransactionUpdateDTO dto, String username) {
-		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-		
-		Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transação não encontrada"));
-		
-		if(!transaction.getUser().getId().equals(user.getId())) {
-			throw new RuntimeException("Essa transação não pertence a você.");
-		}
-		
-		if(dto.getTitle() != null && !dto.getTitle().isBlank()) {
-			transaction.setTitle(dto.getTitle());
-		}
-		
-		if(dto.getDescription() != null && !dto.getDescription().isBlank()) {
-			transaction.setDescription(dto.getDescription());
-		}
-		
-		if(dto.getAmount() != null) {
-			transaction.setAmount(dto.getAmount());
-		}
-		
-		if(dto.getType() != null) {
-			try {
-				transaction.setType(TransactionType.valueOf(dto.getType()));
-			}
-			catch (IllegalArgumentException e) {
-		        throw new RuntimeException("Tipo de transação inválido.");
-		    }
-		}
-		
-		if(dto.getDate() != null) {
-			transaction.setDate(dto.getDate());
-		}
-		
-		if(dto.getCategoryId() != null) {
-			Category category = categoryRepository.findById(
-					dto.getCategoryId()).orElseThrow(()-> new RuntimeException("Categoria não encontrada")
-			);
-			
-			transaction.setCategory(category);
-		}
-		
-		return transactionRepository.save(transaction);
+	    User user = userRepository.findByUsername(username)
+	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+	    Transaction transaction = transactionRepository.findById(id)
+	        .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+
+	    if (!transaction.getUser().getId().equals(user.getId())) {
+	        throw new RuntimeException("Essa transação não pertence a você.");
+	    }
+
+	    transactionMapper.updateFromDto(dto, transaction);
+
+	 
+	    if (dto.categoryId() != null) {
+	        Category category = categoryRepository.findById(dto.categoryId())
+	            .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+	        transaction.setCategory(category);
+	    }
+
+	    if (dto.accountId() != null) {
+	        Account account = accountRepository.findById(dto.accountId())
+	            .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+
+	        if (!account.getUser().getId().equals(user.getId())) {
+	            throw new RuntimeException("Essa conta não pertence a você.");
+	        }
+
+	        transaction.setAccount(account);
+	    }
+
+	    return transactionRepository.save(transaction);
 	}
+
 	
 	public void delete(Long id, String username) {
 		
