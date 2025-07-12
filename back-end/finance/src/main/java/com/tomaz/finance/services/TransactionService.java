@@ -73,25 +73,14 @@ public class TransactionService {
 	        throw new RuntimeException("Essa conta não pertence a você");
 	    }
 	    
-	    BigDecimal balance = account.getBalance();
-	    if (dto.type() == TransactionType.REVENUE) {
-	        balance = balance.add(dto.amount());
-	        account.setBalance(balance);
-	        accountRepository.save(account);
-	    } else if (dto.type() == TransactionType.EXPENSE) {
-	        balance = balance.subtract(dto.amount());
-	        account.setBalance(balance);
-	        accountRepository.save(account);
-	    } else {
-	        throw new IllegalArgumentException("Tipo de transação inválido.");
-	    }
-	    
 	    Transaction transaction = transactionMapper.toEntity(dto);
+	    
+	    updateBalance(account, dto.type(), dto.amount());
 
 	    transaction.setType(dto.type());
 	    transaction.setUser(user);
 	    transaction.setCategory(category);
-	    transaction.setAccount(account);
+	    transaction.setAccount(account);	    
 
 	    transactionRepository.save(transaction);
 	    return transactionMapper.toResponse(transaction);
@@ -195,6 +184,25 @@ public class TransactionService {
     			))
     			.toList();
     					
+    }
+    
+    private void updateBalance(Account account, TransactionType type, BigDecimal amount) {
+    	BigDecimal balance = account.getBalance();
+    	
+    	if(type == TransactionType.REVENUE) {
+    		
+    		balance = balance.add(amount);
+    		account.setBalance(balance);
+    	}
+    	else if(type == TransactionType.EXPENSE) {
+    		balance = balance.subtract(amount);
+    		account.setBalance(balance);
+    	}
+    	else {
+    		throw new RuntimeException("Tipo Invalido");
+    	}
+    	
+    	accountRepository.save(account);
     }
 		
 }
