@@ -31,22 +31,21 @@ public class AccountService {
 		
 		List<Account> accounts = accountRepository.findByUser(user);
 		
-		return accounts.stream()
-				.map(account -> new AccountResponseDTO(account.getName(), account.getBalance()))
-				.toList();
+		return accountMapper.accountFromAccountDTO(accounts);
 	}
 	
-	public Account create(AccountCreateDTO dto, String username) {
+	public AccountResponseDTO create(AccountCreateDTO dto, String username) {
 	    User user = userRepository.findByUsername(username)
 	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
 	    Account account = accountMapper.toEntity(dto);
 	    account.setUser(user);
 
-	    return accountRepository.save(account);
+	    accountRepository.save(account);
+	    return accountMapper.toResponse(account);
 	}
 
-	public Account update(Long id, AccountUpdateDTO dto, String username) {
+	public AccountResponseDTO update(Long id, AccountUpdateDTO dto, String username) {
 
 	    Account account = accountRepository.findById(id)
 	            .orElseThrow(() -> new RuntimeException("Conta não encontrada."));
@@ -59,9 +58,9 @@ public class AccountService {
 	    }
 	    
 	    accountMapper.updateFromDto(dto, account);
-
 	    
-	    return accountRepository.save(account);
+	    accountRepository.save(account);
+	    return accountMapper.toResponse(account);
 	}
 
 	public void delete(Long id, String username) {

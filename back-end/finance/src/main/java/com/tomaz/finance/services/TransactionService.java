@@ -16,6 +16,7 @@ import com.tomaz.finance.dto.BalanceResponseDTO;
 import com.tomaz.finance.dto.CategorySummaryDTO;
 import com.tomaz.finance.dto.TransactionCreateDTO;
 import com.tomaz.finance.dto.TransactionFilterDTO;
+import com.tomaz.finance.dto.TransactionResponseDTO;
 import com.tomaz.finance.dto.TransactionUpdateDTO;
 import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.entities.Category;
@@ -51,12 +52,14 @@ public class TransactionService {
 		
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
         Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
-        Pageable pageable = PageRequest.of(dto.getPage(), dto.getSize());
+        Pageable pageable = PageRequest.of(dto.page(), dto.size());
         
         return transactionRepository.findAll(specification, pageable);
 	}
+
 	
-	public Transaction create(TransactionCreateDTO dto, String username) {
+	public TransactionResponseDTO create(TransactionCreateDTO dto, String username) {
+		
 	    User user = userRepository.findByUsername(username)
 	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -90,10 +93,12 @@ public class TransactionService {
 	    transaction.setCategory(category);
 	    transaction.setAccount(account);
 
-	    return transactionRepository.save(transaction);
+	    transactionRepository.save(transaction);
+	    return transactionMapper.toResponse(transaction);
+	    
 	}
 
-	public Transaction update(Long id, TransactionUpdateDTO dto, String username) {
+	public TransactionResponseDTO update(Long id, TransactionUpdateDTO dto, String username) {
 	    User user = userRepository.findByUsername(username)
 	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -124,7 +129,8 @@ public class TransactionService {
 	        transaction.setAccount(account);
 	    }
 
-	    return transactionRepository.save(transaction);
+	    transactionRepository.save(transaction);
+	    return transactionMapper.toResponse(transaction);
 	}
 
 	
@@ -160,7 +166,7 @@ public class TransactionService {
 		return new BalanceResponseDTO(totalRevenue, totalExpense);
 	}
 	
-    public List<CategorySummaryDTO> getSummaryByType(String username, Integer type){
+    public List<CategorySummaryDTO> getSummaryByType(String username, TransactionType type){
     	
     	User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
     	

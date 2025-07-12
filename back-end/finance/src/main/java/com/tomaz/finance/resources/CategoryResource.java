@@ -39,20 +39,20 @@ public class CategoryResource {
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<Category> findById(@PathVariable Long id) {
-		Category obj = service.findById(id);
+	public ResponseEntity<CategoryResponseDTO> findById(@PathVariable Long id) {
+		CategoryResponseDTO obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<Category> create(@Valid @RequestBody CategoryCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		Category obj = service.create(dto, userDetails.getUsername());
+	public ResponseEntity<CategoryResponseDTO> create(@Valid @RequestBody CategoryCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		CategoryResponseDTO obj = service.create(dto, userDetails.getUsername());
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
 	@PatchMapping("update/{id}")
-	public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody  CategoryUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		Category obj = service.update(id, dto, userDetails.getUsername());
+	public ResponseEntity<CategoryResponseDTO> update(@PathVariable Long id, @RequestBody  CategoryUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		CategoryResponseDTO obj = service.update(id, dto, userDetails.getUsername());
 		return ResponseEntity.ok(obj);
 	}
 	

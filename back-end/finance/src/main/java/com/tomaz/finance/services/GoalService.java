@@ -31,29 +31,21 @@ public class GoalService {
 		
 		List<Goal> goals = goalRepository.findByUser(user);
 		
-		return goals.stream()
-				.map(goal -> new GoalResponseDTO(
-					goal.getId(),
-					goal.getName(),
-					goal.getTargetAmount(),
-					goal.getSavedAmount(),
-					goal.getTargetDate(),
-					goal.isCompleted()
-				
-				)).toList();
+		return goalMapper.goalsFromGoalsDTO(goals);
 	}
 	
-	public Goal create(GoalCreateDTO dto, String username) {
+	public GoalResponseDTO create(GoalCreateDTO dto, String username) {
 	    User user = userRepository.findByUsername(username)
 	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
 	    Goal goal = goalMapper.toEntity(dto);
 	    goal.setUser(user);
 
-	    return goalRepository.save(goal);
+	    goalRepository.save(goal);
+	    return goalMapper.toResponse(goal);
 	}
 	
-	public Goal update(Long id, GoalUpdateDTO dto, String username) {
+	public GoalResponseDTO update(Long id, GoalUpdateDTO dto, String username) {
 
 	    Goal goal = goalRepository.findById(id)
 	            .orElseThrow(() -> new RuntimeException("Meta não encontrada."));
@@ -67,7 +59,8 @@ public class GoalService {
 
 	    goalMapper.updateFromDto(dto, goal);
 
-	    return goalRepository.save(goal);
+	    goalRepository.save(goal);
+	    return goalMapper.toResponse(goal);
 	}
 
 	

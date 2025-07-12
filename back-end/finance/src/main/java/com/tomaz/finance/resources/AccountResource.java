@@ -38,14 +38,14 @@ public class AccountResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<Account> create(@Valid @RequestBody AccountCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		Account obj = service.create(dto, userDetails.getUsername());
+	public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		AccountResponseDTO obj = service.create(dto, userDetails.getUsername());
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
 	@PatchMapping("update/{id}")
-	public ResponseEntity<Account> update(@PathVariable Long id, @RequestBody  AccountUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		Account obj = service.update(id, dto, userDetails.getUsername());
+	public ResponseEntity<AccountResponseDTO> update(@PathVariable Long id, @RequestBody  AccountUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		AccountResponseDTO obj = service.update(id, dto, userDetails.getUsername());
 		return ResponseEntity.ok(obj);
 	}
 	

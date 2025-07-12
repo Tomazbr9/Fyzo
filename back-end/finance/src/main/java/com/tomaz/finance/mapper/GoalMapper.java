@@ -1,5 +1,7 @@
 package com.tomaz.finance.mapper;
 
+import java.util.List;
+
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -16,6 +18,8 @@ public interface GoalMapper {
 	Goal toEntity(GoalCreateDTO dto);
 	
 	GoalResponseDTO toResponse(Goal entity);
+	
+	List<GoalResponseDTO> goalsFromGoalsDTO(List<Goal> goals);
 	
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(GoalUpdateDTO dto, @MappingTarget Goal entity);

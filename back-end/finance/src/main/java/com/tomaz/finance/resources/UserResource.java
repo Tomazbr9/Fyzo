@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tomaz.finance.dto.JwtTokenDTO;
 import com.tomaz.finance.dto.LoginDTO;
 import com.tomaz.finance.dto.UserCreateDTO;
+import com.tomaz.finance.dto.UserResponseDTO;
 import com.tomaz.finance.dto.UserUpdateDTO;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
@@ -46,24 +47,24 @@ public class UserResource {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<User> create(@Valid @RequestBody UserCreateDTO dto){
-		User obj = service.create(dto);
+	public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreateDTO dto){
+		UserResponseDTO obj = service.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<User> findById(@PathVariable Long id) {
-		User obj = service.findById(id);
+	public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
+		UserResponseDTO obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
 	@PatchMapping("/update")
-	public ResponseEntity<User> update(@Valid @RequestBody UserUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+	public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		
 		String username = userDetails.getUsername();
 		
 		
-		User obj = service.update(dto, username);
+		UserResponseDTO obj = service.update(dto, username);
 		return ResponseEntity.ok(obj);
 	}
 	

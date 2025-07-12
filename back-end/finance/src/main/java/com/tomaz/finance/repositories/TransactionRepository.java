@@ -10,12 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import com.tomaz.finance.entities.Transaction;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.enums.TransactionType;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, JpaSpecificationExecutor<Transaction> {
 	List<Transaction> findByUser(User user);
 	
-	List<Transaction> findByUserAndType(User user, Integer type);
+	List<Transaction> findByUserAndType(User user, TransactionType type);
 	
 	Page<Transaction> findByUser(User user, Pageable page);
 }

@@ -37,14 +37,14 @@ public class GoalResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<Goal> create(@Valid @RequestBody GoalCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-	    Goal obj = service.create(dto, userDetails.getUsername());
+	public ResponseEntity<GoalResponseDTO> create(@Valid @RequestBody GoalCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+	    GoalResponseDTO obj = service.create(dto, userDetails.getUsername());
 	    return ResponseEntity.ok(obj);
 	}
 	
 	@PatchMapping("update/{id}")
-	public ResponseEntity<Goal> update(@PathVariable Long id, @RequestBody  GoalUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		Goal obj = service.update(id, dto, userDetails.getUsername());
+	public ResponseEntity<GoalResponseDTO> update(@PathVariable Long id, @RequestBody  GoalUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+		GoalResponseDTO obj = service.update(id, dto, userDetails.getUsername());
 		return ResponseEntity.ok(obj);
 	}
 	

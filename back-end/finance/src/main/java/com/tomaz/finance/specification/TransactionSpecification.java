@@ -19,32 +19,32 @@ public class TransactionSpecification {
 			
 			predicates.add(builder.equal(root.get("user"), user));
 			
-			if(filter.getType() != null) {
-				predicates.add(builder.equal(root.get("type"), filter.getType()));
+			if(filter.type() != null) {
+				predicates.add(builder.equal(root.get("type"), filter.type()));
 			}
 			
-			if(filter.getCategoryId() != null) {
-				predicates.add(builder.equal(root.get("category").get("id"), filter.getCategoryId()));
+			if(filter.categoryId() != null) {
+				predicates.add(builder.equal(root.get("category").get("id"), filter.categoryId()));
 			}
 			
-			if(filter.getStartDate() != null) {
-				predicates.add(builder.greaterThanOrEqualTo(root.get("date"), filter.getStartDate()));
+			if(filter.startDate() != null) {
+				predicates.add(builder.greaterThanOrEqualTo(root.get("date"), filter.startDate()));
 			}
 			
-			if(filter.getEndDate() != null) {
-				predicates.add(builder.lessThanOrEqualTo(root.get("date"), filter.getEndDate()));
+			if(filter.endDate() != null) {
+				predicates.add(builder.lessThanOrEqualTo(root.get("date"), filter.endDate()));
 			}
 			
-			if(filter.getMaxAmount() != null) {
-				predicates.add(builder.greaterThanOrEqualTo(root.get("amount"), filter.getMaxAmount()));
+			if(filter.maxAmount() != null) {
+				predicates.add(builder.greaterThanOrEqualTo(root.get("amount"), filter.maxAmount()));
 			}
 			
-			if(filter.getMinAmount() != null) {
-				predicates.add(builder.lessThanOrEqualTo(root.get("amount"), filter.getMinAmount()));
+			if(filter.minAmount() != null) {
+				predicates.add(builder.lessThanOrEqualTo(root.get("amount"), filter.minAmount()));
 			}
 			
-			if(filter.getAccountId() != null) {
-				predicates.add(builder.equal(root.get("account").get("id"), filter.getAccountId()));
+			if(filter.accountId() != null) {
+				predicates.add(builder.equal(root.get("account").get("id"), filter.accountId()));
 			}
 			
 			return builder.and(predicates.toArray(new Predicate[0]));

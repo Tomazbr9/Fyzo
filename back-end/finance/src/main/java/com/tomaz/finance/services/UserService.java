@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.tomaz.finance.dto.JwtTokenDTO;
 import com.tomaz.finance.dto.LoginDTO;
 import com.tomaz.finance.dto.UserCreateDTO;
+import com.tomaz.finance.dto.UserResponseDTO;
 import com.tomaz.finance.dto.UserUpdateDTO;
 import com.tomaz.finance.entities.Role;
 import com.tomaz.finance.entities.User;
@@ -48,14 +49,13 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
-	public User findById(Long id) {
+	public UserResponseDTO findById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
-		
-		return obj.get();
+		return userMapper.toResponse(obj.get());
 	}
 	
 	public JwtTokenDTO authenticateUser(LoginDTO dto) {
-			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()); 
+			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(dto.username(), dto.password()); 
 	        
 			Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 	        
@@ -64,7 +64,7 @@ public class UserService {
 	        return new JwtTokenDTO(jwtTokenService.generateToken(userDetails));
 	}
 	
-	public User create(UserCreateDTO dto) {
+	public UserResponseDTO create(UserCreateDTO dto) {
 	    User user = userMapper.toEntity(dto);
 
 	    RoleName roleName = RoleName.valueOf(dto.role());
@@ -75,10 +75,12 @@ public class UserService {
 
 	    user.setRoles(List.of(role));
 
-	    return userRepository.save(user);
+	    userRepository.save(user);
+	    return userMapper.toResponse(user);
+	    
 	}
 	
-	public User update(UserUpdateDTO dto, String username) {
+	public UserResponseDTO update(UserUpdateDTO dto, String username) {
 	    User user = userRepository.findByUsername(username)
 	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
@@ -88,7 +90,8 @@ public class UserService {
 	        user.setPassword(securityConfig.passwordEncoder().encode(dto.password()));
 	    }
 
-	    return userRepository.save(user);
+	    userRepository.save(user);
+	    return userMapper.toResponse(user);
 	}
 
 	public void delete(Long id) {

@@ -34,26 +34,16 @@ public class CategoryService {
 		
 		List<Category> categories = categoryRepository.findByUser(user);
 		
-		return categories.stream()
-				.map(category -> new CategoryResponseDTO(
-						category.getId(),
-						category.getName(),
-						category.getType().getCode(),
-						category.getColor()
-				))
-				.toList();
+		return categoryMapper.categoriesFromCategoriesDTO(categories);
 	}
 	
-
-	public Category findById(Long id) {
+	public CategoryResponseDTO findById(Long id) {
 		Optional<Category> obj = categoryRepository.findById(id);
-		
-		
 
-		return obj.get();
+		return categoryMapper.toResponse(obj.get());
 	}
 
-	public Category create(CategoryCreateDTO dto, String username) {
+	public CategoryResponseDTO create(CategoryCreateDTO dto, String username) {
 
 	    User user = userRepository.findByUsername(username)
 	            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -61,10 +51,11 @@ public class CategoryService {
 	    Category category = categoryMapper.toEntity(dto);
 	    category.setUser(user);
 
-	    return categoryRepository.save(category);
+	    categoryRepository.save(category);
+	    return categoryMapper.toResponse(category);
 	}
 
-	public Category update(Long id, CategoryUpdateDTO dto, String username) {
+	public CategoryResponseDTO update(Long id, CategoryUpdateDTO dto, String username) {
 
 	    Category category = categoryRepository.findById(id)
 	            .orElseThrow(() -> new RuntimeException("Categoria não encontrada."));
@@ -78,7 +69,8 @@ public class CategoryService {
 
 	    categoryMapper.updateFromDto(dto, category);
 
-	    return categoryRepository.save(category);
+	    categoryRepository.save(category);
+	    return categoryMapper.toResponse(category);
 	}
 
 	public void delete(Long id, String username) {

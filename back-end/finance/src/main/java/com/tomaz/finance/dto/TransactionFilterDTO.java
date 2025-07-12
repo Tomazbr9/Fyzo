@@ -3,12 +3,14 @@ package com.tomaz.finance.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.tomaz.finance.enums.TransactionType;
+
 public record TransactionFilterDTO(
     BigDecimal maxAmount,
     BigDecimal minAmount,
     Integer categoryId,
     Integer accountId,
-    Integer type,
+    TransactionType type,
     LocalDate startDate,
     LocalDate endDate,
     Integer page,
