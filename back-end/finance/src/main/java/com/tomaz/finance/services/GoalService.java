@@ -12,13 +12,11 @@ import com.tomaz.finance.entities.Goal;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.mapper.GoalMapper;
 import com.tomaz.finance.repositories.GoalRepository;
-import com.tomaz.finance.repositories.UserRepository;
+import com.tomaz.finance.services.finder.GoalFinder;
+import com.tomaz.finance.services.finder.UserFinder;
 
 @Service
 public class GoalService {
-	
-	@Autowired 
-	private UserRepository userRepository;
 	
 	@Autowired
 	private GoalRepository goalRepository;
@@ -26,8 +24,15 @@ public class GoalService {
 	@Autowired
 	private GoalMapper goalMapper;
 	
+	@Autowired
+	private UserFinder userFinder;
+	
+	@Autowired
+	private GoalFinder goalFinder;
+	
 	public List<GoalResponseDTO> findAll(String username){
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		
+		User user = userFinder.findByUsernameOrThrow(username);
 		
 		List<Goal> goals = goalRepository.findByUser(user);
 		
@@ -35,8 +40,7 @@ public class GoalService {
 	}
 	
 	public GoalResponseDTO create(GoalCreateDTO dto, String username) {
-	    User user = userRepository.findByUsername(username)
-	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		User user = userFinder.findByUsernameOrThrow(username);
 
 	    Goal goal = goalMapper.toEntity(dto);
 	    goal.setUser(user);
@@ -47,34 +51,20 @@ public class GoalService {
 	
 	public GoalResponseDTO update(Long id, GoalUpdateDTO dto, String username) {
 
-	    Goal goal = goalRepository.findById(id)
-	            .orElseThrow(() -> new RuntimeException("Meta não encontrada."));
-
-	    User user = userRepository.findByUsername(username)
-	            .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
-
-	    if (!goal.getUser().getId().equals(user.getId())) {
-	        throw new RuntimeException("Essa meta não pertence a você.");
-	    }
+	    User user = userFinder.findByUsernameOrThrow(username);
+	    Goal goal = goalFinder.findByIdAndUserOrThrow(id, user);
 
 	    goalMapper.updateFromDto(dto, goal);
 
 	    goalRepository.save(goal);
 	    return goalMapper.toResponse(goal);
 	}
-
 	
 public void delete(Long id, String username) {
 		
-		Goal goal = goalRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Meta não encontrada"));
-		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-		
-		if(!goal.getUser().getId().equals(user.getId())) {
-			throw new RuntimeException("Essa categoria não pertence a você.");
-		}
+		User user = userFinder.findByUsernameOrThrow(username);
+		Goal goal = goalFinder.findByIdAndUserOrThrow(id, user);
 
-		goalRepository.deleteById(id);
+		goalRepository.delete(goal);
 	}
 }

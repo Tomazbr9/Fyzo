@@ -25,9 +25,11 @@ import com.tomaz.finance.entities.User;
 import com.tomaz.finance.enums.TransactionType;
 import com.tomaz.finance.mapper.TransactionMapper;
 import com.tomaz.finance.repositories.AccountRepository;
-import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.TransactionRepository;
-import com.tomaz.finance.repositories.UserRepository;
+import com.tomaz.finance.services.finder.AccountFinder;
+import com.tomaz.finance.services.finder.CategoryFinder;
+import com.tomaz.finance.services.finder.TransactionFinder;
+import com.tomaz.finance.services.finder.UserFinder;
 import com.tomaz.finance.specification.TransactionSpecification;
 
 @Service
@@ -37,20 +39,26 @@ public class TransactionService {
 	private TransactionRepository transactionRepository;
 	
 	@Autowired
-	private CategoryRepository categoryRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private AccountRepository accountRepository;
 	
 	@Autowired
 	private TransactionMapper transactionMapper;
 	
+	@Autowired
+	private UserFinder userFinder;
+	
+	@Autowired
+	private AccountFinder accountFinder;
+	
+	@Autowired
+	private CategoryFinder categoryFinder;
+	
+	@Autowired
+	private TransactionFinder transactionFinder;
+	
 	public Page<Transaction> findAll(TransactionFilterDTO dto, String username){
 		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+		User user = userFinder.findByUsernameOrThrow(username);
         Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
         Pageable pageable = PageRequest.of(dto.page(), dto.size());
         
@@ -60,18 +68,9 @@ public class TransactionService {
 	
 	public TransactionResponseDTO create(TransactionCreateDTO dto, String username) {
 		
-	    User user = userRepository.findByUsername(username)
-	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-	    Category category = categoryRepository.findById(dto.categoryId())
-	        .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-
-	    Account account = accountRepository.findById(dto.accountId())
-	        .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
-
-	    if (!account.getUser().getId().equals(user.getId())) {
-	        throw new RuntimeException("Essa conta não pertence a você");
-	    }
+	    User user = userFinder.findByUsernameOrThrow(username);
+	    Category category = categoryFinder.findByIdAndUserOrThrow(dto.categoryId(), user);
+	    Account account = accountFinder.findByIdAndUserOrThrow(dto.accountId(), user);
 	    
 	    Transaction transaction = transactionMapper.toEntity(dto);
 	    
@@ -88,28 +87,20 @@ public class TransactionService {
 	}
 
 	public TransactionResponseDTO update(Long id, TransactionUpdateDTO dto, String username) {
-	    User user = userRepository.findByUsername(username)
-	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-	    Transaction transaction = transactionRepository.findById(id)
-	        .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
-
-	    if (!transaction.getUser().getId().equals(user.getId())) {
-	        throw new RuntimeException("Essa transação não pertence a você.");
-	    }
+		
+		User user = userFinder.findByUsernameOrThrow(username);
+	    Transaction transaction = transactionFinder.findByIdAndUserOrThrow(id, user);
 
 	    transactionMapper.updateFromDto(dto, transaction);
 
 	 
 	    if (dto.categoryId() != null) {
-	        Category category = categoryRepository.findById(dto.categoryId())
-	            .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+	    	Category category = categoryFinder.findByIdOrThrow(dto.categoryId());
 	        transaction.setCategory(category);
 	    }
 
 	    if (dto.accountId() != null) {
-	        Account account = accountRepository.findById(dto.accountId())
-	            .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+	    	Account account = accountFinder.findByIdOrThrow(dto.accountId());
 
 	        if (!account.getUser().getId().equals(user.getId())) {
 	            throw new RuntimeException("Essa conta não pertence a você.");
@@ -124,21 +115,14 @@ public class TransactionService {
 
 	
 	public void delete(Long id, String username) {
-		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-		
-		Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transação não encontrada"));
-		
-		if(!transaction.getUser().getId().equals(user.getId())) {
-			throw new RuntimeException("Essa transação não pertence a você.");
-		}
-		
-		transactionRepository.deleteById(id);
+		User user = userFinder.findByUsernameOrThrow(username);
+		Transaction transaction = transactionFinder.findByIdAndUserOrThrow(id, user);
+		transactionRepository.delete(transaction);
 	}
 	
 	public BalanceResponseDTO getUserBalance(String username) {
 		
-		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrato"));
+		User user = userFinder.findByUsernameOrThrow(username);
 		
 		List<Transaction> transactions = transactionRepository.findByUser(user);
 		
@@ -157,7 +141,7 @@ public class TransactionService {
 	
     public List<CategorySummaryDTO> getSummaryByType(String username, TransactionType type){
     	
-    	User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+    	User user = userFinder.findByUsernameOrThrow(username);
     	
     	List<Transaction> transactions = transactionRepository.findByUserAndType(user, type);
     	

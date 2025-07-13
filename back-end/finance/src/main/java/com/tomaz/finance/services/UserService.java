@@ -23,6 +23,7 @@ import com.tomaz.finance.repositories.UserRepository;
 import com.tomaz.finance.security.SecurityConfig;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.security.jwt.JwtTokenService;
+import com.tomaz.finance.services.finder.UserFinder;
 
 @Service
 public class UserService {
@@ -44,6 +45,9 @@ public class UserService {
 	
 	@Autowired 
 	private UserMapper userMapper;
+	
+	@Autowired 
+	private UserFinder userFinder;
 	
 	public List<User> findAll(){
 		return userRepository.findAll();
@@ -81,8 +85,7 @@ public class UserService {
 	}
 	
 	public UserResponseDTO update(UserUpdateDTO dto, String username) {
-	    User user = userRepository.findByUsername(username)
-	        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+		User user = userFinder.findByUsernameOrThrow(username);
 
 	    userMapper.updateFromDto(dto, user);
 	    
@@ -94,11 +97,8 @@ public class UserService {
 	    return userMapper.toResponse(user);
 	}
 
-	public void delete(Long id) {
-		if(!userRepository.existsById(id)) {
-			throw new RuntimeException("Usuário não encontrado");
-		}
-		
-		userRepository.deleteById(id);
+	public void delete(String username) {
+		User user = userFinder.findByUsernameOrThrow(username);
+		userRepository.delete(user);
 	}
 }
