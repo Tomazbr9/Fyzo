@@ -14,10 +14,12 @@ import com.tomaz.finance.dto.LoginDTO;
 import com.tomaz.finance.dto.UserCreateDTO;
 import com.tomaz.finance.dto.UserResponseDTO;
 import com.tomaz.finance.dto.UserUpdateDTO;
+import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Role;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.enums.RoleName;
 import com.tomaz.finance.mapper.UserMapper;
+import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.RoleRepository;
 import com.tomaz.finance.repositories.UserRepository;
 import com.tomaz.finance.security.SecurityConfig;
@@ -49,6 +51,9 @@ public class UserService {
 	@Autowired 
 	private UserFinder userFinder;
 	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	public List<User> findAll(){
 		return userRepository.findAll();
 	}
@@ -76,10 +81,11 @@ public class UserService {
 	        .orElseThrow(() -> new RuntimeException("Role não encontrada: " + roleName));
 
 	    user.setPassword(securityConfig.passwordEncoder().encode(dto.password()));
-
 	    user.setRoles(List.of(role));
 
 	    userRepository.save(user);
+	    copyDefaultCategoriesToUser(user);
+	    
 	    return userMapper.toResponse(user);
 	    
 	}
@@ -100,5 +106,24 @@ public class UserService {
 	public void delete(String username) {
 		User user = userFinder.findByUsernameOrThrow(username);
 		userRepository.delete(user);
+	}
+	
+	private void copyDefaultCategoriesToUser(User user) {
+		List<Category> defaultCategories = categoryRepository.findByIsDefaultTrue();
+		
+		List<Category> categoriesToUser = defaultCategories
+				.stream()
+				.map(category -> {
+					Category newCategory = new Category();
+					newCategory.setName(category.getName());
+					newCategory.setType(category.getType());
+					newCategory.setColor(category.getColor());
+					newCategory.setDefault(false);
+					newCategory.setUser(user);
+					return newCategory;
+				}).toList();
+		
+		categoryRepository.saveAll(categoriesToUser);
+		
 	}
 }

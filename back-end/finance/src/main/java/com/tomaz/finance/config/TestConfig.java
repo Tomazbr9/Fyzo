@@ -74,16 +74,23 @@ public class TestConfig implements CommandLineRunner {
 			Category c1 = Category.builder()
 			    .name("Aluguel")
 			    .type(TransactionType.EXPENSE)
-			    .color("#FF0000") // ou "" se quiser manter vazio, mas o ideal é usar uma cor válida
-			    .user(u1)
+			    .color("#FF0000")
+			    .isDefault(true)
 			    .build();
 
 			Category c2 = Category.builder()
 			    .name("Salario")
 			    .type(TransactionType.REVENUE)
 			    .color("#00FF00")
-			    .user(u2)
+			    .isDefault(true)
 			    .build();
+			
+			Category c3 = Category.builder()
+				    .name("Mercado")
+				    .type(TransactionType.REVENUE)
+				    .color("#00FF00")
+				    .isDefault(true)
+				    .build();
 
 			Account a1 = Account.builder()
 			    .name("Dinheiro")
@@ -134,7 +141,7 @@ public class TestConfig implements CommandLineRunner {
 			roleRepository.saveAll(Arrays.asList(adminRole, customerRole));
 			userRepository.saveAll(Arrays.asList(u1, u2));
 			accountRepository.saveAll(Arrays.asList(a1, a2));
-			categoryRepository.saveAll(Arrays.asList(c1, c2));
+			categoryRepository.saveAll(Arrays.asList(c1, c2, c3));
 			goalRepository.saveAll(Arrays.asList(g1, g2));
 			transactionRepository.saveAll(Arrays.asList(t1, t2));
 	}

@@ -35,9 +35,18 @@ public class SecurityConfig {
             "/transactions/update/**",
             "/transactions/delete/**",
             
+            
     		"/categories/create",
             "/categories/update/**",
             "/categories/delete/**",
+            
+            "/accounts/create",
+            "/accounts/update/**",
+            "/accounts/delete/**",
+            
+            "/goals/create",
+            "/goals/update/**",
+            "/goals/delete/**"
             
     };
 
@@ -48,16 +57,12 @@ public class SecurityConfig {
           "/transactions/summary/revenue",
           "/transactions/filter",
           
-          "/account/me",
-          "/account/create",
-          "/account/update/**",
-          "/account/delete/**",
+          "/categories/me",
+          
+          "/accounts/me",
           
           "/goals/me",
-          "/goals/create",
-          "/goals/update/**",
-          "/goals/delete/**"
-    		
+         
     };
 
     public static final String [] ENDPOINTS_ADMIN = {

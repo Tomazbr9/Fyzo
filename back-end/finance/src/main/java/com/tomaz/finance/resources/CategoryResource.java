@@ -31,7 +31,7 @@ public class CategoryResource {
 	@Autowired
 	private CategoryService service;
 	
-	@GetMapping
+	@GetMapping("/me")
 	public ResponseEntity<List<CategoryResponseDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
 		
 		List<CategoryResponseDTO> list = service.findAll(userDetails.getUsername());

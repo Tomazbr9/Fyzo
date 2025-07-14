@@ -41,6 +41,8 @@ public class Category implements Serializable {
     private TransactionType type;
     private String color;
     
+    private boolean isDefault;
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

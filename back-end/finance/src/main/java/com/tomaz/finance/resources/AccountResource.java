@@ -25,7 +25,7 @@ import com.tomaz.finance.services.AccountService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/accounts")
 public class AccountResource {
 	
 	@Autowired

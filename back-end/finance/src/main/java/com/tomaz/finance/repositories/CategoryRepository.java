@@ -11,4 +11,6 @@ import com.tomaz.finance.entities.User;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 	List<Category> findByUser(User user);
+	
+	List<Category> findByIsDefaultTrue();
 }
