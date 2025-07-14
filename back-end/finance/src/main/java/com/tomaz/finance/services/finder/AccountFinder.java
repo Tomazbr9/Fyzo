@@ -1,10 +1,12 @@
 package com.tomaz.finance.services.finder;
 
-import org.springframework.beans.factory.annotation.Autowired; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.entities.Account;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.exceptions.ResourceNotFoundException;
+import com.tomaz.finance.exceptions.UnauthorizedResourceAccessException;
 import com.tomaz.finance.repositories.AccountRepository;
 
 @Service
@@ -15,7 +17,7 @@ public class AccountFinder {
 	
 	public Account findByIdOrThrow(Long id) {
 		return accountRepository.findById(id)
-		        .orElseThrow(() -> new RuntimeException("Conta não encontrada"));
+		        .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
 	}
 	
 	public Account findByIdAndUserOrThrow(Long id, User user) {
@@ -23,7 +25,7 @@ public class AccountFinder {
 			Account account = findByIdOrThrow(id);
 			
 			if (!account.getUser().getId().equals(user.getId())) {
-		        throw new RuntimeException("Essa conta não pertence a você");
+		        throw new UnauthorizedResourceAccessException("Essa conta não pertence a você");
 		    }
 			
 			return account;

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.entities.Goal;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.exceptions.ResourceNotFoundException;
+import com.tomaz.finance.exceptions.UnauthorizedResourceAccessException;
 import com.tomaz.finance.repositories.GoalRepository;
 
 @Service
@@ -15,7 +17,7 @@ public class GoalFinder {
 	
 	public Goal findByIdOrThrow(Long id) {
 		return goalRepository.findById(id)
-		        .orElseThrow(() -> new RuntimeException("Meta não encontrada"));
+		        .orElseThrow(() -> new ResourceNotFoundException("Meta não encontrada"));
 	}
 	
 	public Goal findByIdAndUserOrThrow(Long id, User user) {
@@ -23,7 +25,7 @@ public class GoalFinder {
 			Goal goal = findByIdOrThrow(id);
 			
 			if (!goal.getUser().getId().equals(user.getId())) {
-		        throw new RuntimeException("Essa meta não pertence a você");
+		        throw new UnauthorizedResourceAccessException("Essa meta não pertence a você");
 		    }
 			
 			return goal;

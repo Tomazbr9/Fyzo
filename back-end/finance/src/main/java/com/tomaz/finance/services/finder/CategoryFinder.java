@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.exceptions.ResourceNotFoundException;
+import com.tomaz.finance.exceptions.UnauthorizedResourceAccessException;
 import com.tomaz.finance.repositories.CategoryRepository;
 
 @Service
@@ -15,7 +17,7 @@ public class CategoryFinder {
 	
 	public Category findByIdOrThrow(Long id) {
 		return categoryRepository.findById(id)
-		        .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
+		        .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
 	}
 	
 	public Category findByIdAndUserOrThrow(Long id, User user) {
@@ -23,7 +25,7 @@ public class CategoryFinder {
 			Category category = findByIdOrThrow(id);
 			
 			if (!category.getUser().getId().equals(user.getId())) {
-		        throw new RuntimeException("Essa categoria não pertence a você");
+		        throw new UnauthorizedResourceAccessException("Essa categoria não pertence a você");
 		    }
 			
 			return category;

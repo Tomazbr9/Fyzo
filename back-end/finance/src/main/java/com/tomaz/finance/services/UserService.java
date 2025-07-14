@@ -18,6 +18,7 @@ import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.Role;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.enums.RoleName;
+import com.tomaz.finance.exceptions.ResourceNotFoundException;
 import com.tomaz.finance.mapper.UserMapper;
 import com.tomaz.finance.repositories.CategoryRepository;
 import com.tomaz.finance.repositories.RoleRepository;
@@ -78,7 +79,7 @@ public class UserService {
 
 	    RoleName roleName = RoleName.valueOf(dto.role());
 	    Role role = roleRepository.findByName(roleName)
-	        .orElseThrow(() -> new RuntimeException("Role não encontrada: " + roleName));
+	        .orElseThrow(() -> new ResourceNotFoundException("Role não encontrado"));
 
 	    user.setPassword(securityConfig.passwordEncoder().encode(dto.password()));
 	    user.setRoles(List.of(role));

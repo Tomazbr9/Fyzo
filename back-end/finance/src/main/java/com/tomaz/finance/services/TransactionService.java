@@ -100,12 +100,7 @@ public class TransactionService {
 	    }
 
 	    if (dto.accountId() != null) {
-	    	Account account = accountFinder.findByIdOrThrow(dto.accountId());
-
-	        if (!account.getUser().getId().equals(user.getId())) {
-	            throw new RuntimeException("Essa conta não pertence a você.");
-	        }
-
+	    	Account account = accountFinder.findByIdOrThrow(id);
 	        transaction.setAccount(account);
 	    }
 
