@@ -26,6 +26,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleTokenMissing(TokenMissingException ex) {
         return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+    
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidToken(InvalidTokenException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+    
+    @ExceptionHandler(TokenGenerationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleTokenGeneration(TokenGenerationException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {

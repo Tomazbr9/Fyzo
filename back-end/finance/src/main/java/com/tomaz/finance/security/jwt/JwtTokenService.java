@@ -10,6 +10,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.tomaz.finance.exceptions.InvalidTokenException;
+import com.tomaz.finance.exceptions.TokenGenerationException;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
 
 @Component
@@ -29,7 +31,7 @@ public class JwtTokenService {
 					.sign(algorithm);
 	    } 
 		catch (JWTCreationException exception) {
-			throw new JWTCreationException("Erro ao gerar token.", exception);
+			throw new TokenGenerationException("Erro ao gerar token");
 		}
 	}
 	
@@ -43,7 +45,7 @@ public class JwtTokenService {
 					.getSubject();
 		}
 		catch (JWTVerificationException exception) {
-			throw new JWTCreationException("Token inválido ou expirado.", exception);
+			throw new InvalidTokenException("Token invalido ou expirado");
 		}
 	}
 	

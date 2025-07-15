@@ -1,10 +1,10 @@
 package com.tomaz.finance.exceptions;
 
-public class TokenMissingException extends RuntimeException  {
+public class InvalidTokenException extends RuntimeException {
 	
     private static final long serialVersionUID = 1L;
 
-	public TokenMissingException(String message) {
+	public InvalidTokenException(String message) {
         super(message);
     }
 }

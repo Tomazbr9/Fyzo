@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.tomaz.finance.entities.User;
+import com.tomaz.finance.exceptions.TokenMissingException;
 import com.tomaz.finance.repositories.UserRepository;
 import com.tomaz.finance.security.SecurityConfig;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
@@ -47,7 +48,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
                 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                throw new RuntimeException("O token está ausente.");
+                throw new TokenMissingException("Token ausente");
             }
         }
         filterChain.doFilter(request, response);

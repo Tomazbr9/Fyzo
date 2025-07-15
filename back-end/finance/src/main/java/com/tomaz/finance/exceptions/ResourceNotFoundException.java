@@ -1,6 +1,6 @@
 package com.tomaz.finance.exceptions;
 
-public class ResourceNotFoundException extends ApplicationException {
+public class ResourceNotFoundException extends RuntimeException  {
 	
 	private static final long serialVersionUID = 1L;
 

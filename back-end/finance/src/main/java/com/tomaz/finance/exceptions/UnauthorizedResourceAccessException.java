@@ -1,6 +1,6 @@
 package com.tomaz.finance.exceptions;
 
-public class UnauthorizedResourceAccessException extends ApplicationException {
+public class UnauthorizedResourceAccessException extends RuntimeException  {
 	
 	private static final long serialVersionUID = 1L;
 

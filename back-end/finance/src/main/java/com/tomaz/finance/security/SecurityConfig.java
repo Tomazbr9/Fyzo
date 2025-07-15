@@ -27,47 +27,38 @@ public class SecurityConfig {
     		"/users/register",
     };
 
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
+    public static final String [] ENDPOINTS_CUSTOMER = {
     		"/users/update",
     		"/users/delete",
     		
+    		"/transactions/me",
     		"/transactions/create",
             "/transactions/update/**",
             "/transactions/delete/**",
+            "/transactions/balance",
+            "/transactions/summary/expense",
+            "/transactions/summary/revenue",
+            "/transactions/filter",
             
-            
+            "/categories/me",
     		"/categories/create",
             "/categories/update/**",
             "/categories/delete/**",
             
+            "/accounts/me",
             "/accounts/create",
             "/accounts/update/**",
             "/accounts/delete/**",
             
+            "/goals/me",
             "/goals/create",
             "/goals/update/**",
             "/goals/delete/**"
             
     };
 
-    public static final String [] ENDPOINTS_CUSTOMER = {
-    	  "/transactions/me",
-          "/transactions/balance",
-          "/transactions/summary/expense",
-          "/transactions/summary/revenue",
-          "/transactions/filter",
-          
-          "/categories/me",
-          
-          "/accounts/me",
-          
-          "/goals/me",
-         
-    };
-
     public static final String [] ENDPOINTS_ADMIN = {
-            "/users",
-            "/categories"
+            "/admin"
     };
 
     @Bean
@@ -81,9 +72,8 @@ public class SecurityConfig {
             
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-                .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
                 .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
+                .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
 
                 .anyRequest().denyAll()
             )
