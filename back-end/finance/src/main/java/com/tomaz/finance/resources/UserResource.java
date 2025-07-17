@@ -1,6 +1,6 @@
 package com.tomaz.finance.resources;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,6 @@ import com.tomaz.finance.dto.LoginDTO;
 import com.tomaz.finance.dto.UserCreateDTO;
 import com.tomaz.finance.dto.UserResponseDTO;
 import com.tomaz.finance.dto.UserUpdateDTO;
-import com.tomaz.finance.entities.User;
 import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.UserService;
 
@@ -32,13 +31,6 @@ public class UserResource {
 	
 	@Autowired
 	private UserService service;
-	
-	@GetMapping
-	public ResponseEntity<List<User>> findAll(){
-		
-		List<User> list = service.findAll();
-		return ResponseEntity.ok().body(list);
-	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<JwtTokenDTO> authenticateUser(@Valid @RequestBody LoginDTO dto){

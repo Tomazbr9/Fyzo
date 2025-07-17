@@ -55,10 +55,6 @@ public class UserService {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	
-	public List<User> findAll(){
-		return userRepository.findAll();
-	}
-	
 	public UserResponseDTO findById(Long id) {
 		Optional<User> obj = userRepository.findById(id);
 		return userMapper.toResponse(obj.get());
