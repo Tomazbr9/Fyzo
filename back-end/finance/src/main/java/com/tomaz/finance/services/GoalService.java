@@ -12,6 +12,7 @@ import com.tomaz.finance.entities.Goal;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.mapper.GoalMapper;
 import com.tomaz.finance.repositories.GoalRepository;
+import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.finder.GoalFinder;
 import com.tomaz.finance.services.finder.UserFinder;
 
@@ -30,17 +31,17 @@ public class GoalService {
 	@Autowired
 	private GoalFinder goalFinder;
 	
-	public List<GoalResponseDTO> findAll(String username){
+	public List<GoalResponseDTO> findAll(UserDetailsImpl userDetails){
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		
 		List<Goal> goals = goalRepository.findByUser(user);
 		
 		return goalMapper.goalsFromGoalsDTO(goals);
 	}
 	
-	public GoalResponseDTO create(GoalCreateDTO dto, String username) {
-		User user = userFinder.findByUsernameOrThrow(username);
+	public GoalResponseDTO create(GoalCreateDTO dto, UserDetailsImpl userDetails) {
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 
 	    Goal goal = goalMapper.toEntity(dto);
 	    goal.setUser(user);
@@ -49,9 +50,9 @@ public class GoalService {
 	    return goalMapper.toResponse(goal);
 	}
 	
-	public GoalResponseDTO update(Long id, GoalUpdateDTO dto, String username) {
+	public GoalResponseDTO update(Long id, GoalUpdateDTO dto, UserDetailsImpl userDetails) {
 
-	    User user = userFinder.findByUsernameOrThrow(username);
+	    User user = userFinder.findByUsernameOrThrow(userDetails);
 	    Goal goal = goalFinder.findByIdAndUserOrThrow(id, user);
 
 	    goalMapper.updateFromDto(dto, goal);
@@ -60,9 +61,9 @@ public class GoalService {
 	    return goalMapper.toResponse(goal);
 	}
 	
-public void delete(Long id, String username) {
+public void delete(Long id, UserDetailsImpl userDetails) {
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		Goal goal = goalFinder.findByIdAndUserOrThrow(id, user);
 
 		goalRepository.delete(goal);

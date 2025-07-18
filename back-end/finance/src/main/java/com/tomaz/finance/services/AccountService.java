@@ -13,6 +13,7 @@ import com.tomaz.finance.entities.User;
 import com.tomaz.finance.mapper.AccountMapper;
 import com.tomaz.finance.repositories.AccountRepository;
 import com.tomaz.finance.repositories.UserRepository;
+import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.finder.AccountFinder;
 import com.tomaz.finance.services.finder.UserFinder;
 
@@ -31,17 +32,17 @@ public class AccountService {
 	@Autowired
 	private UserFinder userFinder;
 	
-	public List<AccountResponseDTO> findAll(String username){
+	public List<AccountResponseDTO> findAll(UserDetailsImpl userDetails){
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		List<Account> accounts = accountRepository.findByUser(user);
 		
 		return accountMapper.accountFromAccountDTO(accounts);
 	}
 	
-	public AccountResponseDTO create(AccountCreateDTO dto, String username) {
+	public AccountResponseDTO create(AccountCreateDTO dto, UserDetailsImpl userDetails) {
 	    
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		
 	    Account account = accountMapper.toEntity(dto);
 	    account.setUser(user);
@@ -50,9 +51,9 @@ public class AccountService {
 	    return accountMapper.toResponse(account);
 	}
 
-	public AccountResponseDTO update(Long id, AccountUpdateDTO dto, String username) {
+	public AccountResponseDTO update(Long id, AccountUpdateDTO dto, UserDetailsImpl userDetails) {
 
-	    User user = userFinder.findByUsernameOrThrow(username);
+	    User user = userFinder.findByUsernameOrThrow(userDetails);
 	    Account account = accountFinder.findByIdAndUserOrThrow(id, user);
 	    
 	    accountMapper.updateFromDto(dto, account);
@@ -61,9 +62,9 @@ public class AccountService {
 	    return accountMapper.toResponse(account);
 	}
 
-	public void delete(Long id, String username) {
+	public void delete(Long id, UserDetailsImpl userDetails) {
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		Account account = accountFinder.findByIdAndUserOrThrow(id, user);
 
 		accountRepository.delete(account);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -87,9 +88,9 @@ public class UserService {
 	    
 	}
 	
-	public UserResponseDTO update(UserUpdateDTO dto, String username) {
-		User user = userFinder.findByUsernameOrThrow(username);
-
+	public UserResponseDTO update(UserUpdateDTO dto, UserDetailsImpl userDetails) {
+		User user = userFinder.findByUsernameOrThrow(userDetails);
+		
 	    userMapper.updateFromDto(dto, user);
 	    
 	    if (dto.password() != null && !dto.password().isBlank()) {
@@ -100,8 +101,10 @@ public class UserService {
 	    return userMapper.toResponse(user);
 	}
 
-	public void delete(String username) {
-		User user = userFinder.findByUsernameOrThrow(username);
+	public void delete(UserDetailsImpl userDetails) {
+		
+		User user = userFinder.findByUsernameOrThrow(userDetails);
+		
 		userRepository.delete(user);
 	}
 	

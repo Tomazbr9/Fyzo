@@ -33,8 +33,14 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         return user.getUsername();
-    } 
-
+    }
+    
+    public boolean isAdmin() {
+    	return getAuthorities()
+    			.stream()
+    			.anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+    }
+    
     @Override
     public boolean isAccountNonExpired() {
         return true;

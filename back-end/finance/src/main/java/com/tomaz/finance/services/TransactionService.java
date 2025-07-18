@@ -26,6 +26,7 @@ import com.tomaz.finance.enums.TransactionType;
 import com.tomaz.finance.mapper.TransactionMapper;
 import com.tomaz.finance.repositories.AccountRepository;
 import com.tomaz.finance.repositories.TransactionRepository;
+import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.finder.AccountFinder;
 import com.tomaz.finance.services.finder.CategoryFinder;
 import com.tomaz.finance.services.finder.TransactionFinder;
@@ -56,9 +57,9 @@ public class TransactionService {
 	@Autowired
 	private TransactionFinder transactionFinder;
 	
-	public Page<Transaction> findAll(TransactionFilterDTO dto, String username){
+	public Page<Transaction> findAll(TransactionFilterDTO dto, UserDetailsImpl userDetails){
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
         Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
         Pageable pageable = PageRequest.of(dto.page(), dto.size());
         
@@ -66,9 +67,9 @@ public class TransactionService {
 	}
 
 	
-	public TransactionResponseDTO create(TransactionCreateDTO dto, String username) {
+	public TransactionResponseDTO create(TransactionCreateDTO dto, UserDetailsImpl userDetails) {
 		
-	    User user = userFinder.findByUsernameOrThrow(username);
+	    User user = userFinder.findByUsernameOrThrow(userDetails);
 	    Category category = categoryFinder.findByIdAndUserOrThrow(dto.categoryId(), user);
 	    Account account = accountFinder.findByIdAndUserOrThrow(dto.accountId(), user);
 	    
@@ -86,9 +87,9 @@ public class TransactionService {
 	    
 	}
 
-	public TransactionResponseDTO update(Long id, TransactionUpdateDTO dto, String username) {
+	public TransactionResponseDTO update(Long id, TransactionUpdateDTO dto, UserDetailsImpl userDetails) {
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 	    Transaction transaction = transactionFinder.findByIdAndUserOrThrow(id, user);
 
 	    transactionMapper.updateFromDto(dto, transaction);
@@ -109,15 +110,15 @@ public class TransactionService {
 	}
 
 	
-	public void delete(Long id, String username) {
-		User user = userFinder.findByUsernameOrThrow(username);
+	public void delete(Long id, UserDetailsImpl userDetails) {
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		Transaction transaction = transactionFinder.findByIdAndUserOrThrow(id, user);
 		transactionRepository.delete(transaction);
 	}
 	
-	public BalanceResponseDTO getUserBalance(String username) {
+	public BalanceResponseDTO getUserBalance(UserDetailsImpl userDetails) {
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		
 		List<Transaction> transactions = transactionRepository.findByUser(user);
 		
@@ -134,9 +135,9 @@ public class TransactionService {
 		return new BalanceResponseDTO(totalRevenue, totalExpense);
 	}
 	
-    public List<CategorySummaryDTO> getSummaryByType(String username, TransactionType type){
+    public List<CategorySummaryDTO> getSummaryByType(UserDetailsImpl userDetails, TransactionType type){
     	
-    	User user = userFinder.findByUsernameOrThrow(username);
+    	User user = userFinder.findByUsernameOrThrow(userDetails);
     	
     	List<Transaction> transactions = transactionRepository.findByUserAndType(user, type);
     	

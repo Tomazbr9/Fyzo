@@ -58,7 +58,9 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_ADMIN = {
-            "/admin/**"
+            "/admin/users/all",
+    		"/admin/users/update/**",
+            "/admin/users/delete/**"
     };
 
     @Bean

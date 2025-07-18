@@ -34,7 +34,7 @@ public class CategoryResource {
 	@GetMapping("/me")
 	public ResponseEntity<List<CategoryResponseDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
 		
-		List<CategoryResponseDTO> list = service.findAll(userDetails.getUsername());
+		List<CategoryResponseDTO> list = service.findAll(userDetails);
 		return ResponseEntity.ok().body(list);
 	}
 	
@@ -46,19 +46,19 @@ public class CategoryResource {
 	
 	@PostMapping("/create")
 	public ResponseEntity<CategoryResponseDTO> create(@Valid @RequestBody CategoryCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		CategoryResponseDTO obj = service.create(dto, userDetails.getUsername());
+		CategoryResponseDTO obj = service.create(dto, userDetails);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
 	@PatchMapping("update/{id}")
 	public ResponseEntity<CategoryResponseDTO> update(@PathVariable Long id, @RequestBody  CategoryUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		CategoryResponseDTO obj = service.update(id, dto, userDetails.getUsername());
+		CategoryResponseDTO obj = service.update(id, dto, userDetails);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails.getUsername());
+		service.delete(id, userDetails);
 		return ResponseEntity.noContent().build();
 	}
 }

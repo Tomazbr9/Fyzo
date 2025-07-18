@@ -33,25 +33,25 @@ public class AccountResource {
 	
 	@GetMapping("/me")
 	public List<AccountResponseDTO> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		return service.findAll(userDetails.getUsername());
+		return service.findAll(userDetails);
 		
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		AccountResponseDTO obj = service.create(dto, userDetails.getUsername());
+		AccountResponseDTO obj = service.create(dto, userDetails);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
 	@PatchMapping("update/{id}")
 	public ResponseEntity<AccountResponseDTO> update(@PathVariable Long id, @RequestBody  AccountUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		AccountResponseDTO obj = service.update(id, dto, userDetails.getUsername());
+		AccountResponseDTO obj = service.update(id, dto, userDetails);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails.getUsername());
+		service.delete(id, userDetails);
 		return ResponseEntity.noContent().build();
 	}
 }

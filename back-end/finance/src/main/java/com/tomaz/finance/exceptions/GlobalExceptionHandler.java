@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,6 +17,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleNotFound(ResourceNotFoundException ex) {
         return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUnauthorized(UsernameNotFoundException ex) {
+        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    
 
     @ExceptionHandler(UnauthorizedResourceAccessException.class)
     public ResponseEntity<ErrorResponseDTO> handleUnauthorized(UnauthorizedResourceAccessException ex) {

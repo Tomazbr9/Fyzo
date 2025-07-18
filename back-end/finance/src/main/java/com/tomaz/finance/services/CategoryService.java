@@ -1,6 +1,6 @@
 package com.tomaz.finance.services;
 
-import java.util.List;
+import java.util.List; 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import com.tomaz.finance.entities.Category;
 import com.tomaz.finance.entities.User;
 import com.tomaz.finance.mapper.CategoryMapper;
 import com.tomaz.finance.repositories.CategoryRepository;
+import com.tomaz.finance.security.entities.UserDetailsImpl;
 import com.tomaz.finance.services.finder.CategoryFinder;
 import com.tomaz.finance.services.finder.UserFinder;
 
@@ -31,9 +32,9 @@ public class CategoryService {
 	@Autowired
 	private CategoryFinder categoryFinder;
 
-	public List<CategoryResponseDTO> findAll(String username) {
+	public List<CategoryResponseDTO> findAll(UserDetailsImpl userDetails) {
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		
 		List<Category> categories = categoryRepository.findByUser(user);
 		
@@ -46,9 +47,9 @@ public class CategoryService {
 		return categoryMapper.toResponse(obj.get());
 	}
 
-	public CategoryResponseDTO create(CategoryCreateDTO dto, String username) {
+	public CategoryResponseDTO create(CategoryCreateDTO dto, UserDetailsImpl userDetails) {
 
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 
 	    Category category = categoryMapper.toEntity(dto);
 	    category.setUser(user);
@@ -57,9 +58,9 @@ public class CategoryService {
 	    return categoryMapper.toResponse(category);
 	}
 
-	public CategoryResponseDTO update(Long id, CategoryUpdateDTO dto, String username) {
+	public CategoryResponseDTO update(Long id, CategoryUpdateDTO dto, UserDetailsImpl userDetails) {
 
-	    User user = userFinder.findByUsernameOrThrow(username);
+	    User user = userFinder.findByUsernameOrThrow(userDetails);
 	    Category category = categoryFinder.findByIdAndUserOrThrow(id, user);
 
 	    categoryMapper.updateFromDto(dto, category);
@@ -68,9 +69,9 @@ public class CategoryService {
 	    return categoryMapper.toResponse(category);
 	}
 
-	public void delete(Long id, String username) {
+	public void delete(Long id, UserDetailsImpl userDetails) {
 		
-		User user = userFinder.findByUsernameOrThrow(username);
+		User user = userFinder.findByUsernameOrThrow(userDetails);
 		Category category = categoryFinder.findByIdAndUserOrThrow(id, user);
 
 		categoryRepository.delete(category);

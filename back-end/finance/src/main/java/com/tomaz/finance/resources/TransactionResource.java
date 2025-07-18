@@ -39,43 +39,43 @@ public class TransactionResource {
 	
 	@GetMapping("/me")
 	public Page<Transaction> findAll(@ModelAttribute TransactionFilterDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		return service.findAll(dto, userDetails.getUsername());
+		return service.findAll(dto, userDetails);
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<TransactionResponseDTO> create(@Valid @RequestBody TransactionCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		
-		TransactionResponseDTO obj = service.create(dto, userDetails.getUsername());
+		TransactionResponseDTO obj = service.create(dto, userDetails);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}
 	
 	@PatchMapping("/update/{id}")
 	public ResponseEntity<TransactionResponseDTO> update(@PathVariable Long id, @RequestBody TransactionUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		TransactionResponseDTO obj = service.update(id, dto, userDetails.getUsername());
+		TransactionResponseDTO obj = service.update(id, dto, userDetails);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails.getUsername());
+		service.delete(id, userDetails);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/balance")
 	public ResponseEntity<BalanceResponseDTO> getBalance(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		BalanceResponseDTO obj = service.getUserBalance(userDetails.getUsername());
+		BalanceResponseDTO obj = service.getUserBalance(userDetails);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@GetMapping("/summary/expense")
 	public ResponseEntity<List<CategorySummaryDTO>> getExpenseByCategory(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		List<CategorySummaryDTO> result = service.getSummaryByType(userDetails.getUsername(), TransactionType.EXPENSE);
+		List<CategorySummaryDTO> result = service.getSummaryByType(userDetails, TransactionType.EXPENSE);
 		return ResponseEntity.ok(result);
 	}
 	
 	@GetMapping("/summary/revenue")
 	public ResponseEntity<List<CategorySummaryDTO>> getRevenueByCategory(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		List<CategorySummaryDTO> result = service.getSummaryByType(userDetails.getUsername(), TransactionType.REVENUE);
+		List<CategorySummaryDTO> result = service.getSummaryByType(userDetails, TransactionType.REVENUE);
 		return ResponseEntity.ok(result);
 	}
 	

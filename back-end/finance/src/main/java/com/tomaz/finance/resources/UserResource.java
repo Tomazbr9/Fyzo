@@ -52,17 +52,14 @@ public class UserResource {
 	
 	@PatchMapping("/update")
 	public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		
-		String username = userDetails.getUsername();
-		
-		
-		UserResponseDTO obj = service.update(dto, username);
+			
+		UserResponseDTO obj = service.update(dto, userDetails);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@DeleteMapping("/delete")
 	public ResponseEntity<Void> delete(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(userDetails.getUsername());
+		service.delete(userDetails);
 		return ResponseEntity.noContent().build();
 	}
 }

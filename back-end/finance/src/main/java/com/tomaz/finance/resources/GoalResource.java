@@ -32,25 +32,25 @@ public class GoalResource {
 	
 	@GetMapping("/me")
 	public ResponseEntity<List<GoalResponseDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		List<GoalResponseDTO> goals = service.findAll(userDetails.getUsername());
+		List<GoalResponseDTO> goals = service.findAll(userDetails);
 		return ResponseEntity.ok().body(goals);
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<GoalResponseDTO> create(@Valid @RequestBody GoalCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-	    GoalResponseDTO obj = service.create(dto, userDetails.getUsername());
+	    GoalResponseDTO obj = service.create(dto, userDetails);
 	    return ResponseEntity.ok(obj);
 	}
 	
 	@PatchMapping("update/{id}")
 	public ResponseEntity<GoalResponseDTO> update(@PathVariable Long id, @RequestBody  GoalUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		GoalResponseDTO obj = service.update(id, dto, userDetails.getUsername());
+		GoalResponseDTO obj = service.update(id, dto, userDetails);
 		return ResponseEntity.ok(obj);
 	}
 	
 	@DeleteMapping("delete/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails.getUsername());
+		service.delete(id, userDetails);
 		return ResponseEntity.noContent().build();
 	}
 
