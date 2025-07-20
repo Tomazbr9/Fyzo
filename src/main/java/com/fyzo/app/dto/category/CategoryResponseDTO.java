@@ -1,4 +1,4 @@
-package com.fyzo.app.dto;
+package com.fyzo.app.dto.category;
 
 import com.fyzo.app.enums.TransactionType;
 

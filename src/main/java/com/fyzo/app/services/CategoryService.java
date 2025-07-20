@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fyzo.app.dto.CategoryCreateDTO;
-import com.fyzo.app.dto.CategoryResponseDTO;
-import com.fyzo.app.dto.CategoryUpdateDTO;
+import com.fyzo.app.dto.category.CategoryRequestDTO;
+import com.fyzo.app.dto.category.CategoryResponseDTO;
+import com.fyzo.app.dto.category.CategoryUpdateDTO;
 import com.fyzo.app.entities.Category;
 import com.fyzo.app.entities.User;
 import com.fyzo.app.mapper.CategoryMapper;
@@ -47,7 +47,7 @@ public class CategoryService {
 		return categoryMapper.toResponse(obj.get());
 	}
 
-	public CategoryResponseDTO create(CategoryCreateDTO dto, UserDetailsImpl userDetails) {
+	public CategoryResponseDTO create(CategoryRequestDTO dto, UserDetailsImpl userDetails) {
 
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 

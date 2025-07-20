@@ -23,5 +23,17 @@
 hs_err_pid*
 replay_pid*
 
-# ignorar a pasta .metadata
+# Eclipse
+.classpath
+.project
+.settings/
 .metadata/
+.factorypath
+target/
+
+# IntelliJ (se um dia usar)
+.idea/
+*.iml
+
+# Maven
+target/

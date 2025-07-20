@@ -7,15 +7,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.fyzo.app.dto.AccountCreateDTO;
-import com.fyzo.app.dto.AccountResponseDTO;
-import com.fyzo.app.dto.AccountUpdateDTO;
+import com.fyzo.app.dto.account.AccountRequestDTO;
+import com.fyzo.app.dto.account.AccountResponseDTO;
+import com.fyzo.app.dto.account.AccountUpdateDTO;
 import com.fyzo.app.entities.Account;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
 	
-	Account toEntity(AccountCreateDTO dto);
+	Account toEntity(AccountRequestDTO dto);
 	
 	AccountResponseDTO toResponse(Account entity);
 	

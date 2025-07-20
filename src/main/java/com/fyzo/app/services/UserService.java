@@ -9,11 +9,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.fyzo.app.dto.JwtTokenDTO;
-import com.fyzo.app.dto.LoginDTO;
-import com.fyzo.app.dto.UserCreateDTO;
-import com.fyzo.app.dto.UserResponseDTO;
-import com.fyzo.app.dto.UserUpdateDTO;
+import com.fyzo.app.dto.auth.JwtTokenDTO;
+import com.fyzo.app.dto.auth.LoginDTO;
+import com.fyzo.app.dto.user.UserRequestDTO;
+import com.fyzo.app.dto.user.UserResponseDTO;
+import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.entities.Category;
 import com.fyzo.app.entities.Role;
 import com.fyzo.app.entities.User;
@@ -70,7 +70,7 @@ public class UserService {
 	        return new JwtTokenDTO(jwtTokenService.generateToken(userDetails));
 	}
 	
-	public UserResponseDTO create(UserCreateDTO dto) {
+	public UserResponseDTO create(UserRequestDTO dto) {
 	    User user = userMapper.toEntity(dto);
 
 	    RoleName roleName = RoleName.valueOf(dto.role());

@@ -1,9 +1,9 @@
-package com.fyzo.app.dto;
+package com.fyzo.app.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public record UserCreateDTO(
+public record UserRequestDTO(
 	    @NotBlank(message = "O nome de usuário é obrigatório")
 	    String username,
 

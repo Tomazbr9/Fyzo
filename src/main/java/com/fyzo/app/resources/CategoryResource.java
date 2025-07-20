@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fyzo.app.dto.CategoryCreateDTO;
-import com.fyzo.app.dto.CategoryResponseDTO;
-import com.fyzo.app.dto.CategoryUpdateDTO;
+import com.fyzo.app.dto.category.CategoryRequestDTO;
+import com.fyzo.app.dto.category.CategoryResponseDTO;
+import com.fyzo.app.dto.category.CategoryUpdateDTO;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.CategoryService;
 
@@ -44,7 +44,7 @@ public class CategoryResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<CategoryResponseDTO> create(@Valid @RequestBody CategoryCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+	public ResponseEntity<CategoryResponseDTO> create(@Valid @RequestBody CategoryRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		CategoryResponseDTO obj = service.create(dto, userDetails);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}

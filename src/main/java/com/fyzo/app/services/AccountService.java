@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fyzo.app.dto.AccountCreateDTO;
-import com.fyzo.app.dto.AccountResponseDTO;
-import com.fyzo.app.dto.AccountUpdateDTO;
+import com.fyzo.app.dto.account.AccountRequestDTO;
+import com.fyzo.app.dto.account.AccountResponseDTO;
+import com.fyzo.app.dto.account.AccountUpdateDTO;
 import com.fyzo.app.entities.Account;
 import com.fyzo.app.entities.User;
 import com.fyzo.app.mapper.AccountMapper;
@@ -39,7 +39,7 @@ public class AccountService {
 		return accountMapper.accountFromAccountDTO(accounts);
 	}
 	
-	public AccountResponseDTO create(AccountCreateDTO dto, UserDetailsImpl userDetails) {
+	public AccountResponseDTO create(AccountRequestDTO dto, UserDetailsImpl userDetails) {
 	    
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 		

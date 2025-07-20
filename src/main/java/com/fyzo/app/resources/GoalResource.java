@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fyzo.app.dto.GoalCreateDTO;
-import com.fyzo.app.dto.GoalResponseDTO;
-import com.fyzo.app.dto.GoalUpdateDTO;
+import com.fyzo.app.dto.goal.GoalRequestDTO;
+import com.fyzo.app.dto.goal.GoalResponseDTO;
+import com.fyzo.app.dto.goal.GoalUpdateDTO;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.GoalService;
 
@@ -36,7 +36,7 @@ public class GoalResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<GoalResponseDTO> create(@Valid @RequestBody GoalCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public ResponseEntity<GoalResponseDTO> create(@Valid @RequestBody GoalRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 	    GoalResponseDTO obj = service.create(dto, userDetails);
 	    return ResponseEntity.ok(obj);
 	}

@@ -1,4 +1,4 @@
-package com.fyzo.app.dto;
+package com.fyzo.app.dto.category;
 
 import com.fyzo.app.enums.TransactionType;
 
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public record CategoryCreateDTO(
+public record CategoryRequestDTO(
     @NotBlank(message = "O nome da categoria é obrigatório")
     String name,
 

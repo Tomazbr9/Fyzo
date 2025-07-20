@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fyzo.app.dto.BalanceResponseDTO;
-import com.fyzo.app.dto.CategorySummaryDTO;
-import com.fyzo.app.dto.TransactionCreateDTO;
-import com.fyzo.app.dto.TransactionFilterDTO;
-import com.fyzo.app.dto.TransactionResponseDTO;
-import com.fyzo.app.dto.TransactionUpdateDTO;
+import com.fyzo.app.dto.dashboard.BalanceResponseDTO;
+import com.fyzo.app.dto.dashboard.CategorySummaryDTO;
+import com.fyzo.app.dto.transaction.TransactionRequestDTO;
+import com.fyzo.app.dto.transaction.TransactionFilterDTO;
+import com.fyzo.app.dto.transaction.TransactionResponseDTO;
+import com.fyzo.app.dto.transaction.TransactionUpdateDTO;
 import com.fyzo.app.entities.Transaction;
 import com.fyzo.app.enums.TransactionType;
 import com.fyzo.app.security.entities.UserDetailsImpl;
@@ -43,7 +43,7 @@ public class TransactionResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<TransactionResponseDTO> create(@Valid @RequestBody TransactionCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+	public ResponseEntity<TransactionResponseDTO> create(@Valid @RequestBody TransactionRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		
 		TransactionResponseDTO obj = service.create(dto, userDetails);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);

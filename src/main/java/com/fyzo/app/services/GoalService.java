@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fyzo.app.dto.GoalCreateDTO;
-import com.fyzo.app.dto.GoalResponseDTO;
-import com.fyzo.app.dto.GoalUpdateDTO;
+import com.fyzo.app.dto.goal.GoalRequestDTO;
+import com.fyzo.app.dto.goal.GoalResponseDTO;
+import com.fyzo.app.dto.goal.GoalUpdateDTO;
 import com.fyzo.app.entities.Goal;
 import com.fyzo.app.entities.User;
 import com.fyzo.app.mapper.GoalMapper;
@@ -40,7 +40,7 @@ public class GoalService {
 		return goalMapper.goalsFromGoalsDTO(goals);
 	}
 	
-	public GoalResponseDTO create(GoalCreateDTO dto, UserDetailsImpl userDetails) {
+	public GoalResponseDTO create(GoalRequestDTO dto, UserDetailsImpl userDetails) {
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 
 	    Goal goal = goalMapper.toEntity(dto);

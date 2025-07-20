@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.fyzo.app.dto.TransactionFilterDTO;
+import com.fyzo.app.dto.transaction.TransactionFilterDTO;
 import com.fyzo.app.entities.Transaction;
 import com.fyzo.app.entities.User;
 

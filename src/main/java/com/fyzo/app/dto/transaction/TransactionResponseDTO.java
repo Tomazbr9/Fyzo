@@ -1,4 +1,4 @@
-package com.fyzo.app.dto;
+package com.fyzo.app.dto.transaction;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

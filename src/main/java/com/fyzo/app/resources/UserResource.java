@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fyzo.app.dto.JwtTokenDTO;
-import com.fyzo.app.dto.LoginDTO;
-import com.fyzo.app.dto.UserCreateDTO;
-import com.fyzo.app.dto.UserResponseDTO;
-import com.fyzo.app.dto.UserUpdateDTO;
+import com.fyzo.app.dto.auth.JwtTokenDTO;
+import com.fyzo.app.dto.auth.LoginDTO;
+import com.fyzo.app.dto.user.UserRequestDTO;
+import com.fyzo.app.dto.user.UserResponseDTO;
+import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.UserService;
 
@@ -37,7 +37,7 @@ public class UserResource {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreateDTO dto){
+	public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserRequestDTO dto){
 		UserResponseDTO obj = service.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}

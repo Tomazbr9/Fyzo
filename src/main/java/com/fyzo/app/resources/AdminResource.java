@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fyzo.app.dto.UserResponseDTO;
-import com.fyzo.app.dto.UserUpdateDTO;
+import com.fyzo.app.dto.user.UserResponseDTO;
+import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.services.AdminService;
 
 import jakarta.validation.Valid;

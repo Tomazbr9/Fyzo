@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fyzo.app.dto.AccountCreateDTO;
-import com.fyzo.app.dto.AccountResponseDTO;
-import com.fyzo.app.dto.AccountUpdateDTO;
+import com.fyzo.app.dto.account.AccountRequestDTO;
+import com.fyzo.app.dto.account.AccountResponseDTO;
+import com.fyzo.app.dto.account.AccountUpdateDTO;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.AccountService;
 
@@ -37,7 +37,7 @@ public class AccountResource {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountCreateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+	public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
 		AccountResponseDTO obj = service.create(dto, userDetails);
 		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 	}

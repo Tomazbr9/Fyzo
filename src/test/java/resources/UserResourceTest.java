@@ -14,8 +14,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fyzo.app.dto.UserResponseDTO;
-import com.fyzo.app.dto.UserUpdateDTO;
+import com.fyzo.app.dto.user.UserResponseDTO;
+import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.resources.UserResource;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.UserService;

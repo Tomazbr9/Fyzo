@@ -7,15 +7,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.fyzo.app.dto.UserCreateDTO;
-import com.fyzo.app.dto.UserResponseDTO;
-import com.fyzo.app.dto.UserUpdateDTO;
+import com.fyzo.app.dto.user.UserRequestDTO;
+import com.fyzo.app.dto.user.UserResponseDTO;
+import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.entities.User;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 	
-	User toEntity(UserCreateDTO dto);
+	User toEntity(UserRequestDTO dto);
 	
 	UserResponseDTO toResponse(User entity);
 	

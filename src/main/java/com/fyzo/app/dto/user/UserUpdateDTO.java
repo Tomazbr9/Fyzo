@@ -1,4 +1,4 @@
-package com.fyzo.app.dto;
+package com.fyzo.app.dto.user;
 
 import jakarta.validation.constraints.Email; 
 

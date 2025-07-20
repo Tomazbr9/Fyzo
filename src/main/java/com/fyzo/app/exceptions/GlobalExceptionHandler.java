@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.fyzo.app.dto.ErrorResponseDTO;
+import com.fyzo.app.dto.exception.ErrorResponseDTO;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

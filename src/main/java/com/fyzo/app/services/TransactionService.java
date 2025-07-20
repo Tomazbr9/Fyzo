@@ -12,12 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.fyzo.app.dto.BalanceResponseDTO;
-import com.fyzo.app.dto.CategorySummaryDTO;
-import com.fyzo.app.dto.TransactionCreateDTO;
-import com.fyzo.app.dto.TransactionFilterDTO;
-import com.fyzo.app.dto.TransactionResponseDTO;
-import com.fyzo.app.dto.TransactionUpdateDTO;
+import com.fyzo.app.dto.dashboard.BalanceResponseDTO;
+import com.fyzo.app.dto.dashboard.CategorySummaryDTO;
+import com.fyzo.app.dto.transaction.TransactionRequestDTO;
+import com.fyzo.app.dto.transaction.TransactionFilterDTO;
+import com.fyzo.app.dto.transaction.TransactionResponseDTO;
+import com.fyzo.app.dto.transaction.TransactionUpdateDTO;
 import com.fyzo.app.entities.Account;
 import com.fyzo.app.entities.Category;
 import com.fyzo.app.entities.Transaction;
@@ -67,7 +67,7 @@ public class TransactionService {
 	}
 
 	
-	public TransactionResponseDTO create(TransactionCreateDTO dto, UserDetailsImpl userDetails) {
+	public TransactionResponseDTO create(TransactionRequestDTO dto, UserDetailsImpl userDetails) {
 		
 	    User user = userFinder.findByUsernameOrThrow(userDetails);
 	    Category category = categoryFinder.findByIdAndUserOrThrow(dto.categoryId(), user);

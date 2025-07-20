@@ -7,15 +7,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.fyzo.app.dto.GoalCreateDTO;
-import com.fyzo.app.dto.GoalResponseDTO;
-import com.fyzo.app.dto.GoalUpdateDTO;
+import com.fyzo.app.dto.goal.GoalRequestDTO;
+import com.fyzo.app.dto.goal.GoalResponseDTO;
+import com.fyzo.app.dto.goal.GoalUpdateDTO;
 import com.fyzo.app.entities.Goal;
 
 @Mapper(componentModel = "spring")
 public interface GoalMapper {
 	
-	Goal toEntity(GoalCreateDTO dto);
+	Goal toEntity(GoalRequestDTO dto);
 	
 	GoalResponseDTO toResponse(Goal entity);
 	

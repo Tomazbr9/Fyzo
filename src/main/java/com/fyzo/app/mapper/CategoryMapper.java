@@ -7,15 +7,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.fyzo.app.dto.CategoryCreateDTO;
-import com.fyzo.app.dto.CategoryResponseDTO;
-import com.fyzo.app.dto.CategoryUpdateDTO;
+import com.fyzo.app.dto.category.CategoryRequestDTO;
+import com.fyzo.app.dto.category.CategoryResponseDTO;
+import com.fyzo.app.dto.category.CategoryUpdateDTO;
 import com.fyzo.app.entities.Category;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 	
-	Category toEntity(CategoryCreateDTO dto);
+	Category toEntity(CategoryRequestDTO dto);
 	
 	CategoryResponseDTO toResponse(Category entity);
 	

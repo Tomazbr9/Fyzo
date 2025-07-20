@@ -5,15 +5,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import com.fyzo.app.dto.TransactionCreateDTO;
-import com.fyzo.app.dto.TransactionResponseDTO;
-import com.fyzo.app.dto.TransactionUpdateDTO;
+import com.fyzo.app.dto.transaction.TransactionRequestDTO;
+import com.fyzo.app.dto.transaction.TransactionResponseDTO;
+import com.fyzo.app.dto.transaction.TransactionUpdateDTO;
 import com.fyzo.app.entities.Transaction;
 
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
 	
-	Transaction toEntity(TransactionCreateDTO dto);
+	Transaction toEntity(TransactionRequestDTO dto);
 	
 	TransactionResponseDTO toResponse(Transaction entity);
 	

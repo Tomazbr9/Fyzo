@@ -1,4 +1,4 @@
-package com.fyzo.app.dto;
+package com.fyzo.app.dto.auth;
 
 import jakarta.validation.constraints.NotBlank;
 
