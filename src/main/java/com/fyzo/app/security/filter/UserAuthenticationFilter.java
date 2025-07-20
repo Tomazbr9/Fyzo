@@ -34,8 +34,8 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-      
         if (checkIfEndpointIsNotPublic(request)) {
+        	
             String token = recoveryToken(request); 
             if (token != null) {
                 String subject = jwtTokenService.getSubjectFromToken(token); 
@@ -64,7 +64,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
+        String requestURI = request.getRequestURI();    
         return !Arrays.asList(SecurityConfig.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).contains(requestURI);
     }
 

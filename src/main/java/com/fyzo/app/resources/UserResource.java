@@ -30,23 +30,13 @@ public class UserResource {
 	@Autowired
 	private UserService service;
 	
-	@PostMapping("/login")
-	public ResponseEntity<JwtTokenDTO> authenticateUser(@Valid @RequestBody LoginDTO dto){
-		JwtTokenDTO token = service.authenticateUser(dto);
-		return new ResponseEntity<>(token, HttpStatus.OK);
-	}
-	
-	@PostMapping("/register")
-	public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserRequestDTO dto){
-		UserResponseDTO obj = service.create(dto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
-	}
-	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
 		UserResponseDTO obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
+	
+	
 	
 	@PatchMapping("/update")
 	public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
