@@ -33,9 +33,9 @@ public class UserService {
 	@Autowired 
 	private UserFinder userFinder;
 	
-	public UserResponseDTO findById(Long id) {
-		Optional<User> obj = userRepository.findById(id);
-		return userMapper.toResponse(obj.get());
+	public UserResponseDTO findById(UserDetailsImpl userDetails) {
+		User user = userFinder.findByUsernameOrThrow(userDetails);
+		return userMapper.toResponse(user);
 	}
 	
 	

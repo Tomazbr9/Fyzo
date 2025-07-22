@@ -30,13 +30,11 @@ public class UserResource {
 	@Autowired
 	private UserService service;
 	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) {
-		UserResponseDTO obj = service.findById(id);
+	@GetMapping("/me")
+	public ResponseEntity<UserResponseDTO> findById(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		UserResponseDTO obj = service.findById(userDetails);
 		return ResponseEntity.ok().body(obj);
 	}
-	
-	
 	
 	@PatchMapping("/update")
 	public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){

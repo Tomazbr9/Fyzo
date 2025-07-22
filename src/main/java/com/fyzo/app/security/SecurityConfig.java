@@ -28,6 +28,7 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
+    		"/users/me",
     		"/users/update",
     		"/users/delete",
     		

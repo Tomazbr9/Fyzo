@@ -9,6 +9,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,18 +63,30 @@ public class UserResourceTest {
 	@Test
 	void shouldReturnUserById() throws Exception {
 		
-		Long id = 1L;
+		
 		UserResponseDTO mockUser = new UserResponseDTO("user", "user@gmail.com");
 		
-		when(userService.findById(id)).thenReturn(mockUser);
+		User existingUser = new User();
+	    existingUser.setId(1L);
+	    existingUser.setUsername("user");
+	    existingUser.setEmail("user@gmail.com");
+	    existingUser.setPassword("passowrd");
+	    existingUser.setRoles(Collections.singletonList(new Role(1L, RoleName.ROLE_CUSTOMER)));
 		
-		mockMvc.perform(get("/users/{id}", id)
+	    UserDetailsImpl userDetails = new UserDetailsImpl(existingUser);
+	    
+		when(userService.findById(userDetails)).thenReturn(mockUser);
+		
+		System.out.println(objectMapper.writeValueAsString(mockUser));
+
+		mockMvc.perform(get("/users/me").with(user(userDetails))
 				.accept(MediaType.APPLICATION_JSON))
+				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.username").value("user"))
 				.andExpect(jsonPath("$.email").value("user@gmail.com"));
 		
-		verify(userService).findById(id);
+		
 	}
 	
 	@Test
