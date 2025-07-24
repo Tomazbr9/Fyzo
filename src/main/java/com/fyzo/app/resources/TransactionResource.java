@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fyzo.app.dto.dashboard.BalanceResponseDTO;
 import com.fyzo.app.dto.dashboard.CategorySummaryDTO;
-import com.fyzo.app.dto.transaction.TransactionRequestDTO;
 import com.fyzo.app.dto.transaction.TransactionFilterDTO;
+import com.fyzo.app.dto.transaction.TransactionRequestDTO;
 import com.fyzo.app.dto.transaction.TransactionResponseDTO;
 import com.fyzo.app.dto.transaction.TransactionUpdateDTO;
 import com.fyzo.app.entities.Transaction;
@@ -28,6 +28,12 @@ import com.fyzo.app.enums.TransactionType;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.TransactionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -37,29 +43,175 @@ public class TransactionResource {
 	@Autowired
 	private TransactionService service;
 	
-	@GetMapping("/me")
-	public Page<Transaction> findAll(@ModelAttribute TransactionFilterDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		return service.findAll(dto, userDetails);
-	}
+	@Operation(
+		    summary = "List all user's transactions with filters and pagination",
+		    description = "Retrieves a paginated list of transactions belonging to the authenticated user, filtered by provided parameters",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Transactions retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = Page.class) 		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@GetMapping("/me")
+		public Page<Transaction> findAll(
+		    @ModelAttribute TransactionFilterDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    return service.findAll(dto, userDetails);
+		}
+
 	
-	@PostMapping("/create")
-	public ResponseEntity<TransactionResponseDTO> create(@Valid @RequestBody TransactionRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		
-		TransactionResponseDTO obj = service.create(dto, userDetails);
-		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
-	}
+	@Operation(
+		    summary = "Create a new transaction",
+		    description = "Creates a new transaction for the authenticated user with the provided data",
+		    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+		        description = "Transaction data to be created",
+		        required = true,
+		        content = @Content(
+		            mediaType = "application/json",
+		            schema = @Schema(implementation = TransactionRequestDTO.class)
+		        )
+		    ),
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "201",
+		            description = "Transaction created successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = TransactionResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@PostMapping("/create")
+		public ResponseEntity<TransactionResponseDTO> create(
+		    @Valid @RequestBody TransactionRequestDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    TransactionResponseDTO obj = service.create(dto, userDetails);
+		    return ResponseEntity.status(HttpStatus.CREATED).body(obj);
+		}
+
 	
-	@PatchMapping("/update/{id}")
-	public ResponseEntity<TransactionResponseDTO> update(@PathVariable Long id, @RequestBody TransactionUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		TransactionResponseDTO obj = service.update(id, dto, userDetails);
-		return ResponseEntity.ok(obj);
-	}
+	@Operation(
+		    summary = "Update an existing transaction",
+		    description = "Updates a transaction by its ID for the authenticated user using the provided data",
+		    parameters = {
+		        @Parameter(
+		            name = "id",
+		            description = "ID of the transaction to be updated",
+		            required = true,
+		            in = ParameterIn.PATH,
+		            schema = @Schema(type = "integer", format = "int64")
+		        )
+		    },
+		    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+		        description = "Transaction data to update",
+		        required = true,
+		        content = @Content(
+		            mediaType = "application/json",
+		            schema = @Schema(implementation = TransactionUpdateDTO.class)
+		        )
+		    ),
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Transaction updated successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = TransactionResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Transaction not found",
+		            content = @Content
+		        )
+		    }
+		)
+		@PatchMapping("/update/{id}")
+		public ResponseEntity<TransactionResponseDTO> update(
+		    @PathVariable Long id,
+		    @RequestBody TransactionUpdateDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    TransactionResponseDTO obj = service.update(id, dto, userDetails);
+		    return ResponseEntity.ok(obj);
+		}
+
 	
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails);
-		return ResponseEntity.noContent().build();
-	}
+	@Operation(
+		    summary = "Delete a transaction",
+		    description = "Deletes a transaction by its ID for the authenticated user",
+		    parameters = {
+		        @Parameter(
+		            name = "id",
+		            description = "ID of the transaction to be deleted",
+		            required = true,
+		            in = ParameterIn.PATH,
+		            schema = @Schema(type = "integer", format = "int64")
+		        )
+		    },
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "204",
+		            description = "Transaction deleted successfully"
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "403",
+		            description = "Forbidden - user does not have permission",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Transaction not found",
+		            content = @Content
+		        )
+		    }
+		)
+		@DeleteMapping("/delete/{id}")
+		public ResponseEntity<Void> delete(
+		    @PathVariable Long id,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    service.delete(id, userDetails);
+		    return ResponseEntity.noContent().build();
+		}
+
 	
 	@GetMapping("/balance")
 	public ResponseEntity<BalanceResponseDTO> getBalance(@AuthenticationPrincipal UserDetailsImpl userDetails){

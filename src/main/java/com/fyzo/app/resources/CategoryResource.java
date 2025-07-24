@@ -21,6 +21,12 @@ import com.fyzo.app.dto.category.CategoryUpdateDTO;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.CategoryService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -30,34 +36,170 @@ public class CategoryResource {
 	@Autowired
 	private CategoryService service;
 	
-	@GetMapping("/me")
-	public ResponseEntity<List<CategoryResponseDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		
-		List<CategoryResponseDTO> list = service.findAll(userDetails);
-		return ResponseEntity.ok().body(list);
-	}
 	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<CategoryResponseDTO> findById(@PathVariable Long id) {
-		CategoryResponseDTO obj = service.findById(id);
-		return ResponseEntity.ok().body(obj);
-	}
+	@Operation(
+		    summary = "List all user's categories",
+		    description = "Retrieves a list of all categories belonging to the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Categories retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                array = @ArraySchema(schema = @Schema(implementation = CategoryResponseDTO.class))
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@GetMapping("/me")
+		public ResponseEntity<List<CategoryResponseDTO>> findAll(
+		    @Parameter(hidden = true)
+		    @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		    
+		    List<CategoryResponseDTO> list = service.findAll(userDetails);
+		    return ResponseEntity.ok().body(list);
+		}
+
 	
-	@PostMapping("/create")
-	public ResponseEntity<CategoryResponseDTO> create(@Valid @RequestBody CategoryRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		CategoryResponseDTO obj = service.create(dto, userDetails);
-		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
-	}
+
+	@Operation(
+		    summary = "Find category by ID",
+		    description = "Retrieves a category by its ID, if it belongs to the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Category retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = CategoryResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Category not found or does not belong to the authenticated user",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@GetMapping(value = "/{id}")
+		public ResponseEntity<CategoryResponseDTO> findById(@PathVariable Long id) {
+		    CategoryResponseDTO obj = service.findById(id);
+		    return ResponseEntity.ok().body(obj);
+		}
+
 	
-	@PatchMapping("update/{id}")
-	public ResponseEntity<CategoryResponseDTO> update(@PathVariable Long id, @RequestBody  CategoryUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		CategoryResponseDTO obj = service.update(id, dto, userDetails);
-		return ResponseEntity.ok(obj);
-	}
+	@Operation(
+		    summary = "Create a new category",
+		    description = "Creates a new category for the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "201",
+		            description = "Category created successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = CategoryResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@PostMapping("/create")
+		public ResponseEntity<CategoryResponseDTO> create(
+		    @Valid @RequestBody CategoryRequestDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    CategoryResponseDTO obj = service.create(dto, userDetails);
+		    return ResponseEntity.status(HttpStatus.CREATED).body(obj);
+		}
+
 	
-	@DeleteMapping("delete/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails);
-		return ResponseEntity.noContent().build();
-	}
+	@Operation(
+		    summary = "Update a category",
+		    description = "Updates an existing category of the authenticated user by its ID",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Category updated successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = CategoryResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Category not found or does not belong to the authenticated user",
+		            content = @Content
+		        )
+		    }
+		)
+		@PatchMapping("update/{id}")
+		public ResponseEntity<CategoryResponseDTO> update(
+		    @PathVariable Long id,
+		    @RequestBody CategoryUpdateDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    CategoryResponseDTO obj = service.update(id, dto, userDetails);
+		    return ResponseEntity.ok(obj);
+		}
+
+	
+	@Operation(
+		    summary = "Delete a category",
+		    description = "Deletes a category by its ID, if it belongs to the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "204",
+		            description = "Category deleted successfully",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Category not found or does not belong to the authenticated user",
+		            content = @Content
+		        )
+		    }
+		)
+		@DeleteMapping("delete/{id}")
+		public ResponseEntity<Void> delete(
+		    @PathVariable Long id,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    service.delete(id, userDetails);
+		    return ResponseEntity.noContent().build();
+		}
+
 }

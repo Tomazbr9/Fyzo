@@ -20,6 +20,11 @@ import com.fyzo.app.dto.goal.GoalUpdateDTO;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.GoalService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,28 +34,137 @@ public class GoalResource {
 	@Autowired
 	private GoalService service;
 	
-	@GetMapping("/me")
-	public ResponseEntity<List<GoalResponseDTO>> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		List<GoalResponseDTO> goals = service.findAll(userDetails);
-		return ResponseEntity.ok().body(goals);
-	}
+	@Operation(
+		    summary = "List all user's goals",
+		    description = "Retrieves a list of all goals belonging to the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Goals retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                array = @ArraySchema(schema = @Schema(implementation = GoalResponseDTO.class))
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@GetMapping("/me")
+		public ResponseEntity<List<GoalResponseDTO>> findAll(
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    List<GoalResponseDTO> goals = service.findAll(userDetails);
+		    return ResponseEntity.ok().body(goals);
+		}
+
 	
-	@PostMapping("/create")
-	public ResponseEntity<GoalResponseDTO> create(@Valid @RequestBody GoalRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-	    GoalResponseDTO obj = service.create(dto, userDetails);
-	    return ResponseEntity.ok(obj);
-	}
+	@Operation(
+		    summary = "Create a new goal",
+		    description = "Creates a new goal for the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Goal created successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = GoalResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@PostMapping("/create")
+		public ResponseEntity<GoalResponseDTO> create(
+		    @Valid @RequestBody GoalRequestDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    GoalResponseDTO obj = service.create(dto, userDetails);
+		    return ResponseEntity.ok(obj);
+		}
+
 	
-	@PatchMapping("update/{id}")
-	public ResponseEntity<GoalResponseDTO> update(@PathVariable Long id, @RequestBody  GoalUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		GoalResponseDTO obj = service.update(id, dto, userDetails);
-		return ResponseEntity.ok(obj);
-	}
+	@Operation(
+		    summary = "Update a goal",
+		    description = "Updates an existing goal of the authenticated user by its ID",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Goal updated successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = GoalResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Goal not found or does not belong to the authenticated user",
+		            content = @Content
+		        )
+		    }
+		)
+		@PatchMapping("update/{id}")
+		public ResponseEntity<GoalResponseDTO> update(
+		    @PathVariable Long id,
+		    @RequestBody GoalUpdateDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    GoalResponseDTO obj = service.update(id, dto, userDetails);
+		    return ResponseEntity.ok(obj);
+		}
+
 	
-	@DeleteMapping("delete/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails);
-		return ResponseEntity.noContent().build();
-	}
+	@Operation(
+		    summary = "Delete a goal",
+		    description = "Deletes a goal by its ID, if it belongs to the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "204",
+		            description = "Goal deleted successfully",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Goal not found or does not belong to the authenticated user",
+		            content = @Content
+		        )
+		    }
+		)
+		@DeleteMapping("delete/{id}")
+		public ResponseEntity<Void> delete(
+		    @PathVariable Long id,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    service.delete(id, userDetails);
+		    return ResponseEntity.noContent().build();
+		}
+
 
 }

@@ -21,6 +21,11 @@ import com.fyzo.app.dto.account.AccountUpdateDTO;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.AccountService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -30,27 +35,135 @@ public class AccountResource {
 	@Autowired
 	private AccountService service;
 	
-	@GetMapping("/me")
-	public List<AccountResponseDTO> findAll(@AuthenticationPrincipal UserDetailsImpl userDetails){
-		return service.findAll(userDetails);
-		
-	}
+	@Operation(
+		    summary = "List all user's accounts",
+		    description = "Retrieves a list of all accounts belonging to the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Accounts retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                array = @ArraySchema(schema = @Schema(implementation = AccountResponseDTO.class))
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@GetMapping("/me")
+		public List<AccountResponseDTO> findAll(
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    return service.findAll(userDetails);
+		}
+
 	
-	@PostMapping("/create")
-	public ResponseEntity<AccountResponseDTO> create(@Valid @RequestBody AccountRequestDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		AccountResponseDTO obj = service.create(dto, userDetails);
-		return ResponseEntity.status(HttpStatus.CREATED).body(obj);
-	}
+	@Operation(
+		    summary = "Create a new account",
+		    description = "Creates a new account for the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "201",
+		            description = "Account created successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = AccountResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+		)
+		@PostMapping("/create")
+		public ResponseEntity<AccountResponseDTO> create(
+		    @Valid @RequestBody AccountRequestDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    AccountResponseDTO obj = service.create(dto, userDetails);
+		    return ResponseEntity.status(HttpStatus.CREATED).body(obj);
+		}
+
 	
-	@PatchMapping("update/{id}")
-	public ResponseEntity<AccountResponseDTO> update(@PathVariable Long id, @RequestBody  AccountUpdateDTO dto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		AccountResponseDTO obj = service.update(id, dto, userDetails);
-		return ResponseEntity.ok(obj);
-	}
+	@Operation(
+		    summary = "Update an account",
+		    description = "Updates an existing account of the authenticated user by its ID",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Account updated successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = AccountResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Account not found or does not belong to the authenticated user",
+		            content = @Content
+		        )
+		    }
+		)
+		@PatchMapping("update/{id}")
+		public ResponseEntity<AccountResponseDTO> update(
+		    @PathVariable Long id,
+		    @RequestBody AccountUpdateDTO dto,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    AccountResponseDTO obj = service.update(id, dto, userDetails);
+		    return ResponseEntity.ok(obj);
+		}
+
 	
-	@DeleteMapping("delete/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
-		service.delete(id, userDetails);
-		return ResponseEntity.noContent().build();
-	}
+	@Operation(
+		    summary = "Delete an account",
+		    description = "Deletes an account by its ID, if it belongs to the authenticated user",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "204",
+		            description = "Account deleted successfully",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "Account not found or does not belong to the authenticated user",
+		            content = @Content
+		        )
+		    }
+		)
+		@DeleteMapping("delete/{id}")
+		public ResponseEntity<Void> delete(
+		    @PathVariable Long id,
+		    @AuthenticationPrincipal UserDetailsImpl userDetails
+		) {
+		    service.delete(id, userDetails);
+		    return ResponseEntity.noContent().build();
+		}
+
 }

@@ -16,6 +16,12 @@ import com.fyzo.app.dto.user.UserResponseDTO;
 import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.services.AdminService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
@@ -25,29 +31,116 @@ public class AdminResource {
 	@Autowired
 	private AdminService service;
 	
-	@GetMapping("/users/all")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<List<UserResponseDTO>> findAll(){
-		
-		List<UserResponseDTO> list = service.findAll();
-		return ResponseEntity.ok().body(list);
-	}
+	@Operation(
+		    summary = "List all users",
+		    description = "Retrieves a list of all users. Access restricted to users with ADMIN role",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Users retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class))
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "403",
+		            description = "Forbidden - user does not have ADMIN role",
+		            content = @Content
+		        )
+		    }
+		)
+		@PreAuthorize("hasRole('ADMIN')")
+		@GetMapping("/users/all")
+		public ResponseEntity<List<UserResponseDTO>> findAll() {
+		    List<UserResponseDTO> list = service.findAll();
+		    return ResponseEntity.ok().body(list);
+		}
+
 	
-	@PatchMapping("/users/update/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody UserUpdateDTO dto, @PathVariable Long id){
-			
-		UserResponseDTO obj = service.update(dto, id);
-		return ResponseEntity.ok(obj);
-	}
+	@Operation(
+		    summary = "Update a user",
+		    description = "Updates an existing user by its ID. Access restricted to users with ADMIN role",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "User updated successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = UserResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "400",
+		            description = "Invalid input data",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "403",
+		            description = "Forbidden - user does not have ADMIN role",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "User not found",
+		            content = @Content
+		        )
+		    }
+		)
+		@PreAuthorize("hasRole('ADMIN')")
+		@PatchMapping("/users/update/{id}")
+		public ResponseEntity<UserResponseDTO> update(
+		    @Valid @RequestBody UserUpdateDTO dto,
+		    @PathVariable Long id
+		) {
+		    UserResponseDTO obj = service.update(dto, id);
+		    return ResponseEntity.ok(obj);
+		}
+
 	
-	@PatchMapping("/users/delete/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Void> delete(@PathVariable Long id){
-			
-		service.delete(id);
-		return ResponseEntity.noContent().build();
-	}
+	@Operation(
+		    summary = "Delete a user",
+		    description = "Deletes a user by its ID. Access restricted to users with ADMIN role",
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "204",
+		            description = "User deleted successfully",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "403",
+		            description = "Forbidden - user does not have ADMIN role",
+		            content = @Content
+		        ),
+		        @ApiResponse(
+		            responseCode = "404",
+		            description = "User not found",
+		            content = @Content
+		        )
+		    }
+		)
+		@PreAuthorize("hasRole('ADMIN')")
+		@PatchMapping("/users/delete/{id}")
+		public ResponseEntity<Void> delete(@PathVariable Long id) {
+		    service.delete(id);
+		    return ResponseEntity.noContent().build();
+		}
+
 	
 	
 	
