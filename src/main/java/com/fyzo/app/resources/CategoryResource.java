@@ -27,8 +27,15 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+
+@Tag(
+	    name = "Category Management",
+	    description = "Operations for creating, retrieving, updating, and deleting user categories"
+	)
 @RestController
 @RequestMapping("/categories")
 public class CategoryResource {
@@ -40,6 +47,7 @@ public class CategoryResource {
 	@Operation(
 		    summary = "List all user's categories",
 		    description = "Retrieves a list of all categories belonging to the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -70,6 +78,7 @@ public class CategoryResource {
 	@Operation(
 		    summary = "Find category by ID",
 		    description = "Retrieves a category by its ID, if it belongs to the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -101,6 +110,7 @@ public class CategoryResource {
 	@Operation(
 		    summary = "Create a new category",
 		    description = "Creates a new category for the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "201",
@@ -135,6 +145,7 @@ public class CategoryResource {
 	@Operation(
 		    summary = "Update a category",
 		    description = "Updates an existing category of the authenticated user by its ID",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -175,6 +186,7 @@ public class CategoryResource {
 	@Operation(
 		    summary = "Delete a category",
 		    description = "Deletes a category by its ID, if it belongs to the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "204",

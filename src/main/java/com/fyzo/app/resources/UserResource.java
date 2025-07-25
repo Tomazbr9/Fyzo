@@ -20,10 +20,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "Users", description = "Endpoints to retrieve, update, and delete authenticated users")
+@Tag(name = "Users Management", description = "Operations to retrieve, update and delete authenticated users")
 @RestController
 @RequestMapping("/users")
 public class UserResource {
@@ -34,6 +35,7 @@ public class UserResource {
 	@Operation(
 		    summary = "Get current user profile",
 		    description = "Retrieves the complete profile information of the currently authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -68,6 +70,7 @@ public class UserResource {
 	@Operation(
 		    summary = "Update authenticated user's information",
 		    description = "Partially updates the currently authenticated user's data. Only provided fields will be updated.",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -110,6 +113,7 @@ public class UserResource {
 	@Operation(
 		    summary = "Delete authenticated user account",
 		    description = "Permanently deletes the currently authenticated user's account and all associated data",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "204",

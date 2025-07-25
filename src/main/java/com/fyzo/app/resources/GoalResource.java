@@ -25,8 +25,14 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(
+	    name = "Goal Management",
+	    description = "Operations related to the creation, retrieval, update, and deletion of user goals"
+	)
 @RestController
 @RequestMapping("/goals")
 public class GoalResource {
@@ -37,6 +43,7 @@ public class GoalResource {
 	@Operation(
 		    summary = "List all user's goals",
 		    description = "Retrieves a list of all goals belonging to the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -65,6 +72,7 @@ public class GoalResource {
 	@Operation(
 		    summary = "Create a new goal",
 		    description = "Creates a new goal for the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -99,6 +107,7 @@ public class GoalResource {
 	@Operation(
 		    summary = "Update a goal",
 		    description = "Updates an existing goal of the authenticated user by its ID",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -139,6 +148,7 @@ public class GoalResource {
 	@Operation(
 		    summary = "Delete a goal",
 		    description = "Deletes a goal by its ID, if it belongs to the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "204",

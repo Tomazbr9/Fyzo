@@ -26,10 +26,10 @@ public class SecurityConfig {
     		"/auth/login",
     		"/auth/register",
     		
-    		"/v3/api-docs/**",
-    		"/swagger-ui.html/**",
-    		"/swagger-ui/**"
-            
+    		"/swagger-ui/**",
+    		"/v3/api-docs/**"
+
+           
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
@@ -83,7 +83,7 @@ public class SecurityConfig {
                 .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
                 .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
 
-                .anyRequest().denyAll()
+                .anyRequest().authenticated()
             )
            .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();

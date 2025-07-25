@@ -22,8 +22,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(
+	    name = "Admin Management",
+	    description = "Operations for user management restricted to ADMIN role"
+	)
 @RestController
 @RequestMapping("/admin")
 public class AdminResource {
@@ -34,6 +39,7 @@ public class AdminResource {
 	@Operation(
 		    summary = "List all users",
 		    description = "Retrieves a list of all users. Access restricted to users with ADMIN role",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -66,6 +72,7 @@ public class AdminResource {
 	@Operation(
 		    summary = "Update a user",
 		    description = "Updates an existing user by its ID. Access restricted to users with ADMIN role",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -111,6 +118,7 @@ public class AdminResource {
 	@Operation(
 		    summary = "Delete a user",
 		    description = "Deletes a user by its ID. Access restricted to users with ADMIN role",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "204",

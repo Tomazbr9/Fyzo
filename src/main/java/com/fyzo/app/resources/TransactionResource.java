@@ -34,8 +34,11 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Transactions Management", description = "Operations to retrieve, update and delete transactions")
 @RestController
 @RequestMapping("/transactions")
 public class TransactionResource {
@@ -46,6 +49,7 @@ public class TransactionResource {
 	@Operation(
 		    summary = "List all user's transactions with filters and pagination",
 		    description = "Retrieves a paginated list of transactions belonging to the authenticated user, filtered by provided parameters",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -73,6 +77,7 @@ public class TransactionResource {
 	@Operation(
 		    summary = "Create a new transaction",
 		    description = "Creates a new transaction for the authenticated user with the provided data",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
 		        description = "Transaction data to be created",
 		        required = true,
@@ -115,6 +120,7 @@ public class TransactionResource {
 	@Operation(
 		    summary = "Update an existing transaction",
 		    description = "Updates a transaction by its ID for the authenticated user using the provided data",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    parameters = {
 		        @Parameter(
 		            name = "id",
@@ -172,6 +178,7 @@ public class TransactionResource {
 	@Operation(
 		    summary = "Delete a transaction",
 		    description = "Deletes a transaction by its ID for the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    parameters = {
 		        @Parameter(
 		            name = "id",

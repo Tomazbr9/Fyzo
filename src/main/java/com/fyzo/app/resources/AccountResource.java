@@ -26,8 +26,14 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(
+	    name = "Accounts Management",
+	    description = "Operations for managing user accounts"
+	)
 @RestController
 @RequestMapping("/accounts")
 public class AccountResource {
@@ -38,6 +44,7 @@ public class AccountResource {
 	@Operation(
 		    summary = "List all user's accounts",
 		    description = "Retrieves a list of all accounts belonging to the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -65,6 +72,7 @@ public class AccountResource {
 	@Operation(
 		    summary = "Create a new account",
 		    description = "Creates a new account for the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "201",
@@ -99,6 +107,7 @@ public class AccountResource {
 	@Operation(
 		    summary = "Update an account",
 		    description = "Updates an existing account of the authenticated user by its ID",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "200",
@@ -139,6 +148,7 @@ public class AccountResource {
 	@Operation(
 		    summary = "Delete an account",
 		    description = "Deletes an account by its ID, if it belongs to the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
 		            responseCode = "204",

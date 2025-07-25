@@ -28,9 +28,9 @@ public class OpenApiConfig {
                     .name("Apache 2.0")
                     .url("http://springdoc.org"))
             )
-            .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
+            .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
             .components(new Components()
-                .addSecuritySchemes("BearerAuth",
+                .addSecuritySchemes("bearerAuth",
                     new SecurityScheme()
                         .name("Authorization")
                         .type(SecurityScheme.Type.HTTP)
