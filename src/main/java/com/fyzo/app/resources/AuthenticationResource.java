@@ -83,7 +83,6 @@ public class AuthenticationResource {
 		public ResponseEntity<UserResponseDTO> create(
 		    @Valid @RequestBody UserRequestDTO dto
 		) {
-		    System.out.println(dto);
 		    UserResponseDTO obj = service.registerUser(dto);
 		    return ResponseEntity.status(HttpStatus.CREATED).body(obj);
 		}
