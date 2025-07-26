@@ -19,6 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fyzo.app.dto.auth.JwtTokenDTO;
+import com.fyzo.app.dto.auth.LoginDTO;
 import com.fyzo.app.dto.user.UserRequestDTO;
 import com.fyzo.app.dto.user.UserResponseDTO;
 import com.fyzo.app.security.filter.UserAuthenticationFilter;
@@ -65,6 +67,22 @@ public class AuthenticationResourceTest {
             .andExpect(jsonPath("$.email").value("tomaz@gmail.com"));
 
         verify(authenticationService).registerUser(any());
+    }
+    
+    @Test
+    void mustSuccessfullyAuthenticateUser() throws Exception {
+    	var request = new LoginDTO("tomaz", "password");
+    	var response = new JwtTokenDTO("token");
+    	
+    	when(authenticationService.authenticateUser(any())).thenReturn(response);
+    	
+    	mockMvc.perform(post("/auth/login").with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.token").value("token"));
+
+        verify(authenticationService).authenticateUser(any());
     }
 }
 
