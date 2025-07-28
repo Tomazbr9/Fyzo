@@ -62,7 +62,7 @@ public class UserResource {
 		    @Parameter(hidden = true) 
 		    @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		    
-		    UserResponseDTO obj = service.findById(userDetails);
+		    UserResponseDTO obj = service.findByUser(userDetails);
 		    return ResponseEntity.ok().body(obj);
 		}
 	

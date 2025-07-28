@@ -1,6 +1,7 @@
 package com.fyzo.app.resources;
 
 import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.reset;
@@ -31,11 +32,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fyzo.app.dto.account.AccountRequestDTO;
 import com.fyzo.app.dto.account.AccountResponseDTO;
 import com.fyzo.app.dto.account.AccountUpdateDTO;
-import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.security.filter.UserAuthenticationFilter;
 import com.fyzo.app.security.jwt.JwtTokenService;
 import com.fyzo.app.services.AccountService;
-import com.fyzo.app.utils.TestUtils;
 
 @WebMvcTest(AccountResource.class)
 @AutoConfigureMockMvc(addFilters = false)
@@ -65,7 +64,7 @@ public class AccountResourceTest {
     @Test
     void shouldReturnAccountListForAuthenticatedUser() throws Exception {
         
-        List<AccountResponseDTO> mockResponse = List.of(
+        var mockResponse = List.of(
             new AccountResponseDTO("Conta Corrente", new BigDecimal("100.0")),
             new AccountResponseDTO("Conta Poupança", new BigDecimal("50.0"))
         );
@@ -88,8 +87,6 @@ public class AccountResourceTest {
     void shouldCreateAccountSuccessfully() throws Exception {
     	var request = new AccountRequestDTO("Dinheiro");
     	var response = new AccountResponseDTO("Dinheiro", new BigDecimal("0.0"));
-    	var mockUser = TestUtils.mockCustomerUser();
-
     	
     	when(accountService.create(any(), any())).thenReturn(response);
     	

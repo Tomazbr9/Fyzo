@@ -33,7 +33,7 @@ public class UserService {
 	@Autowired 
 	private UserFinder userFinder;
 	
-	public UserResponseDTO findById(UserDetailsImpl userDetails) {
+	public UserResponseDTO findByUser(UserDetailsImpl userDetails) {
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 		return userMapper.toResponse(user);
 	}

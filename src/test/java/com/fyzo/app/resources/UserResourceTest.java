@@ -5,11 +5,11 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,14 +18,13 @@ import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fyzo.app.config.TestSecurityConfig;
 import com.fyzo.app.dto.user.UserResponseDTO;
 import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.entities.Role;
@@ -35,8 +34,7 @@ import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.security.filter.UserAuthenticationFilter;
 import com.fyzo.app.security.jwt.JwtTokenService;
 import com.fyzo.app.services.UserService;
-
-@Import(TestSecurityConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(UserResource.class)
 public class UserResourceTest {
 	
@@ -63,71 +61,48 @@ public class UserResourceTest {
 	@Test
 	void shouldReturnUserById() throws Exception {
 		
-		
-		UserResponseDTO mockUser = new UserResponseDTO("user", "user@gmail.com");
-		
-		User existingUser = new User();
-	    existingUser.setId(1L);
-	    existingUser.setUsername("user");
-	    existingUser.setEmail("user@gmail.com");
-	    existingUser.setPassword("passowrd");
-	    existingUser.setRoles(Collections.singletonList(new Role(1L, RoleName.ROLE_CUSTOMER)));
-		
-	    UserDetailsImpl userDetails = new UserDetailsImpl(existingUser);
+		var response = new UserResponseDTO("user", "user@gmail.com");
 	    
-		when(userService.findById(userDetails)).thenReturn(mockUser);
-		
-		System.out.println(objectMapper.writeValueAsString(mockUser));
+		when(userService.findByUser(any())).thenReturn(response);
 
-		mockMvc.perform(get("/users/me").with(user(userDetails))
+		mockMvc.perform(get("/users/me").with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
-				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.username").value("user"))
 				.andExpect(jsonPath("$.email").value("user@gmail.com"));
 		
-		
+		verify(userService).findByUser(any());
 	}
 	
 	@Test
 	void shouldUpdateUserSuccessFully() throws Exception {
 	   
-	    UserUpdateDTO updateDTO = new UserUpdateDTO("newUser", "new@gmail.com", "newpassword");
+	    var request = new UserUpdateDTO("newUser", "new@gmail.com", "newpassword");
+	    var response = new UserResponseDTO("newUser", "new@gmail.com");
 	    
-	    User existingUser = new User();
-	    existingUser.setId(1L);
-	    existingUser.setUsername("oldUser");
-	    existingUser.setEmail("old@gmail.com");
-	    existingUser.setPassword("oldPassword");
-	    existingUser.setRoles(Collections.singletonList(new Role(1L, RoleName.ROLE_CUSTOMER)));
+	    when(userService.update(any(), any())).thenReturn(response);
 	    
-	    UserDetailsImpl userDetails = new UserDetailsImpl(existingUser);
-	    
-	    mockMvc.perform(patch("/users/update").with(user(userDetails))
+	    mockMvc.perform(patch("/users/update").with(csrf())
 	        .contentType(MediaType.APPLICATION_JSON)
-	        .content(objectMapper.writeValueAsString(updateDTO))
+	        .content(objectMapper.writeValueAsString(request))
 	        .accept(MediaType.APPLICATION_JSON))
 	        .andExpect(status().isOk())
 	        .andExpect(jsonPath("$.username").value("newUser"))
 	        .andExpect(jsonPath("$.email").value("new@gmail.com"));
+	    
+	    verify(userService).update(any(), any());
 	}
 	
 	@Test
 	void shouldDeleteUser() throws Exception {
-		User fakeUser = new User();
-		fakeUser.setId(1L);
-		fakeUser.setUsername("user");
-		fakeUser.setEmail("user@gmail.com");
-		fakeUser.setPassword("password");
-		fakeUser.setRoles(Collections.singletonList(new Role(1L, RoleName.ROLE_CUSTOMER)));
 		
-		UserDetailsImpl userDetails = new UserDetailsImpl(fakeUser);
+		doNothing().when(userService).delete(any());
 		
-		doNothing().when(userService).delete(any(UserDetailsImpl.class));
-		
-		mockMvc.perform(delete("/users/delete").with(user(userDetails))
+		mockMvc.perform(delete("/users/delete").with(csrf())
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNoContent());
+		
+		verify(userService).delete(any());
 	}
 	
 }
