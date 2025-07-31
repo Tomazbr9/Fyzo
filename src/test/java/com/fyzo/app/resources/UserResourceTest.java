@@ -34,8 +34,9 @@ import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.security.filter.UserAuthenticationFilter;
 import com.fyzo.app.security.jwt.JwtTokenService;
 import com.fyzo.app.services.UserService;
-@AutoConfigureMockMvc(addFilters = false)
+
 @WebMvcTest(UserResource.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class UserResourceTest {
 	
 	@Autowired
