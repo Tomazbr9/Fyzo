@@ -48,7 +48,7 @@ class AccountServiceTest {
 
     @Test
     void shouldReturnAllAccountsForAuthenticatedUser() {
-        // Arrange
+        
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
         User user = new User();
         List<Account> accounts = List.of(
@@ -65,10 +65,10 @@ class AccountServiceTest {
         when(accountRepository.findByUser(user)).thenReturn(accounts);
         when(accountMapper.accountFromAccountDTO(accounts)).thenReturn(expectedDTOs);
 
-        // Act
+        
         List<AccountResponseDTO> result = accountService.findAll(userDetails);
-
-        // Assert
+        
+        
         assertNotNull(result);
         assertEquals(expectedDTOs, result);
 
@@ -79,7 +79,7 @@ class AccountServiceTest {
 
     @Test
     void shouldCreateAccountForAuthenticatedUser() {
-        // Arrange
+        
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
         User user = new User();
         AccountRequestDTO dto = new AccountRequestDTO("Banco");
@@ -106,7 +106,7 @@ class AccountServiceTest {
 
     @Test
     void shouldUpdateAccountWithAuthenticatedUser() {
-        // Arrange
+        
         Long id = 1L;
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
         User user = new User();
@@ -124,10 +124,8 @@ class AccountServiceTest {
         when(accountRepository.save(account)).thenReturn(account);
         when(accountMapper.toResponse(account)).thenReturn(expectedResponse);
 
-        // Act
         AccountResponseDTO response = accountService.update(id, dto, userDetails);
-
-        // Assert
+ 
         assertNotNull(response);
         assertEquals(expectedResponse, response);
 
@@ -140,7 +138,7 @@ class AccountServiceTest {
 
     @Test
     void shouldDeleteAccountWithAuthenticatedUser() {
-        // Arrange
+        
         Long id = 1L;
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
         User user = new User();
@@ -149,10 +147,8 @@ class AccountServiceTest {
         when(userFinder.findByUsernameOrThrow(userDetails)).thenReturn(user);
         when(accountFinder.findByIdAndUserOrThrow(id, user)).thenReturn(account);
 
-        // Act
         accountService.delete(id, userDetails);
 
-        // Assert
         verify(userFinder).findByUsernameOrThrow(userDetails);
         verify(accountFinder).findByIdAndUserOrThrow(id, user);
         verify(accountRepository).delete(account);

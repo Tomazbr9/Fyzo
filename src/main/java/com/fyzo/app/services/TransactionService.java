@@ -101,7 +101,7 @@ public class TransactionService {
 	    }
 
 	    if (dto.accountId() != null) {
-	    	Account account = accountFinder.findByIdOrThrow(id);
+	    	Account account = accountFinder.findByIdOrThrow(dto.accountId());
 	        transaction.setAccount(account);
 	    }
 
