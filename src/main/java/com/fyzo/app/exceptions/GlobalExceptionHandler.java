@@ -1,58 +1,73 @@
 package com.fyzo.app.exceptions;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.fyzo.app.dto.exception.ErrorResponseDTO;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleNotFound(ResourceNotFoundException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorResponseDTO> handleNotFound(ResourceNotFoundException exeption, HttpServletRequest request) {
+        return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.NOT_FOUND);
     }
     
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUnauthorized(UsernameNotFoundException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
+    @ExceptionHandler(UsernameNotFoundPersonException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUserNameNotFound(UsernameNotFoundPersonException exeption, HttpServletRequest request) {
+        return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.NOT_FOUND);
     }
     
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exeption, HttpServletRequest request) {
+        Map<String, String> errors = new HashMap<>();
+
+        exeption.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+
+        return ResponseEntity.badRequest().body(errors);
+    }
 
     @ExceptionHandler(UnauthorizedResourceAccessException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUnauthorized(UnauthorizedResourceAccessException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN);
+    public ResponseEntity<ErrorResponseDTO> handleUnauthorized(UnauthorizedResourceAccessException exeption, HttpServletRequest request) {
+        return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.FORBIDDEN);
     }
     
     @ExceptionHandler(TokenMissingException.class)
-    public ResponseEntity<ErrorResponseDTO> handleTokenMissing(TokenMissingException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorResponseDTO> handleTokenMissing(TokenMissingException exeption, HttpServletRequest request) {
+        return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.UNAUTHORIZED);
     }
     
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<ErrorResponseDTO> handleInvalidToken(InvalidTokenException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ErrorResponseDTO> handleInvalidToken(InvalidTokenException exeption, HttpServletRequest request) {
+        return buildErrorResponse(exeption.getMessage(),request.getRequestURI(), HttpStatus.UNAUTHORIZED);
     }
     
     @ExceptionHandler(TokenGenerationException.class)
-    public ResponseEntity<ErrorResponseDTO> handleTokenGeneration(TokenGenerationException ex) {
-        return buildErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponseDTO> handleTokenGeneration(TokenGenerationException exeption, HttpServletRequest request) {
+        return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
-        return buildErrorResponse("Erro interno no servidor.", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception exeption, HttpServletRequest request) {
+        return buildErrorResponse("Erro interno no servidor", request.getRequestURI(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    private ResponseEntity<ErrorResponseDTO> buildErrorResponse(String message, HttpStatus status) {
+    private ResponseEntity<ErrorResponseDTO> buildErrorResponse(String message, String request, HttpStatus status) {
         ErrorResponseDTO error = new ErrorResponseDTO(
             status.value(),
             message,
+            request,
             LocalDateTime.now()
         );
         return new ResponseEntity<>(error, status);

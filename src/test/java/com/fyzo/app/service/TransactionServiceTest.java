@@ -6,7 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -71,7 +71,6 @@ class TransactionServiceTest {
     @Mock
     private TransactionFinder transactionFinder;
 
-    // --------- findAll ---------
     @Test
     void shouldReturnPagedTransactionsWithFilters() {
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
@@ -101,7 +100,7 @@ class TransactionServiceTest {
         }
     }
 
-    // --------- create ---------
+ 
     @Test
     void shouldCreateTransaction() {
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
@@ -146,7 +145,7 @@ class TransactionServiceTest {
         verify(accountRepository).save(account);
     }
 
-    // --------- update ---------
+  
     @Test
     void shouldUpdateTransaction() {
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
@@ -195,7 +194,7 @@ class TransactionServiceTest {
         verify(transactionMapper).toResponse(transaction);
     }
 
-    // --------- delete ---------
+    
     @Test
     void shouldDeleteTransaction() {
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
@@ -213,7 +212,6 @@ class TransactionServiceTest {
         verify(transactionRepository).delete(transaction);
     }
 
-    // --------- getUserBalance ---------
     @Test
     void shouldCalculateUserBalanceCorrectly() {
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
@@ -241,7 +239,6 @@ class TransactionServiceTest {
         verify(transactionRepository).findByUser(user);
     }
 
-    // --------- getSummaryByType ---------
     @Test
     void shouldReturnSummaryGroupedByCategory() {
         UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
