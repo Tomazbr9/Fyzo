@@ -17,6 +17,7 @@ import com.fyzo.app.entities.Role;
 import com.fyzo.app.entities.User;
 import com.fyzo.app.enums.RoleName;
 import com.fyzo.app.exceptions.ResourceNotFoundException;
+import com.fyzo.app.exceptions.UsernameAlreadyExistsException;
 import com.fyzo.app.mapper.UserMapper;
 import com.fyzo.app.repositories.CategoryRepository;
 import com.fyzo.app.repositories.RoleRepository;
@@ -61,6 +62,10 @@ public class AuthenticationService {
 	
 	public UserResponseDTO registerUser(UserRequestDTO dto) {
 	    User user = userMapper.toEntity(dto);
+	    
+	    if(userRepository.existsByUsername(dto.username())) {
+	    	throw  new UsernameAlreadyExistsException("Nome de usuário ja existente");
+	    }
 
 	    RoleName roleName = RoleName.valueOf(dto.role());
 	    Role role = roleRepository.findByName(roleName)

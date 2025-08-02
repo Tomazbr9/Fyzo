@@ -43,6 +43,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.FORBIDDEN);
     }
     
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception, HttpServletRequest request){
+    	return buildErrorResponse(exception.getMessage(), request.getRequestURI(), HttpStatus.CONFLICT);
+    }
+    
     @ExceptionHandler(TokenMissingException.class)
     public ResponseEntity<ErrorResponseDTO> handleTokenMissing(TokenMissingException exeption, HttpServletRequest request) {
         return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.UNAUTHORIZED);
