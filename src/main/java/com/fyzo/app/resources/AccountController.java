@@ -36,7 +36,7 @@ import jakarta.validation.Valid;
 	)
 @RestController
 @RequestMapping("/accounts")
-public class AccountResource {
+public class AccountController {
 	
 	@Autowired
 	private AccountService service;

@@ -62,7 +62,7 @@ public class AdminResource {
 		    }
 		)
 		@PreAuthorize("hasRole('ADMIN')")
-		@GetMapping("/users/all")
+		@GetMapping("/users")
 		public ResponseEntity<List<UserResponseDTO>> findAll() {
 		    List<UserResponseDTO> list = service.findAll();
 		    return ResponseEntity.ok().body(list);
@@ -105,7 +105,7 @@ public class AdminResource {
 		    }
 		)
 		@PreAuthorize("hasRole('ADMIN')")
-		@PatchMapping("/users/update/{id}")
+		@PatchMapping("/users/{id}")
 		public ResponseEntity<UserResponseDTO> update(
 		    @Valid @RequestBody UserUpdateDTO dto,
 		    @PathVariable Long id
@@ -143,7 +143,7 @@ public class AdminResource {
 		    }
 		)
 		@PreAuthorize("hasRole('ADMIN')")
-		@PatchMapping("/users/delete/{id}")
+		@PatchMapping("/users/{id}")
 		public ResponseEntity<Void> delete(@PathVariable Long id) {
 		    service.delete(id);
 		    return ResponseEntity.noContent().build();
