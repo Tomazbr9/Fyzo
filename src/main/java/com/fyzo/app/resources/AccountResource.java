@@ -61,13 +61,13 @@ public class AccountResource {
 		        )
 		    }
 		)
-		@GetMapping("/me")
-		public List<AccountResponseDTO> findAll(
+		@GetMapping
+		public ResponseEntity<List<AccountResponseDTO>> findAll(
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
 		) {
-		    return service.findAll(userDetails);
+		    List<AccountResponseDTO> accounts = service.findAll(userDetails);
+		    return ResponseEntity.ok(accounts);
 		}
-
 	
 	@Operation(
 		    summary = "Create a new account",
@@ -94,7 +94,7 @@ public class AccountResource {
 		        )
 		    }
 		)
-		@PostMapping("/create")
+		@PostMapping
 		public ResponseEntity<AccountResponseDTO> create(
 		    @Valid @RequestBody AccountRequestDTO dto,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -134,10 +134,10 @@ public class AccountResource {
 		        )
 		    }
 		)
-		@PatchMapping("update/{id}")
+		@PatchMapping("/{id}")
 		public ResponseEntity<AccountResponseDTO> update(
 		    @PathVariable Long id,
-		    @RequestBody AccountUpdateDTO dto,
+		    @RequestBody @Valid AccountUpdateDTO dto,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
 		) {
 		    AccountResponseDTO obj = service.update(id, dto, userDetails);
@@ -167,7 +167,7 @@ public class AccountResource {
 		        )
 		    }
 		)
-		@DeleteMapping("delete/{id}")
+		@DeleteMapping("/{id}")
 		public ResponseEntity<Void> delete(
 		    @PathVariable Long id,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails

@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 	)
 @RestController
 @RequestMapping("/auth")
-public class AuthenticationResource {
+public class AuthenticationController {
 	
 	@Autowired
 	private AuthenticationService service;
