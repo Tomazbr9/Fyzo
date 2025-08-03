@@ -36,7 +36,7 @@ import com.fyzo.app.security.filter.UserAuthenticationFilter;
 import com.fyzo.app.security.jwt.JwtTokenService;
 import com.fyzo.app.services.TransactionService;
 
-@WebMvcTest(TransactionResource.class)
+@WebMvcTest(TransactionController.class)
 @AutoConfigureMockMvc(addFilters = false)
 public class TransactionsResourceTest {
 	

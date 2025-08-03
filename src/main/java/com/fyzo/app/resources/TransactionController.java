@@ -2,9 +2,7 @@ package com.fyzo.app.resources;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fyzo.app.dto.dashboard.BalanceResponseDTO;
 import com.fyzo.app.dto.dashboard.CategorySummaryDTO;
+import com.fyzo.app.dto.transaction.PageResponseDTO;
 import com.fyzo.app.dto.transaction.TransactionFilterDTO;
 import com.fyzo.app.dto.transaction.TransactionRequestDTO;
 import com.fyzo.app.dto.transaction.TransactionResponseDTO;
 import com.fyzo.app.dto.transaction.TransactionUpdateDTO;
-import com.fyzo.app.entities.Transaction;
 import com.fyzo.app.enums.TransactionType;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.TransactionService;
@@ -32,6 +30,7 @@ import com.fyzo.app.services.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,14 +41,14 @@ import jakarta.validation.Valid;
 @Tag(name = "Transactions Management", description = "Operations to retrieve, update and delete transactions")
 @RestController
 @RequestMapping("/transactions")
-public class TransactionResource {
+public class TransactionController {
 	
 	@Autowired
 	private TransactionService service;
 	
 	@Operation(
 		    summary = "List all user's transactions with filters and pagination",
-		    description = "Retrieves a paginated list of transactions belonging to the authenticated user, filtered by provided parameters",
+		    description = "Retrieves a paginated list of transactions belonging to the authenticated user, filtered by provided parameters.",
 		    security = @SecurityRequirement(name = "bearerAuth"),
 		    responses = {
 		        @ApiResponse(
@@ -57,7 +56,8 @@ public class TransactionResource {
 		            description = "Transactions retrieved successfully",
 		            content = @Content(
 		                mediaType = "application/json",
-		                schema = @Schema(implementation = Page.class) 		            )
+		                schema = @Schema(implementation = PageResponseDTO.class)
+		            )
 		        ),
 		        @ApiResponse(
 		            responseCode = "401",
@@ -66,12 +66,13 @@ public class TransactionResource {
 		        )
 		    }
 		)
-		@GetMapping("/me")
-		public Page<Transaction> findAll(
+		@GetMapping
+		public ResponseEntity<PageResponseDTO<TransactionResponseDTO>> findAll(
 		    @ModelAttribute TransactionFilterDTO dto,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
 		) {
-		    return service.findAll(dto, userDetails);
+		    PageResponseDTO<TransactionResponseDTO> transactions = service.findAll(dto, userDetails);
+		    return ResponseEntity.ok(transactions);
 		}
 
 	
@@ -108,7 +109,7 @@ public class TransactionResource {
 		        )
 		    }
 		)
-		@PostMapping("/create")
+		@PostMapping
 		public ResponseEntity<TransactionResponseDTO> create(
 		    @Valid @RequestBody TransactionRequestDTO dto,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -165,10 +166,10 @@ public class TransactionResource {
 		        )
 		    }
 		)
-		@PatchMapping("/update/{id}")
+		@PatchMapping("/{id}")
 		public ResponseEntity<TransactionResponseDTO> update(
 		    @PathVariable Long id,
-		    @RequestBody TransactionUpdateDTO dto,
+		    @RequestBody @Valid TransactionUpdateDTO dto,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
 		) {
 		    TransactionResponseDTO obj = service.update(id, dto, userDetails);
@@ -211,7 +212,7 @@ public class TransactionResource {
 		        )
 		    }
 		)
-		@DeleteMapping("/delete/{id}")
+		@DeleteMapping("/{id}")
 		public ResponseEntity<Void> delete(
 		    @PathVariable Long id,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -219,20 +220,81 @@ public class TransactionResource {
 		    service.delete(id, userDetails);
 		    return ResponseEntity.noContent().build();
 		}
-
 	
+	
+
+	@Operation(
+		    summary = "Get user balance",
+		    description = "Retrieves the total balance for the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Balance retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                schema = @Schema(implementation = BalanceResponseDTO.class)
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+	)
 	@GetMapping("/balance")
 	public ResponseEntity<BalanceResponseDTO> getBalance(@AuthenticationPrincipal UserDetailsImpl userDetails){
 		BalanceResponseDTO obj = service.getUserBalance(userDetails);
 		return ResponseEntity.ok(obj);
 	}
 	
+	@Operation(
+		    summary = "Get expense summary by category",
+		    description = "Retrieves a summary of expenses grouped by category for the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Expense summary retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                array = @ArraySchema(schema = @Schema(implementation = CategorySummaryDTO.class))
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+	)
 	@GetMapping("/summary/expense")
 	public ResponseEntity<List<CategorySummaryDTO>> getExpenseByCategory(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		List<CategorySummaryDTO> result = service.getSummaryByType(userDetails, TransactionType.EXPENSE);
 		return ResponseEntity.ok(result);
 	}
 	
+	@Operation(
+		    summary = "Get revenue summary by category",
+		    description = "Retrieves a summary of revenues grouped by category for the authenticated user",
+		    security = @SecurityRequirement(name = "bearerAuth"),
+		    responses = {
+		        @ApiResponse(
+		            responseCode = "200",
+		            description = "Revenue summary retrieved successfully",
+		            content = @Content(
+		                mediaType = "application/json",
+		                array = @ArraySchema(schema = @Schema(implementation = CategorySummaryDTO.class))
+		            )
+		        ),
+		        @ApiResponse(
+		            responseCode = "401",
+		            description = "Unauthorized - authentication required",
+		            content = @Content
+		        )
+		    }
+	)
 	@GetMapping("/summary/revenue")
 	public ResponseEntity<List<CategorySummaryDTO>> getRevenueByCategory(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		List<CategorySummaryDTO> result = service.getSummaryByType(userDetails, TransactionType.REVENUE);

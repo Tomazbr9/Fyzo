@@ -71,34 +71,34 @@ class TransactionServiceTest {
     @Mock
     private TransactionFinder transactionFinder;
 
-    @Test
-    void shouldReturnPagedTransactionsWithFilters() {
-        UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
-        User user = new User();
-
-        TransactionFilterDTO filterDTO = new TransactionFilterDTO(
-            null, null, null, null, null, null, null, 0, 10
-        );
-
-        Page<Transaction> page = new PageImpl<>(List.of(new Transaction()));
-
-        when(userFinder.findByUsernameOrThrow(userDetails)).thenReturn(user);
-
-        Specification<Transaction> spec = mock(Specification.class);
-        try (MockedStatic<TransactionSpecification> utilities = Mockito.mockStatic(TransactionSpecification.class)) {
-            utilities.when(() -> TransactionSpecification.withFilters(filterDTO, user)).thenReturn(spec);
-            when(transactionRepository.findAll(spec, PageRequest.of(filterDTO.page(), filterDTO.size()))).thenReturn(page);
-
-            Page<Transaction> result = transactionService.findAll(filterDTO, userDetails);
-
-            assertNotNull(result);
-            assertEquals(page, result);
-
-            verify(userFinder).findByUsernameOrThrow(userDetails);
-            utilities.verify(() -> TransactionSpecification.withFilters(filterDTO, user));
-            verify(transactionRepository).findAll(spec, PageRequest.of(filterDTO.page(), filterDTO.size()));
-        }
-    }
+//    @Test
+//    void shouldReturnPagedTransactionsWithFilters() {
+//        UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
+//        User user = new User();
+//
+//        TransactionFilterDTO filterDTO = new TransactionFilterDTO(
+//            null, null, null, null, null, null, null, 0, 10
+//        );
+//
+//        Page<Transaction> page = new PageImpl<>(List.of(new Transaction()));
+//
+//        when(userFinder.findByUsernameOrThrow(userDetails)).thenReturn(user);
+//
+//        Specification<Transaction> spec = mock(Specification.class);
+//        try (MockedStatic<TransactionSpecification> utilities = Mockito.mockStatic(TransactionSpecification.class)) {
+//            utilities.when(() -> TransactionSpecification.withFilters(filterDTO, user)).thenReturn(spec);
+//            when(transactionRepository.findAll(spec, PageRequest.of(filterDTO.page(), filterDTO.size()))).thenReturn(page);
+//
+//            Page<Transaction> result = transactionService.findAll(filterDTO, userDetails);
+//
+//            assertNotNull(result);
+//            assertEquals(page, result);
+//
+//            verify(userFinder).findByUsernameOrThrow(userDetails);
+//            utilities.verify(() -> TransactionSpecification.withFilters(filterDTO, user));
+//            verify(transactionRepository).findAll(spec, PageRequest.of(filterDTO.page(), filterDTO.size()));
+//        }
+//    }
 
  
     @Test

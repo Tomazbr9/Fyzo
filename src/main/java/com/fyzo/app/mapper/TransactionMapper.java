@@ -1,5 +1,7 @@
 package com.fyzo.app.mapper;
 
+import java.util.List;
+
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -16,6 +18,8 @@ public interface TransactionMapper {
 	Transaction toEntity(TransactionRequestDTO dto);
 	
 	TransactionResponseDTO toResponse(Transaction entity);
+	
+	List<TransactionResponseDTO> transactionsToTransactionsDTO(List<Transaction> transactions);
 	
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFromDto(TransactionUpdateDTO dto, @MappingTarget Transaction entity);

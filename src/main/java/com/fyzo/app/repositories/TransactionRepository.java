@@ -18,5 +18,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 	
 	List<Transaction> findByUserAndType(User user, TransactionType type);
 	
-	Page<Transaction> findByUser(User user, Pageable page);
 }

@@ -1,6 +1,6 @@
 package com.fyzo.app.services;
 
-import java.math.BigDecimal; 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,8 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.fyzo.app.dto.dashboard.BalanceResponseDTO;
 import com.fyzo.app.dto.dashboard.CategorySummaryDTO;
-import com.fyzo.app.dto.transaction.TransactionRequestDTO;
+import com.fyzo.app.dto.transaction.PageResponseDTO;
 import com.fyzo.app.dto.transaction.TransactionFilterDTO;
+import com.fyzo.app.dto.transaction.TransactionRequestDTO;
 import com.fyzo.app.dto.transaction.TransactionResponseDTO;
 import com.fyzo.app.dto.transaction.TransactionUpdateDTO;
 import com.fyzo.app.entities.Account;
@@ -57,16 +58,24 @@ public class TransactionService {
 	@Autowired
 	private TransactionFinder transactionFinder;
 	
-	public Page<Transaction> findAll(TransactionFilterDTO dto, UserDetailsImpl userDetails){
+	public PageResponseDTO<TransactionResponseDTO> findAll(TransactionFilterDTO dto, UserDetailsImpl userDetails){
 		
 		User user = userFinder.findByUsernameOrThrow(userDetails);
         Specification<Transaction> specification = TransactionSpecification.withFilters(dto, user);
         Pageable pageable = PageRequest.of(dto.page(), dto.size());
+        Page<Transaction> page = transactionRepository.findAll(specification, pageable);
         
-        return transactionRepository.findAll(specification, pageable);
+        List<TransactionResponseDTO> content = transactionMapper.transactionsToTransactionsDTO(page.getContent());
+        
+        return new PageResponseDTO<TransactionResponseDTO>(
+        		content,  
+        		page.getNumber(), 
+        		page.getSize(), 
+        		page.getTotalElements(), 
+        		page.getTotalPages(), 
+        		page.isLast());
 	}
 
-	
 	public TransactionResponseDTO create(TransactionRequestDTO dto, UserDetailsImpl userDetails) {
 		
 	    User user = userFinder.findByUsernameOrThrow(userDetails);
