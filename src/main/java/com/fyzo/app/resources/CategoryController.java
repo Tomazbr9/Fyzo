@@ -38,7 +38,7 @@ import jakarta.validation.Valid;
 	)
 @RestController
 @RequestMapping("/categories")
-public class CategoryResource {
+public class CategoryController {
 	
 	@Autowired
 	private CategoryService service;
@@ -64,7 +64,7 @@ public class CategoryResource {
 		        )
 		    }
 		)
-		@GetMapping("/me")
+		@GetMapping
 		public ResponseEntity<List<CategoryResponseDTO>> findAll(
 		    @Parameter(hidden = true)
 		    @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -100,7 +100,7 @@ public class CategoryResource {
 		        )
 		    }
 		)
-		@GetMapping(value = "/{id}")
+		@GetMapping("/{id}")
 		public ResponseEntity<CategoryResponseDTO> findById(@PathVariable Long id) {
 		    CategoryResponseDTO obj = service.findById(id);
 		    return ResponseEntity.ok().body(obj);
@@ -132,7 +132,7 @@ public class CategoryResource {
 		        )
 		    }
 		)
-		@PostMapping("/create")
+		@PostMapping
 		public ResponseEntity<CategoryResponseDTO> create(
 		    @Valid @RequestBody CategoryRequestDTO dto,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -172,7 +172,7 @@ public class CategoryResource {
 		        )
 		    }
 		)
-		@PatchMapping("update/{id}")
+		@PatchMapping("/{id}")
 		public ResponseEntity<CategoryResponseDTO> update(
 		    @PathVariable Long id,
 		    @RequestBody CategoryUpdateDTO dto,
@@ -205,7 +205,7 @@ public class CategoryResource {
 		        )
 		    }
 		)
-		@DeleteMapping("delete/{id}")
+		@DeleteMapping("/{id}")
 		public ResponseEntity<Void> delete(
 		    @PathVariable Long id,
 		    @AuthenticationPrincipal UserDetailsImpl userDetails
