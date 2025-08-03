@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 @Tag(name = "Users Management", description = "Operations to retrieve, update and delete authenticated users")
 @RestController
 @RequestMapping("/users")
-public class UserResource {
+public class UserController {
 	
 	@Autowired
 	private UserService service;
@@ -98,7 +98,7 @@ public class UserResource {
 		        
 		    }
 		)
-		@PatchMapping("/update")
+		@PatchMapping("/me")
 		public ResponseEntity<UserResponseDTO> update(
 		    @Parameter(description = "User data for update", required = true)
 		    @Valid @RequestBody UserUpdateDTO dto,
@@ -131,9 +131,9 @@ public class UserResource {
 		        )
 		    }
 		)
-		@DeleteMapping("/delete")
+		@DeleteMapping("/me")
 		public ResponseEntity<Void> delete(
-		    @Parameter(hidden = true) // Hidden from documentation as it's handled internally
+		    @Parameter(hidden = true) 
 		    @AuthenticationPrincipal UserDetailsImpl userDetails) {
 		    
 		    service.delete(userDetails);
