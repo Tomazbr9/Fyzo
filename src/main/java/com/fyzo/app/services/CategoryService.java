@@ -17,6 +17,8 @@ import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.finder.CategoryFinder;
 import com.fyzo.app.services.finder.UserFinder;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CategoryService {
 
@@ -46,7 +48,8 @@ public class CategoryService {
 
 		return categoryMapper.toResponse(obj.get());
 	}
-
+    
+	@Transactional
 	public CategoryResponseDTO create(CategoryRequestDTO dto, UserDetailsImpl userDetails) {
 
 		User user = userFinder.findByUsernameOrThrow(userDetails);
@@ -57,7 +60,8 @@ public class CategoryService {
 	    categoryRepository.save(category);
 	    return categoryMapper.toResponse(category);
 	}
-
+    
+	@Transactional
 	public CategoryResponseDTO update(Long id, CategoryUpdateDTO dto, UserDetailsImpl userDetails) {
 
 	    User user = userFinder.findByUsernameOrThrow(userDetails);
@@ -68,7 +72,8 @@ public class CategoryService {
 	    categoryRepository.save(category);
 	    return categoryMapper.toResponse(category);
 	}
-
+    
+	@Transactional
 	public void delete(Long id, UserDetailsImpl userDetails) {
 		
 		User user = userFinder.findByUsernameOrThrow(userDetails);
