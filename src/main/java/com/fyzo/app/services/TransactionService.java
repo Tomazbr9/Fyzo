@@ -132,6 +132,7 @@ public class TransactionService {
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 		Transaction transaction = transactionFinder.findByIdAndUserOrThrow(id, user);
 		transactionRepository.delete(transaction);
+		revertBalance(transaction.getAccount(), transaction.getType(), transaction.getAmount());
 	}
 	
 	public BalanceResponseDTO getUserBalance(UserDetailsImpl userDetails) {
