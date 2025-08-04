@@ -33,34 +33,17 @@ public class SecurityConfig {
     };
 
     public static final String [] ENDPOINTS_CUSTOMER = {
-    		"/users/me",
-    		"/users/update",
-    		"/users/delete",
+    		"/users",
     		
-    		"/transactions/me",
-    		"/transactions/create",
-            "/transactions/update/**",
-            "/transactions/delete/**",
+    		"/transactions/**",
             "/transactions/balance",
             "/transactions/summary/expense",
             "/transactions/summary/revenue",
             "/transactions/filter",
             
-            "/categories/me",
-    		"/categories/create",
-            "/categories/update/**",
-            "/categories/delete/**",
+            "/categories/**",
             
-            "/accounts/me",
-            "/accounts/create",
-            "/accounts/update/**",
-            "/accounts/delete/**",
-            
-            "/goals/me",
-            "/goals/create",
-            "/goals/update/**",
-            "/goals/delete/**"
-            
+            "/accounts/**"
     };
 
     public static final String [] ENDPOINTS_ADMIN = {

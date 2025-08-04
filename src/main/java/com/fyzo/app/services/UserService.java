@@ -7,20 +7,18 @@ import com.fyzo.app.dto.user.UserResponseDTO;
 import com.fyzo.app.dto.user.UserUpdateDTO;
 import com.fyzo.app.entities.User;
 import com.fyzo.app.mapper.UserMapper;
-import com.fyzo.app.repositories.RoleRepository;
 import com.fyzo.app.repositories.UserRepository;
 import com.fyzo.app.security.SecurityConfig;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.finder.UserFinder;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
 	
 	@Autowired
     private SecurityConfig securityConfig;
-	
-	@Autowired 
-	RoleRepository roleRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -37,6 +35,7 @@ public class UserService {
 	}
 	
 	
+	@Transactional
 	public UserResponseDTO update(UserUpdateDTO dto, UserDetailsImpl userDetails) {
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 		
@@ -49,7 +48,8 @@ public class UserService {
 	    userRepository.save(user);
 	    return userMapper.toResponse(user);
 	}
-
+    
+	@Transactional
 	public void delete(UserDetailsImpl userDetails) {
 		
 		User user = userFinder.findByUsernameOrThrow(userDetails);

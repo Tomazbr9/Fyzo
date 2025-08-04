@@ -34,6 +34,8 @@ import com.fyzo.app.services.finder.TransactionFinder;
 import com.fyzo.app.services.finder.UserFinder;
 import com.fyzo.app.specification.TransactionSpecification;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TransactionService {
 	
@@ -75,7 +77,8 @@ public class TransactionService {
         		page.getTotalPages(), 
         		page.isLast());
 	}
-
+    
+	@Transactional
 	public TransactionResponseDTO create(TransactionRequestDTO dto, UserDetailsImpl userDetails) {
 		
 	    User user = userFinder.findByUsernameOrThrow(userDetails);
@@ -95,12 +98,16 @@ public class TransactionService {
 	    return transactionMapper.toResponse(transaction);
 	    
 	}
-
+    
+	@Transactional
 	public TransactionResponseDTO update(Long id, TransactionUpdateDTO dto, UserDetailsImpl userDetails) {
 		
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 	    Transaction transaction = transactionFinder.findByIdAndUserOrThrow(id, user);
-
+         
+	    
+	    revertBalance(transaction.getAccount(), transaction.getType(), transaction.getAmount());
+	    
 	    transactionMapper.updateFromDto(dto, transaction);
 
 	 
@@ -113,12 +120,14 @@ public class TransactionService {
 	    	Account account = accountFinder.findByIdOrThrow(dto.accountId());
 	        transaction.setAccount(account);
 	    }
-
+        
+	    updateBalance(transaction.getAccount(), transaction.getType(), transaction.getAmount());
 	    transactionRepository.save(transaction);
 	    return transactionMapper.toResponse(transaction);
 	}
 
 	
+	@Transactional
 	public void delete(Long id, UserDetailsImpl userDetails) {
 		User user = userFinder.findByUsernameOrThrow(userDetails);
 		Transaction transaction = transactionFinder.findByIdAndUserOrThrow(id, user);
@@ -175,20 +184,33 @@ public class TransactionService {
     					
     }
     
+    @Transactional
     private void updateBalance(Account account, TransactionType type, BigDecimal amount) {
-    	BigDecimal balance = account.getBalance();
-    	
+    
     	if(type == TransactionType.REVENUE) {
     		
-    		balance = balance.add(amount);
-    		account.setBalance(balance);
+    		account.setBalance(account.getBalance().add(amount));
     	}
     	else if(type == TransactionType.EXPENSE) {
-    		balance = balance.subtract(amount);
-    		account.setBalance(balance);
+    		account.setBalance(account.getBalance().subtract(amount));
     	}
     	else {
     		throw new RuntimeException("Tipo Invalido");
+    	}
+    	
+    	accountRepository.save(account);
+    }
+    
+    private void revertBalance(Account account, TransactionType type, BigDecimal amount) {
+    	
+    	if(type == TransactionType.REVENUE) {
+    		account.setBalance(account.getBalance().subtract(amount));
+    	}
+    	else if(type == TransactionType.EXPENSE){
+    		account.setBalance(account.getBalance().add(amount));
+    	}
+    	else {
+    		throw new RuntimeException("Tipo Inválido");
     	}
     	
     	accountRepository.save(account);
