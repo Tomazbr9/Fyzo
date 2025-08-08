@@ -16,6 +16,8 @@ import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.services.finder.AccountFinder;
 import com.fyzo.app.services.finder.UserFinder;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AccountService {
 	
@@ -39,6 +41,7 @@ public class AccountService {
 		return accountMapper.accountFromAccountDTO(accounts);
 	}
 	
+	@Transactional
 	public AccountResponseDTO create(AccountRequestDTO dto, UserDetailsImpl userDetails) {
 	    
 		User user = userFinder.findByUsernameOrThrow(userDetails);
@@ -49,7 +52,8 @@ public class AccountService {
 	    accountRepository.save(account);
 	    return accountMapper.toResponse(account);
 	}
-
+    
+	@Transactional
 	public AccountResponseDTO update(Long id, AccountUpdateDTO dto, UserDetailsImpl userDetails) {
 
 	    User user = userFinder.findByUsernameOrThrow(userDetails);
@@ -60,7 +64,8 @@ public class AccountService {
 	    accountRepository.save(account);
 	    return accountMapper.toResponse(account);
 	}
-
+    
+	@Transactional
 	public void delete(Long id, UserDetailsImpl userDetails) {
 		
 		User user = userFinder.findByUsernameOrThrow(userDetails);

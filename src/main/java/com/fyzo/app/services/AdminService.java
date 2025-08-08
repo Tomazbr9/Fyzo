@@ -13,6 +13,8 @@ import com.fyzo.app.repositories.UserRepository;
 import com.fyzo.app.security.SecurityConfig;
 import com.fyzo.app.services.finder.UserFinder;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AdminService {
 	
@@ -37,6 +39,7 @@ public class AdminService {
 		
 	}
 	
+	@Transactional
 	public UserResponseDTO update(UserUpdateDTO dto, Long id) {
 		User user = userFinder.findByIdOrThrow(id);
 		
@@ -51,6 +54,7 @@ public class AdminService {
 		
 	}
 	
+	@Transactional
 	public void delete(Long id) {
 		
 		User user = userFinder.findByIdOrThrow(id);

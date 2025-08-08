@@ -26,6 +26,8 @@ import com.fyzo.app.security.SecurityConfig;
 import com.fyzo.app.security.entities.UserDetailsImpl;
 import com.fyzo.app.security.jwt.JwtTokenService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class AuthenticationService {
 	
@@ -60,6 +62,7 @@ public class AuthenticationService {
         return new JwtTokenDTO(jwtTokenService.generateToken(userDetails));
     }
 	
+	@Transactional
 	public UserResponseDTO registerUser(UserRequestDTO dto) {
 	    User user = userMapper.toEntity(dto);
 	    
