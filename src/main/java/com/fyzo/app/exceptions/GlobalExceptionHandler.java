@@ -28,10 +28,9 @@ public class GlobalExceptionHandler {
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exeption, HttpServletRequest request) {
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
-
-        exeption.getBindingResult().getFieldErrors().forEach(error -> {
+        exception.getBindingResult().getFieldErrors().forEach(error -> {
             errors.put(error.getField(), error.getDefaultMessage());
         });
 
@@ -44,8 +43,15 @@ public class GlobalExceptionHandler {
     }
     
     @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDTO> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception, HttpServletRequest request){
-    	return buildErrorResponse(exception.getMessage(), request.getRequestURI(), HttpStatus.CONFLICT);
+    public ResponseEntity<Map<String, String>> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception, HttpServletRequest request){
+    	Map<String, String> messageError = new HashMap<>(Map.of("username", exception.getMessage())); 
+        return ResponseEntity.badRequest().body(messageError);
+    }
+    
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Map<String, String>> handleEmailAlreadyExists(EmailAlreadyExistsException exception, HttpServletRequest request){
+    	Map<String, String> messageError = new HashMap<>(Map.of("email", exception.getMessage())); 
+        return ResponseEntity.badRequest().body(messageError);
     }
     
     @ExceptionHandler(TokenMissingException.class)

@@ -16,6 +16,7 @@ import com.fyzo.app.entities.Category;
 import com.fyzo.app.entities.Role;
 import com.fyzo.app.entities.User;
 import com.fyzo.app.enums.RoleName;
+import com.fyzo.app.exceptions.EmailAlreadyExistsException;
 import com.fyzo.app.exceptions.ResourceNotFoundException;
 import com.fyzo.app.exceptions.UsernameAlreadyExistsException;
 import com.fyzo.app.mapper.UserMapper;
@@ -53,6 +54,7 @@ public class AuthenticationService {
 	private CategoryRepository categoryRepository;
 	
 	public JwtTokenDTO authenticateUser(LoginDTO dto) {
+		
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(dto.username(), dto.password()); 
         
 		Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
@@ -68,6 +70,10 @@ public class AuthenticationService {
 	    
 	    if(userRepository.existsByUsername(dto.username())) {
 	    	throw  new UsernameAlreadyExistsException("Nome de usuário ja existente");
+	    }
+	    
+	    if(userRepository.existsByEmail(dto.email())) {
+	    	throw new EmailAlreadyExistsException("Email já existente");
 	    }
 
 	    RoleName roleName = RoleName.valueOf(dto.role());

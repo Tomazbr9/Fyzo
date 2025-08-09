@@ -11,6 +11,7 @@ public record UserRequestDTO(
 
 	    @NotBlank(message = "O email é obrigatório")
 	    @Email(message = "Informe um email válido")
+	    @Column(unique = true)
 	    String email,
 
 	    @NotBlank(message = "A senha é obrigatória")
