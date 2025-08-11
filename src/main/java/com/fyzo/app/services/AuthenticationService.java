@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -17,8 +19,10 @@ import com.fyzo.app.entities.Role;
 import com.fyzo.app.entities.User;
 import com.fyzo.app.enums.RoleName;
 import com.fyzo.app.exceptions.EmailAlreadyExistsException;
+import com.fyzo.app.exceptions.InvalidCredentialsException;
 import com.fyzo.app.exceptions.ResourceNotFoundException;
 import com.fyzo.app.exceptions.UsernameAlreadyExistsException;
+import com.fyzo.app.exceptions.UsernameNotFoundPersonException;
 import com.fyzo.app.mapper.UserMapper;
 import com.fyzo.app.repositories.CategoryRepository;
 import com.fyzo.app.repositories.RoleRepository;
@@ -55,13 +59,19 @@ public class AuthenticationService {
 	
 	public JwtTokenDTO authenticateUser(LoginDTO dto) {
 		
-		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(dto.username(), dto.password()); 
-        
-		Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		
-        return new JwtTokenDTO(jwtTokenService.generateToken(userDetails));
+		try {
+			
+			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(dto.username(), dto.password()); 
+	        
+			Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+	        
+			UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+			
+	        return new JwtTokenDTO(jwtTokenService.generateToken(userDetails));
+	        
+		 } catch (InternalAuthenticationServiceException e) {
+		        throw new InvalidCredentialsException("Credenciais inválidas");
+		 }
     }
 	
 	@Transactional

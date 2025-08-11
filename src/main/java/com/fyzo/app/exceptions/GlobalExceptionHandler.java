@@ -54,6 +54,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(messageError);
     }
     
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidCredentials(InvalidCredentialsException exeption, HttpServletRequest request) {
+        return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.UNAUTHORIZED);
+    }
+    
     @ExceptionHandler(TokenMissingException.class)
     public ResponseEntity<ErrorResponseDTO> handleTokenMissing(TokenMissingException exeption, HttpServletRequest request) {
         return buildErrorResponse(exeption.getMessage(), request.getRequestURI(), HttpStatus.UNAUTHORIZED);
