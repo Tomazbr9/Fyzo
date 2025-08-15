@@ -7,5 +7,6 @@ public record TransactionResponseDTO (
 		String title,
 		String description,
 	    BigDecimal amount,
-	    LocalDate date
+	    LocalDate date,
+	    String type
 ) {}

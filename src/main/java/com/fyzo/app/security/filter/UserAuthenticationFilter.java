@@ -34,7 +34,14 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (checkIfEndpointIsNotPublic(request)) {
+        
+    	if("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+    		filterChain.doFilter(request, response);
+    		return;
+    	}
+    	
+    	
+    	if (checkIfEndpointIsNotPublic(request)) {
         	
             String token = recoveryToken(request); 
             if (token != null) {
@@ -65,6 +72,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
+        
         return !(
             requestURI.startsWith("/auth/login") ||
             requestURI.startsWith("/auth/register") ||
