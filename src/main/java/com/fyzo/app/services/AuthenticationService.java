@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +13,7 @@ import com.fyzo.app.dto.auth.JwtTokenDTO;
 import com.fyzo.app.dto.auth.LoginDTO;
 import com.fyzo.app.dto.user.UserRequestDTO;
 import com.fyzo.app.dto.user.UserResponseDTO;
+import com.fyzo.app.entities.Account;
 import com.fyzo.app.entities.Category;
 import com.fyzo.app.entities.Role;
 import com.fyzo.app.entities.User;
@@ -22,8 +22,8 @@ import com.fyzo.app.exceptions.EmailAlreadyExistsException;
 import com.fyzo.app.exceptions.InvalidCredentialsException;
 import com.fyzo.app.exceptions.ResourceNotFoundException;
 import com.fyzo.app.exceptions.UsernameAlreadyExistsException;
-import com.fyzo.app.exceptions.UsernameNotFoundPersonException;
 import com.fyzo.app.mapper.UserMapper;
+import com.fyzo.app.repositories.AccountRepository;
 import com.fyzo.app.repositories.CategoryRepository;
 import com.fyzo.app.repositories.RoleRepository;
 import com.fyzo.app.repositories.UserRepository;
@@ -56,6 +56,9 @@ public class AuthenticationService {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	public JwtTokenDTO authenticateUser(LoginDTO dto) {
 		
@@ -95,6 +98,7 @@ public class AuthenticationService {
 
 	    userRepository.save(user);
 	    copyDefaultCategoriesToUser(user);
+	    copyDefaultAccountsToUser(user);
 	    
 	    return userMapper.toResponse(user);
 	    
@@ -116,6 +120,25 @@ public class AuthenticationService {
 				}).toList();
 		
 		categoryRepository.saveAll(categoriesToUser);
+		
+	}
+	
+	private void copyDefaultAccountsToUser(User user) {
+		
+		List<Account> defaultAccounts = accountRepository.findByIsDefaultTrue();
+		
+		List<Account> accountsToUser = defaultAccounts
+				.stream()
+				.map(account -> {
+					Account newAccount = new Account ();
+					newAccount.setName(account.getName());
+					newAccount.setImageUrl(account.getImageUrl());
+					newAccount.setDefault(false);
+					newAccount.setUser(user);
+					return newAccount;
+				}).toList();
+		
+		accountRepository.saveAll(accountsToUser);
 		
 	}
 	

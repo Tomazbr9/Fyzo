@@ -33,9 +33,14 @@ public class Account implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	private String imageUrl;
+	
+	private boolean isDefault;
 	
 	@Builder.Default
 	private BigDecimal balance = BigDecimal.ZERO;
+	
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")

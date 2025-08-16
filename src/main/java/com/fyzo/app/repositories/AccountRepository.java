@@ -12,4 +12,6 @@ import com.fyzo.app.entities.User;
 public interface AccountRepository extends JpaRepository<Account, Long> {
 	List<Account> findByUser(User user);
 	
+	List<Account> findByIsDefaultTrue();
+	
 }
