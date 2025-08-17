@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Pattern;
 public record CategoryRequestDTO(
     @NotBlank(message = "O nome da categoria é obrigatório")
     String name,
+    
+    String icon,
 
     @NotNull(message = "Por favor, escolha o tipo da categoria")
     TransactionType type,

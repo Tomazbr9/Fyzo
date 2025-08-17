@@ -13,6 +13,8 @@ public record CategoryUpdateDTO(
 
     @NotNull(message = "O tipo da categoria é obrigatório")
     TransactionType type,
+    
+    String icon,
 
     @Pattern(regexp = "^#[A-Fa-f0-9]{6}$", message = "A cor deve estar no formato hexadecimal (ex: #FF5733)")
     String color

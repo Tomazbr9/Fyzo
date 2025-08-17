@@ -114,6 +114,7 @@ public class AuthenticationService {
 					newCategory.setName(category.getName());
 					newCategory.setType(category.getType());
 					newCategory.setColor(category.getColor());
+					newCategory.setIcon(category.getIcon());
 					newCategory.setDefault(false);
 					newCategory.setUser(user);
 					return newCategory;

@@ -77,21 +77,24 @@ public class TestConfig implements CommandLineRunner {
 			Category c1 = Category.builder()
 			    .name("Aluguel")
 			    .type(TransactionType.EXPENSE)
-			    .color("#FF0000")
+			    .icon("home")
+			    .color("#ff1a1a")
 			    .isDefault(true)
 			    .build();
 
 			Category c2 = Category.builder()
 			    .name("Salario")
 			    .type(TransactionType.REVENUE)
-			    .color("#00FF00")
+			    .icon("money")
+			    .color("#33cc33")
 			    .isDefault(true)
 			    .build();
 			
 			Category c3 = Category.builder()
 				    .name("Mercado")
 				    .type(TransactionType.REVENUE)
-				    .color("#00FF00")
+				    .icon("shopping_cart")
+				    .color("#1a1aff")
 				    .isDefault(true)
 				    .build();
 

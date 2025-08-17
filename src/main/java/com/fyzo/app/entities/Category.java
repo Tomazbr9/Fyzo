@@ -37,6 +37,9 @@ public class Category implements Serializable {
     private Long id;
     private String name;
     
+    @Builder.Default
+    private String icon = "topic";
+    
     @Enumerated(EnumType.STRING)
     private TransactionType type;
     private String color;
