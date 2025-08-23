@@ -5,5 +5,6 @@ import java.math.BigDecimal;
 public record CategorySummaryDTO(
     Long id,
     String categoryName,
+    String color,
     BigDecimal total
 ) {}

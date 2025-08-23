@@ -185,8 +185,8 @@ public class TransactionService {
     			.map(entry -> new CategorySummaryDTO(
     					entry.getKey().getId(),
     					entry.getKey().getName(),
-    					entry.getValue()
-    					
+    					entry.getKey().getColor(),
+    					entry.getValue()	
     			))
     			.toList();
     					

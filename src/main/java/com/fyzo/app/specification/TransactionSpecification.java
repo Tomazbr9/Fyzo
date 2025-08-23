@@ -35,13 +35,6 @@ public class TransactionSpecification {
 				predicates.add(builder.lessThanOrEqualTo(root.get("date"), filter.endDate()));
 			}
 			
-			if(filter.maxAmount() != null) {
-				predicates.add(builder.greaterThanOrEqualTo(root.get("amount"), filter.maxAmount()));
-			}
-			
-			if(filter.minAmount() != null) {
-				predicates.add(builder.lessThanOrEqualTo(root.get("amount"), filter.minAmount()));
-			}
 			
 			if(filter.accountId() != null) {
 				predicates.add(builder.equal(root.get("account").get("id"), filter.accountId()));
