@@ -1,5 +1,6 @@
 package com.fyzo.app.specification;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +28,18 @@ public class TransactionSpecification {
 				predicates.add(builder.equal(root.get("category").get("id"), filter.categoryId()));
 			}
 			
-			if(filter.startDate() != null) {
-				predicates.add(builder.greaterThanOrEqualTo(root.get("date"), filter.startDate()));
-			}
-			
-			if(filter.endDate() != null) {
-				predicates.add(builder.lessThanOrEqualTo(root.get("date"), filter.endDate()));
-			}
-			
 			
 			if(filter.accountId() != null) {
 				predicates.add(builder.equal(root.get("account").get("id"), filter.accountId()));
 			}
+			
+			if (filter.year() != null && filter.month() != null) {
+			    LocalDate startDate = LocalDate.of(filter.year(), filter.month(), 1);
+			    LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+			    predicates.add(builder.between(root.get("date"), startDate, endDate));
+			}
+
 			
 			return builder.and(predicates.toArray(new Predicate[0]));
 		};

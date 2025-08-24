@@ -11,8 +11,8 @@ public record TransactionFilterDTO(
     Integer categoryId,
     Integer accountId,
     TransactionType type,
-    LocalDate startDate,
-    LocalDate endDate,
+    Integer month,
+    Integer year,
     Integer page,
     Integer size
 ) {

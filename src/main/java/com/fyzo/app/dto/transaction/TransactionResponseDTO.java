@@ -8,5 +8,7 @@ public record TransactionResponseDTO (
 		String description,
 	    BigDecimal amount,
 	    LocalDate date,
-	    String type
+	    String type,
+	    Long categoryId,
+	    Long accountId
 ) {}

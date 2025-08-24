@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -17,6 +18,8 @@ public interface TransactionMapper {
 	
 	Transaction toEntity(TransactionRequestDTO dto);
 	
+	@Mapping(target = "categoryId", source = "category.id")
+    @Mapping(target = "accountId", source = "account.id")
 	TransactionResponseDTO toResponse(Transaction entity);
 	
 	List<TransactionResponseDTO> transactionsToTransactionsDTO(List<Transaction> transactions);
